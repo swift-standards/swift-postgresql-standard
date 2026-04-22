@@ -1,0 +1,128 @@
+// swift-tools-version: 6.3.1
+
+import CompilerPluginSupport
+import PackageDescription
+
+let package = Package(
+    name: "swift-postgresql-standard",
+    platforms: [
+        .macOS(.v26),
+        .iOS(.v26),
+        .tvOS(.v26),
+        .watchOS(.v26),
+        .visionOS(.v26),
+    ],
+    products: [
+        .library(
+            name: "PostgreSQL Standard",
+            targets: ["PostgreSQL Standard"]
+        ),
+        .library(
+            name: "PostgreSQL Standard Test Support",
+            targets: ["PostgreSQL Standard Test Support"]
+        ),
+    ],
+    traits: [
+        .trait(
+            name: "SQLValidation",
+            description: "Enable SQL syntax validation against PostgreSQL using postgres-nio."
+        ),
+    ],
+    dependencies: [
+        // L1
+        .package(path: "../../swift-primitives/swift-structured-queries-primitives"),
+
+        // Remote
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
+        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
+
+        // Ecosystem (test support + tests)
+        .package(path: "../../swift-foundations/swift-tests"),
+    ],
+    targets: [
+        // MARK: - PostgreSQL Standard
+
+        .target(
+            name: "PostgreSQL Standard",
+            dependencies: [
+                "StructuredQueriesPostgresMacros",
+                .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
+            ],
+            exclude: ["Documentation.docc"]
+        ),
+
+        // MARK: - Macros
+
+        .macro(
+            name: "StructuredQueriesPostgresMacros",
+            dependencies: [
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+            ],
+            exclude: ["Symbolic Links/README.md"]
+        ),
+
+        // MARK: - Test Support
+
+        .target(
+            name: "PostgreSQL Standard Test Support",
+            dependencies: [
+                "PostgreSQL Standard",
+                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+                .product(name: "PostgresNIO", package: "postgres-nio",
+                         condition: .when(traits: ["SQLValidation"])),
+            ],
+            path: "Tests/Support"
+        ),
+
+        // MARK: - Tests
+
+        .testTarget(
+            name: "PostgreSQL Standard Tests",
+            dependencies: [
+                "PostgreSQL Standard",
+                "PostgreSQL Standard Test Support",
+                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+            ]
+        ),
+
+        .testTarget(
+            name: "StructuredQueriesPostgresMacrosTests",
+            dependencies: [
+                "PostgreSQL Standard",
+                "StructuredQueriesPostgresMacros",
+                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+            ]
+        ),
+
+        .testTarget(
+            name: "README Examples Tests",
+            dependencies: [
+                "PostgreSQL Standard",
+                "PostgreSQL Standard Test Support",
+                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+            ]
+        ),
+    ],
+    swiftLanguageModes: [.v6]
+)
+
+for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
+    let ecosystem: [SwiftSetting] = [
+        .strictMemorySafety(),
+        .enableUpcomingFeature("ExistentialAny"),
+        .enableUpcomingFeature("InternalImportsByDefault"),
+        .enableUpcomingFeature("MemberImportVisibility"),
+        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+        .enableExperimentalFeature("LifetimeDependence"),
+        .enableExperimentalFeature("Lifetimes"),
+        .enableExperimentalFeature("SuppressedAssociatedTypes"),
+        .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableUpcomingFeature("LifetimeDependence"),
+    ]
+
+    let package: [SwiftSetting] = []
+
+    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
+}
