@@ -2,7 +2,7 @@ import Foundation
 import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
-import Identity_Primitives
+import Tagged_Primitives
 import Testing
 
 extension SnapshotTests {
