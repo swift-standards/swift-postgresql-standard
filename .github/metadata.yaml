@@ -1,0 +1,9 @@
+# .github/metadata.yaml
+# Triaged by AI-assisted bulk pass (2026-04-29).
+description: "Swift standard PostgreSQL wire-protocol types."
+topics:
+  - standards
+  - postgresql
+  - database
+  - wire-protocol
+homepage: "https://swift-institute.org"
