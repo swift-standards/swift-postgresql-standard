@@ -7,3 +7,6 @@ topics:
   - database
   - wire-protocol
 homepage: "https://swift-institute.org"
+
+socialPreview:
+  displayName: "PostgreSQL"
