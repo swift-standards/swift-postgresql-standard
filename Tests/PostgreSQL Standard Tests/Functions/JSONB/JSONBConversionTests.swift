@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
@@ -12,8 +12,8 @@ struct TestUserForConversion {
     let email: String
     let age: Int
 
-    @Column(as: Data.self)
-    let tags: Data
+    @Column(as: Foundation.Data.self)
+    let tags: Foundation.Data
 }
 
 extension SnapshotTests.JSONB {

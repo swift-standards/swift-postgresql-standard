@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
@@ -14,15 +14,15 @@ struct TestUser {
     let id: UUID
     let name: String
 
-    @Column(as: Data.self)  // JSONB column
-    let settings: Data
+    @Column(as: Foundation.Data.self)  // JSONB column
+    let settings: Foundation.Data
 
-    @Column(as: Data.self)  // JSONB column
-    let metadata: Data
+    @Column(as: Foundation.Data.self)  // JSONB column
+    let metadata: Foundation.Data
 
-    @Column(as: Data?.self)  // Optional JSONB column
-    let preferences: Data?
+    @Column(as: Foundation.Data?.self)  // Optional JSONB column
+    let preferences: Foundation.Data?
 
-    @Column(as: Data.self)  // JSONB array column
-    let tags: Data
+    @Column(as: Foundation.Data.self)  // JSONB array column
+    let tags: Foundation.Data
 }

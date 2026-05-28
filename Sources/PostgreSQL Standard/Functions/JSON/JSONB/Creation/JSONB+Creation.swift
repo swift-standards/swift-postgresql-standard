@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - JSONB.Creation (Table 9.49)
@@ -75,7 +75,7 @@ extension JSONB.Creation {
             fragment.append("\(quote: schemaName).")
         }
         fragment.append("\(quote: T.tableName).*)")
-        return SQLQueryExpression(fragment, as: Data.self)
+        return SQLQueryExpression(fragment, as: Foundation.Data.self)
     }
 
     /// Create JSON object from text arrays

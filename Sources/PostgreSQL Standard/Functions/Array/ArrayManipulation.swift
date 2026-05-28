@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - PostgreSQL Array Manipulation Functions
@@ -119,10 +119,10 @@ extension QueryExpression where QueryValue: Collection, QueryValue.Element: Quer
     /// ```
     ///
     /// - Returns: A JSON representation of the array
-    public func toJSON() -> some QueryExpression<Data> {
+    public func toJSON() -> some QueryExpression<Foundation.Data> {
         SQLQueryExpression(
             "array_to_json(\(self.queryFragment))",
-            as: Data.self
+            as: Foundation.Data.self
         )
     }
 
@@ -137,10 +137,10 @@ extension QueryExpression where QueryValue: Collection, QueryValue.Element: Quer
     ///
     /// - Parameter prettyPrint: Whether to pretty-print the JSON
     /// - Returns: A JSON representation of the array
-    public func toJSON(prettyPrint: Bool) -> some QueryExpression<Data> {
+    public func toJSON(prettyPrint: Bool) -> some QueryExpression<Foundation.Data> {
         SQLQueryExpression(
             "array_to_json(\(self.queryFragment), \(prettyPrint))",
-            as: Data.self
+            as: Foundation.Data.self
         )
     }
 }

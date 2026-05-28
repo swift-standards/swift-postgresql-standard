@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - PostgreSQL JSON Conversion Utilities
@@ -31,7 +31,7 @@ extension QueryExpression where QueryValue == String {
     /// // SELECT to_json("users"."description") FROM "users"
     /// ```
     public func jsonQuote() -> some QueryExpression<Data> {
-        SQLQueryExpression("to_json(\(self.queryFragment))", as: Data.self)
+        SQLQueryExpression("to_json(\(self.queryFragment))", as: Foundation.Data.self)
     }
 }
 
@@ -45,7 +45,7 @@ extension QueryExpression where QueryValue == String? {
     /// // SELECT to_json("users"."bio") FROM "users"
     /// ```
     public func jsonQuote() -> some QueryExpression<Data?> {
-        SQLQueryExpression("to_json(\(self.queryFragment))", as: Data?.self)
+        SQLQueryExpression("to_json(\(self.queryFragment))", as: Foundation.Data?.self)
     }
 }
 
@@ -59,6 +59,6 @@ extension QueryExpression {
     /// // SELECT to_json("users"."metadata") FROM "users"
     /// ```
     public func jsonQuote() -> some QueryExpression<Data> {
-        SQLQueryExpression("to_json(\(self.queryFragment))", as: Data.self)
+        SQLQueryExpression("to_json(\(self.queryFragment))", as: Foundation.Data.self)
     }
 }

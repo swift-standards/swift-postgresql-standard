@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - Cast extensions for QueryExpression
@@ -100,7 +100,7 @@ extension [UInt8]: PostgreSQLType {
     public static var typeName: String { "BYTEA" }
 }
 
-extension Date: PostgreSQLType {
+extension Foundation.Date: PostgreSQLType {
     public static var typeName: String { "TIMESTAMP" }
 }
 

@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
@@ -14,7 +14,7 @@ struct JSONBExamplesTests {
     struct User {
         let id: Int
         var name: String
-        var settings: Data
+        var settings: Foundation.Data
     }
 
     // MARK: - JSONB Containment

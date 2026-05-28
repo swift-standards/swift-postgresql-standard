@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - JSONB.AdditionalOperators (Table 9.48)
@@ -34,7 +34,7 @@ extension JSONB.AdditionalOperators {
         public typealias QueryValue = Bool
 
         let lhs: LHS
-        let rhs: Data
+        let rhs: Foundation.Data
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
@@ -64,7 +64,7 @@ extension JSONB.AdditionalOperators {
         public typealias QueryValue = Bool
 
         let lhs: LHS
-        let rhs: Data
+        let rhs: Foundation.Data
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
@@ -185,7 +185,7 @@ extension JSONB.AdditionalOperators {
         public typealias QueryValue = Data
 
         let lhs: LHS
-        let rhs: Data
+        let rhs: Foundation.Data
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
@@ -219,7 +219,7 @@ extension JSONB.AdditionalOperators {
         public typealias QueryValue = Value
 
         let lhs: LHS
-        let rhs: Data
+        let rhs: Foundation.Data
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs

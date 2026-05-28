@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - PostgreSQL Set Returning Functions
@@ -82,12 +82,12 @@ public func generateSeries(_ start: Int, _ stop: Int, step: Int) -> SQLQueryExpr
 /// - `"1 week"` - One week
 /// - `"1 month"` - One month
 /// - `"1 year"` - One year
-public func generateSeriesTimestamp(_ start: Date, _ stop: Date, interval: String)
+public func generateSeriesTimestamp(_ start: Foundation.Date, _ stop: Foundation.Date, interval: String)
     -> SQLQueryExpression<Date>
 {
     SQLQueryExpression(
         "generate_series(\(bind: start), \(bind: stop), '\(raw: interval)'::interval)",
-        as: Date.self
+        as: Foundation.Date.self
     )
 }
 
@@ -157,7 +157,7 @@ public func generateSubscripts<Element>(
 public func jsonArrayElements(_ json: some QueryExpression<Data>) -> SQLQueryExpression<Data> {
     SQLQueryExpression(
         "json_array_elements(\(json.queryFragment))",
-        as: Data.self
+        as: Foundation.Data.self
     )
 }
 
@@ -191,7 +191,7 @@ public func jsonArrayElementsText(_ json: some QueryExpression<Data>) -> SQLQuer
 public func jsonbArrayElements(_ jsonb: some QueryExpression<Data>) -> SQLQueryExpression<Data> {
     SQLQueryExpression(
         "jsonb_array_elements(\(jsonb.queryFragment))",
-        as: Data.self
+        as: Foundation.Data.self
     )
 }
 

@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
@@ -10,11 +10,11 @@ struct TestUserForIndexing {
     let id: UUID
     let name: String
 
-    @Column(as: Data.self)
-    let settings: Data
+    @Column(as: Foundation.Data.self)
+    let settings: Foundation.Data
 
-    @Column(as: Data.self)
-    let metadata: Data
+    @Column(as: Foundation.Data.self)
+    let metadata: Foundation.Data
 }
 
 extension SnapshotTests.JSONB {

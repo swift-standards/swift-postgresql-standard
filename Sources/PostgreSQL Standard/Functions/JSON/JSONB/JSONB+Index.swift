@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - JSONB.Index
@@ -249,8 +249,8 @@ extension Table {
     /// ```swift
     /// @Table("posts")
     /// struct Post {
-    ///     @Column(as: Data.self)
-    ///     var metadata: Data  // Stored as JSONB in database
+    ///     @Column(as: Foundation.Data.self)
+    ///     var metadata: Foundation.Data  // Stored as JSONB in database
     /// }
     ///
     /// try await db.execute(

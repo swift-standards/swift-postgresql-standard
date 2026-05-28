@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 /// Protocol to identify JSONB representation types
@@ -78,7 +78,7 @@ extension _JSONBRepresentation: QueryDecodable {
         self.init(
             queryOutput: try jsonDecoder.decode(
                 QueryOutput.self,
-                from: Data(String(decoder: &decoder).utf8)
+                from: Foundation.Data(String(decoder: &decoder).utf8)
             )
         )
     }

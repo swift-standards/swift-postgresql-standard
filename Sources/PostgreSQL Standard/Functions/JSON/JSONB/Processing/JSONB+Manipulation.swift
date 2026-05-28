@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - JSONB.Processing.Manipulation (Table 9.51)
@@ -8,11 +8,11 @@ extension JSONB.Processing {
     ///
     /// **PostgreSQL Documentation**: Table 9.51
     public struct Set<LHS: QueryExpression>: QueryExpression {
-        public typealias QueryValue = Data
+        public typealias QueryValue = Foundation.Data
 
         let jsonb: LHS
         let path: [String]
-        let value: Data
+        let value: Foundation.Data
         let createIfMissing: Bool
 
         init(jsonb: LHS, path: [String], value: some Encodable, createIfMissing: Bool = true) {
@@ -22,7 +22,7 @@ extension JSONB.Processing {
             if let data = try? jsonbEncoder.encode(value) {
                 self.value = data
             } else {
-                self.value = Data()
+                self.value = Foundation.Data()
             }
         }
 
@@ -38,11 +38,11 @@ extension JSONB.Processing {
     ///
     /// **PostgreSQL Documentation**: Table 9.51
     public struct Insert<LHS: QueryExpression>: QueryExpression {
-        public typealias QueryValue = Data
+        public typealias QueryValue = Foundation.Data
 
         let jsonb: LHS
         let path: [String]
-        let value: Data
+        let value: Foundation.Data
         let after: Bool
 
         init(jsonb: LHS, path: [String], value: some Encodable, after: Bool = false) {
@@ -52,7 +52,7 @@ extension JSONB.Processing {
             if let data = try? jsonbEncoder.encode(value) {
                 self.value = data
             } else {
-                self.value = Data()
+                self.value = Foundation.Data()
             }
         }
 
@@ -68,7 +68,7 @@ extension JSONB.Processing {
     ///
     /// **PostgreSQL Documentation**: Table 9.51
     public struct StripNulls<LHS: QueryExpression>: QueryExpression {
-        public typealias QueryValue = Data
+        public typealias QueryValue = Foundation.Data
 
         let jsonb: LHS
 
@@ -91,7 +91,7 @@ extension JSONB.Processing {
 
         let jsonb: LHS
         let path: [String]
-        let value: Data
+        let value: Foundation.Data
         let createIfMissing: Bool
 
         init(jsonb: LHS, path: [String], value: some Encodable, createIfMissing: Bool = true) {
@@ -101,7 +101,7 @@ extension JSONB.Processing {
             if let data = try? jsonbEncoder.encode(value) {
                 self.value = data
             } else {
-                self.value = Data()
+                self.value = Foundation.Data()
             }
         }
 
@@ -123,7 +123,7 @@ extension JSONB.Processing {
 
         let jsonb: LHS
         let path: [String]
-        let value: Data
+        let value: Foundation.Data
         let after: Bool
 
         init(jsonb: LHS, path: [String], value: some Encodable, after: Bool = false) {
@@ -133,7 +133,7 @@ extension JSONB.Processing {
             if let data = try? jsonbEncoder.encode(value) {
                 self.value = data
             } else {
-                self.value = Data()
+                self.value = Foundation.Data()
             }
         }
 
@@ -163,7 +163,7 @@ extension JSONB.Processing {
 
 // MARK: - QueryExpression Function Extensions
 
-extension QueryExpression where QueryValue == Data {
+extension QueryExpression where QueryValue == Foundation.Data {
     /// PostgreSQL's jsonb_set function - Update JSONB at path
     ///
     /// Example:
@@ -177,7 +177,7 @@ extension QueryExpression where QueryValue == Data {
         _ path: [String],
         to value: T,
         createIfMissing: Bool = true
-    ) -> some QueryExpression<Data> {
+    ) -> some QueryExpression<Foundation.Data> {
         JSONB.Processing.Set(
             jsonb: self, path: path, value: value, createIfMissing: createIfMissing)
     }
@@ -195,7 +195,7 @@ extension QueryExpression where QueryValue == Data {
         _ value: T,
         at path: [String],
         after: Bool = false
-    ) -> some QueryExpression<Data> {
+    ) -> some QueryExpression<Foundation.Data> {
         JSONB.Processing.Insert(jsonb: self, path: path, value: value, after: after)
     }
 
@@ -206,7 +206,7 @@ extension QueryExpression where QueryValue == Data {
     /// User.update { $0.settings = $0.settings.strippingNulls() }
     /// // UPDATE users SET settings = jsonb_strip_nulls(settings)
     /// ```
-    public func strippingNulls() -> some QueryExpression<Data> {
+    public func strippingNulls() -> some QueryExpression<Foundation.Data> {
         JSONB.Processing.StripNulls(jsonb: self)
     }
 

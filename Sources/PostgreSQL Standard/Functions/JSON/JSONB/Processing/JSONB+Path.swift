@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - JSONB.Processing.Path (Table 9.51)
@@ -35,7 +35,7 @@ extension JSONB.Processing.Path {
     /// - Nested value access
     /// - Programmatic JSON navigation
     public struct ExtractPath<LHS: QueryExpression>: QueryExpression {
-        public typealias QueryValue = Data
+        public typealias QueryValue = Foundation.Data
 
         let jsonb: LHS
         let path: [String]

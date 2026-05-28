@@ -1,4 +1,4 @@
-import Foundation
+public import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - UUID Generation Functions
@@ -145,7 +145,7 @@ extension Foundation.UUID {
     /// ```
     ///
     /// > Note: Delegates to `PostgreSQL.UUID.random()` for implementation.
-    public static var random: some QueryExpression<UUID> {
+    public static var random: some QueryExpression<Foundation.UUID> {
         PostgreSQL.UUID.random()
     }
 
@@ -157,7 +157,7 @@ extension Foundation.UUID {
     /// ```
     ///
     /// > Note: Delegates to `PostgreSQL.UUID.v4()` for implementation.
-    public static var v4: some QueryExpression<UUID> {
+    public static var v4: some QueryExpression<Foundation.UUID> {
         PostgreSQL.UUID.v4()
     }
 
@@ -169,7 +169,7 @@ extension Foundation.UUID {
     /// ```
     ///
     /// > Note: Delegates to `PostgreSQL.UUID.timeOrdered()` for implementation.
-    public static var timeOrdered: some QueryExpression<UUID> {
+    public static var timeOrdered: some QueryExpression<Foundation.UUID> {
         PostgreSQL.UUID.timeOrdered()
     }
 
@@ -181,7 +181,7 @@ extension Foundation.UUID {
     /// ```
     ///
     /// > Note: Delegates to `PostgreSQL.UUID.v7()` for implementation.
-    public static var v7: some QueryExpression<UUID> {
+    public static var v7: some QueryExpression<Foundation.UUID> {
         PostgreSQL.UUID.v7()
     }
 
@@ -198,7 +198,7 @@ extension Foundation.UUID {
     /// - Returns: A time-ordered UUID with shifted timestamp
     ///
     /// > Note: Delegates to `PostgreSQL.UUID.timeOrdered(shift:)` for implementation.
-    public static func timeOrdered(shift: String) -> some QueryExpression<UUID> {
+    public static func timeOrdered(shift: String) -> some QueryExpression<Foundation.UUID> {
         PostgreSQL.UUID.timeOrdered(shift: shift)
     }
 }
