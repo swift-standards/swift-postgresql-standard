@@ -30,14 +30,14 @@ let package = Package(
     ],
     dependencies: [
         // L1
-        .package(path: "../../swift-primitives/swift-structured-queries-primitives"),
+        .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
 
         // Remote
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
         .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
 
         // Ecosystem (test support + tests)
-        .package(path: "../../swift-foundations/swift-tests"),
+        .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
     ],
     targets: [
         // MARK: - PostgreSQL Standard
