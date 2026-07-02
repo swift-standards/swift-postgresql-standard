@@ -1,6 +1,6 @@
 # .github/metadata.yaml
 # Triaged by AI-assisted bulk pass (2026-04-29).
-description: "Swift standard PostgreSQL wire-protocol types."
+description: "PostgreSQL structured-query building — statements, functions, operators, macros, and SQL validation — for Swift."
 topics:
   - standards
   - postgresql
