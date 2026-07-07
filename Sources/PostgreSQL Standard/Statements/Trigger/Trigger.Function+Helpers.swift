@@ -1,5 +1,6 @@
-import Foundation
-import Structured_Queries_Primitives
+public import Foundation
+public import Structured_Queries_Primitives
+import Structured_Queries_Primitives_Support
 
 // MARK: - Convenience Helpers
 

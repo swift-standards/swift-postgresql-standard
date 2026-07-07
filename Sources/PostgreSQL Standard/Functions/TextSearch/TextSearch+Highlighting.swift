@@ -2,6 +2,7 @@
 
 import Foundation
 import Structured_Queries_Primitives
+import Structured_Queries_Primitives_Support
 
 extension TableColumnExpression where Value == String {
     /// Highlight search matches in text with delimiters.

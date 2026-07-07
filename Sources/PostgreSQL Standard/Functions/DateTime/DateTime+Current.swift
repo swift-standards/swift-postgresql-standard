@@ -1,5 +1,5 @@
-import Foundation
-import Structured_Queries_Primitives
+public import Foundation
+public import Structured_Queries_Primitives
 
 // MARK: - Current Date/Time Functions
 //

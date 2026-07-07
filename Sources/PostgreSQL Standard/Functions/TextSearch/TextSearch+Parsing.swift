@@ -1,4 +1,5 @@
 import Structured_Queries_Primitives
+import Structured_Queries_Primitives_Support
 
 // MARK: - 12.9.1 & 12.9.2: Text Search Parsing (to_tsvector, to_tsquery, @@)
 

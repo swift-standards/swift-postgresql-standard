@@ -47,6 +47,7 @@ let package = Package(
             dependencies: [
                 "StructuredQueriesPostgresMacros",
                 .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
+                .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
             ],
             exclude: ["Documentation.docc"]
         ),

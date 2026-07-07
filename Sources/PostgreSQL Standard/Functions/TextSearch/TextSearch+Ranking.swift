@@ -1,4 +1,5 @@
 import Structured_Queries_Primitives
+import Structured_Queries_Primitives_Support
 
 // MARK: - 12.9.3: Ranking Search Results (ts_rank, ts_rank_cd)
 
