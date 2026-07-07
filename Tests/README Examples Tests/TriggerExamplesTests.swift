@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 /// Tests for Trigger examples shown in README.md
 @Suite("README Examples - Triggers")
@@ -293,7 +293,9 @@ struct TriggerExamplesTests {
         let trigger = Product.createTrigger(
             name: "audit_all_changes",
             timing: .after,
-            event: .insert, .update(), .delete(),
+            event: .insert,
+            .update(),
+            .delete(),
             function: .plpgsql(
                 "audit_changes",
                 """

@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 // Simple test table with UUID primary key
 @Table("test_records")
@@ -47,6 +47,11 @@ extension SnapshotTests {
             let insertStatement = SimpleRecord.insert {
                 draft
             } onConflict: { columns in
+                // Trailing comma required: parameter-pack single-element tuple literal syntax
+                // (TableColumn<Self, T1>, repeat TableColumn<Self, each T2>) with an empty pack.
+                // swift-format requires no space before `)` here; SwiftLint's `comma` rule wants
+                // one after — the two oracles disagree on this construct, so shield SwiftLint.
+                // swiftlint:disable:next comma
                 (columns.name,)
             } doUpdate: { row, excluded in
                 row.value = excluded.value

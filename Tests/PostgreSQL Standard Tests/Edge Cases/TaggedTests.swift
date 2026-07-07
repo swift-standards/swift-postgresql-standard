@@ -1,9 +1,9 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Tagged_Primitives
 import Testing
+import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct TaggedTests {

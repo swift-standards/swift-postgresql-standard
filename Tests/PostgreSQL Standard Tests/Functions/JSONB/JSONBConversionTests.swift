@@ -1,8 +1,8 @@
 public import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 // Test table for conversion tests
 @Table("test_users")
@@ -198,7 +198,9 @@ extension SnapshotTests.JSONB {
         @Test func jsonObjectSimple() {
             let query = TestUserForConversion.select { _ in
                 JSONB.Creation.object(
-                    keys: ["name", "email"], values: ["Alice", "alice@example.com"])
+                    keys: ["name", "email"],
+                    values: ["Alice", "alice@example.com"]
+                )
             }
 
             assertInlineSnapshot(of: query, as: .sql) {
@@ -256,7 +258,9 @@ extension SnapshotTests.JSONB {
         @Test func buildArrayWithRowToJson() {
             let query = TestUserForConversion.select { columns in
                 JSONB.Creation.buildArray(
-                    columns.name, JSONB.Creation.rowToJson(TestUserForConversion.self))
+                    columns.name,
+                    JSONB.Creation.rowToJson(TestUserForConversion.self)
+                )
             }
 
             assertInlineSnapshot(of: query, as: .sql) {

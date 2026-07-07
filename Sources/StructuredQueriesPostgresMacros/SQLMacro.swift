@@ -8,7 +8,9 @@ public enum SQLMacro: ExpressionMacro {
         of node: N,
         in context: C
     ) -> ExprSyntax {
-        guard let argument = node.arguments.first?.expression else { fatalError() }
+        guard let argument = node.arguments.first?.expression else {
+            fatalError("#sql requires at least one argument")
+        }
         let binds = [
             UInt8(ascii: "?"), UInt8(ascii: ":"), UInt8(ascii: "@"), UInt8(ascii: "$"),
         ]
@@ -54,7 +56,8 @@ public enum SQLMacro: ExpressionMacro {
                                                 by: currentDelimiter.offset
                                             ),
                                             message: MacroExpansionNoteMessage(
-                                                "Opening \(q)\(openingDelimiter)\(q)")
+                                                "Opening \(q)\(openingDelimiter)\(q)"
+                                            )
                                         )
                                     ],
                                     fixIt: .replace(
@@ -135,7 +138,8 @@ public enum SQLMacro: ExpressionMacro {
                     Diagnostic(
                         node: string,
                         position: currentDelimiter.segment.position.advanced(
-                            by: currentDelimiter.offset),
+                            by: currentDelimiter.offset
+                        ),
                         message: MacroExpansionWarningMessage(
                             """
                             Cannot find \(q)\(closingDelimiter)\(q) to match opening \(q)\(openingDelimiter)\(q) \
@@ -164,7 +168,8 @@ public enum SQLMacro: ExpressionMacro {
                     Diagnostic(
                         node: string,
                         position: unexpectedBind.segment.position.advanced(
-                            by: unexpectedBind.offset),
+                            by: unexpectedBind.offset
+                        ),
                         message: MacroExpansionErrorMessage(
                             """
                             Invalid bind parameter in literal; use interpolation to bind values into SQL
@@ -188,7 +193,8 @@ public enum SQLMacro: ExpressionMacro {
                     Diagnostic(
                         node: string,
                         position: unexpectedClose.segment.position.advanced(
-                            by: unexpectedClose.offset),
+                            by: unexpectedClose.offset
+                        ),
                         message: MacroExpansionWarningMessage(
                             """
                             Cannot find \(q)\(openingDelimiter)\(q) to match closing \(q)\(closingDelimiter)\(q) \

@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 extension SnapshotTests.PostgresArrayOps {
     @Suite("Array Manipulation") struct ArrayManipulationTests {
@@ -22,7 +22,8 @@ extension SnapshotTests.PostgresArrayOps {
 
             // SQL .joined() - generates PostgreSQL's array_to_string() in query
             await assertSQL(
-                of: Post.select { $0.tags.joined(separator: ", ") }  // Calls QueryExpression.joined()
+                // Calls QueryExpression.joined()
+                of: Post.select { $0.tags.joined(separator: ", ") }
             ) {
                 """
                 SELECT array_to_string("posts"."tags", ', ')

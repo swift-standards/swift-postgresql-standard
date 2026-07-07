@@ -179,7 +179,11 @@ extension QueryExpression where QueryValue == Foundation.Data {
         createIfMissing: Bool = true
     ) -> some QueryExpression<Foundation.Data> {
         JSONB.Processing.Set(
-            jsonb: self, path: path, value: value, createIfMissing: createIfMissing)
+            jsonb: self,
+            path: path,
+            value: value,
+            createIfMissing: createIfMissing
+        )
     }
 
     /// PostgreSQL's jsonb_insert function - Insert into JSONB at path

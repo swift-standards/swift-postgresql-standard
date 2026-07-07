@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 // Database integration tests removed. This file contained tests that required database execution:
 // - UUID binding tests with actual database operations

@@ -1,9 +1,9 @@
 import Foundation
-import Tests_Apple_Testing_Bridge
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Apple_Testing_Bridge
+import Tests_Inline_Snapshot
 
 /// Tests for Basic CRUD examples shown in README.md
 @Suite(
@@ -83,7 +83,7 @@ struct BasicCRUDTests {
             of:
                 User
                 .join(Post.all) { $0.id == $1.userId }
-                .where { user, post in user.isActive }
+                .where { user, _ in user.isActive }
                 .select { user, post in (user.name, post.title) }
         ) {
             """

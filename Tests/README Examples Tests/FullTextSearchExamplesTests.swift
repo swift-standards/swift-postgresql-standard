@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 /// Tests for Full-Text Search examples shown in README.md
 @Suite("README Examples - Full-Text Search")

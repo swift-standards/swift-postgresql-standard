@@ -1,5 +1,8 @@
 import Structured_Queries_Primitives
 
+// Deliberate overload set: renaming would break the public aggregate API surface;
+// the overloads are disambiguated by generic constraints, not by trailing-closure shape.
+// swift-format-ignore: AmbiguousTrailingClosureOverload
 extension Select {
     /// Creates a new select statement from this one by appending a maximum aggregate to its selection.
     ///
@@ -14,7 +17,8 @@ extension Select {
         of expression: (From.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Value._Optionalized.Wrapped?, From, ()>
     where
-        Columns == (), Joins == (),
+        Columns == (),
+        Joins == (),
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
@@ -32,7 +36,8 @@ extension Select {
         >
     ) -> Select<Value._Optionalized.Wrapped?, From, (repeat each J)>
     where
-        Columns == (), Joins == (repeat each J),
+        Columns == (),
+        Joins == (repeat each J),
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
@@ -50,7 +55,8 @@ extension Select {
         >
     ) -> Select<(repeat each C, Value._Optionalized.Wrapped?), From, (repeat each J)>
     where
-        Columns == (repeat each C), Joins == (repeat each J),
+        Columns == (repeat each C),
+        Joins == (repeat each J),
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
@@ -66,7 +72,8 @@ extension Select {
         of expression: (From.TableColumns, Joins.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Value._Optionalized.Wrapped?, From, Joins>
     where
-        Columns == (), Joins: Table,
+        Columns == (),
+        Joins: Table,
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
@@ -82,7 +89,8 @@ extension Select {
         of expression: (From.TableColumns, Joins.TableColumns) -> some QueryExpression<Value>
     ) -> Select<(repeat each C, Value._Optionalized.Wrapped?), From, Joins>
     where
-        Columns == (repeat each C), Joins: Table,
+        Columns == (repeat each C),
+        Joins: Table,
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {

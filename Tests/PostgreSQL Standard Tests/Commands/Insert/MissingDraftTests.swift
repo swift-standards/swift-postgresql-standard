@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 // Test tables for various scenarios
 @Table("uuid_records")
@@ -317,7 +317,8 @@ extension SnapshotTests {
                         }.returning(\.id))
                     )
                     SELECT * FROM new_reminders
-                    """),
+                    """
+                ),
                 as: .sql
             ) {
                 """
@@ -354,7 +355,8 @@ extension SnapshotTests {
                     SELECT * FROM first_insert
                     UNION ALL
                     SELECT * FROM second_insert
-                    """),
+                    """
+                ),
                 as: .sql
             ) {
                 """
@@ -396,7 +398,8 @@ extension SnapshotTests {
                     VALUES
                     (1, 'Generated test', CURRENT_TIMESTAMP)
                     RETURNING "id"
-                    """),
+                    """
+                ),
                 as: .sql
             ) {
                 """
@@ -418,7 +421,8 @@ extension SnapshotTests {
                     ("id", "name", "createdAt")
                     VALUES
                     (gen_random_uuid(), 'UUID Function', NOW())
-                    """),
+                    """
+                ),
                 as: .sql
             ) {
                 """

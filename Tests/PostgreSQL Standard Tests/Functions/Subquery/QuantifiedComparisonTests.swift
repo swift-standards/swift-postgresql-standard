@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 extension SnapshotTests.Subquery {
     @Suite("Quantified Comparison") struct QuantifiedComparisonTests {
@@ -12,7 +12,9 @@ extension SnapshotTests.Subquery {
         @Test func equalsAny() async {
             // Create a subquery expression using raw SQL
             let subquery = #sql(
-                "SELECT id FROM shop_products WHERE featured = true", as: [Int].self)
+                "SELECT id FROM shop_products WHERE featured = true",
+                as: [Int].self
+            )
 
             await assertSQL(
                 of: ShopProduct.where { $0.id.equalsAny(subquery) }

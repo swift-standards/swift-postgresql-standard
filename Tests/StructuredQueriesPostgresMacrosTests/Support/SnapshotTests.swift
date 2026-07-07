@@ -1,7 +1,7 @@
 import MacroTesting
-import Tests_Snapshot
 import StructuredQueriesPostgresMacros
 import Testing
+import Tests_Snapshot
 
 @MainActor
 @Suite(

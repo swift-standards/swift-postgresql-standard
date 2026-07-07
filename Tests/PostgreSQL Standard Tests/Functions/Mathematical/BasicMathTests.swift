@@ -1,8 +1,8 @@
 import Foundation
-import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support
 import Testing
+import Tests_Inline_Snapshot
 
 extension SnapshotTests.PostgresMath {
     @Suite("Basic Math Functions") struct BasicMathTests {
@@ -22,7 +22,8 @@ extension SnapshotTests.PostgresMath {
 
             // SQL .min() - generates PostgreSQL's least() in query
             await assertSQL(
-                of: PriceItem.select { $0.price.min($0.comparePrice) }  // Calls QueryExpression.min()
+                // Calls QueryExpression.min()
+                of: PriceItem.select { $0.price.min($0.comparePrice) }
             ) {
                 """
                 SELECT least("price_items"."price", "price_items"."comparePrice")
@@ -44,7 +45,8 @@ extension SnapshotTests.PostgresMath {
 
             // SQL .max() - generates PostgreSQL's greatest() in query
             await assertSQL(
-                of: PriceItem.select { $0.price.max($0.comparePrice) }  // Calls QueryExpression.max()
+                // Calls QueryExpression.max()
+                of: PriceItem.select { $0.price.max($0.comparePrice) }
             ) {
                 """
                 SELECT greatest("price_items"."price", "price_items"."comparePrice")

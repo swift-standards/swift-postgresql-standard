@@ -31,6 +31,8 @@ extension PrimaryKeyedTable {
                 func open<Root, Value>(_ column: some WritableTableColumnExpression<Root, Value>) {
                     updates.set(
                         column,
+                        // Root is guaranteed to be Self: `column` is drawn from Self.TableColumns.writableColumns.
+                        // swiftlint:disable:next force_cast
                         Value(queryOutput: (row as! Root)[keyPath: column.keyPath]).queryFragment
                     )
                 }

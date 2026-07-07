@@ -48,7 +48,8 @@ extension VariableDeclSyntax {
                 var binding = $0
                 binding.accessorBlock = nil
                 return binding
-            })
+            }
+        )
         return variable
     }
 }

@@ -41,7 +41,8 @@ extension TableDefinition where QueryValue: FullTextSearchable {
         var fragment: QueryFragment = "ts_rank("
         fragment.append("\(quote: QueryValue.tableName).\(quote: QueryValue.searchVectorColumn), ")
         fragment.append(
-            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))")
+            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))"
+        )
         if normalization != .none {
             fragment.append(", \(raw: String(normalization.rawValue))")
         }
@@ -73,7 +74,8 @@ extension TableDefinition where QueryValue: FullTextSearchable {
         var fragment: QueryFragment = "ts_rank_cd("
         fragment.append("\(quote: QueryValue.tableName).\(quote: QueryValue.searchVectorColumn), ")
         fragment.append(
-            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))")
+            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))"
+        )
         if normalization != .none {
             fragment.append(", \(raw: String(normalization.rawValue))")
         }
@@ -136,7 +138,8 @@ extension TableDefinition where QueryValue: FullTextSearchable {
         // Vector and query
         fragment.append("\(quote: QueryValue.tableName).\(quote: QueryValue.searchVectorColumn), ")
         fragment.append(
-            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))")
+            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))"
+        )
 
         // Optional normalization
         if normalization != .none {
@@ -179,7 +182,8 @@ extension TableDefinition where QueryValue: FullTextSearchable {
         // Vector and query
         fragment.append("\(quote: QueryValue.tableName).\(quote: QueryValue.searchVectorColumn), ")
         fragment.append(
-            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))")
+            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))"
+        )
 
         // Optional normalization
         if normalization != .none {
@@ -215,7 +219,8 @@ extension TableColumnExpression where Value == TextSearch.Vector {
         var fragment: QueryFragment = "ts_rank("
         fragment.append("\(self.queryFragment), ")
         fragment.append(
-            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))")
+            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))"
+        )
         if normalization != .none {
             fragment.append(", \(raw: String(normalization.rawValue))")
         }
@@ -255,7 +260,8 @@ extension TableColumnExpression where Value == TextSearch.Vector {
         // Vector and query
         fragment.append("\(self.queryFragment), ")
         fragment.append(
-            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))")
+            "to_tsquery(\(raw: language.quoted(.text))::regconfig, \(bind: "\(query)"))"
+        )
 
         // Optional normalization
         if normalization != .none {

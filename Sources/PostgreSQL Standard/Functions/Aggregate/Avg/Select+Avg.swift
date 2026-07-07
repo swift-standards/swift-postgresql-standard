@@ -1,5 +1,8 @@
 import Structured_Queries_Primitives
 
+// Deliberate overload set: renaming would break the public aggregate API surface;
+// the overloads are disambiguated by generic constraints, not by trailing-closure shape.
+// swift-format-ignore: AmbiguousTrailingClosureOverload
 extension Select {
     /// Creates a new select statement from this one by appending an average aggregate to its selection.
     ///
@@ -14,7 +17,8 @@ extension Select {
         of expression: (From.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Double?, From, ()>
     where
-        Columns == (), Joins == (),
+        Columns == (),
+        Joins == (),
         Value: _OptionalPromotable,
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
@@ -33,7 +37,8 @@ extension Select {
         >
     ) -> Select<Double?, From, (repeat each J)>
     where
-        Columns == (), Joins == (repeat each J),
+        Columns == (),
+        Joins == (repeat each J),
         Value: _OptionalPromotable,
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
@@ -52,7 +57,8 @@ extension Select {
         >
     ) -> Select<(repeat each C, Double?), From, (repeat each J)>
     where
-        Columns == (repeat each C), Joins == (repeat each J),
+        Columns == (repeat each C),
+        Joins == (repeat each J),
         Value: _OptionalPromotable,
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
@@ -69,7 +75,8 @@ extension Select {
         of expression: (From.TableColumns, Joins.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Double?, From, Joins>
     where
-        Columns == (), Joins: Table,
+        Columns == (),
+        Joins: Table,
         Value: _OptionalPromotable,
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
@@ -86,7 +93,8 @@ extension Select {
         of expression: (From.TableColumns, Joins.TableColumns) -> some QueryExpression<Value>
     ) -> Select<(repeat each C, Double?), From, Joins>
     where
-        Columns == (repeat each C), Joins: Table,
+        Columns == (repeat each C),
+        Joins: Table,
         Value: _OptionalPromotable,
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
