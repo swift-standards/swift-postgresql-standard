@@ -1,4 +1,5 @@
 import Foundation
+import Tests_Apple_Testing_Bridge
 import Tests_Inline_Snapshot
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Test_Support

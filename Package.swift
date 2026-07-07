@@ -103,6 +103,7 @@ let package = Package(
                 "PostgreSQL Standard",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+                .product(name: "Tests Apple Testing Bridge", package: "swift-tests"),
             ]
         ),
     ],
