@@ -2,7 +2,9 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public enum BindMacro: ExpressionMacro {
+public enum BindMacro: ExpressionMacro {}
+
+extension BindMacro {
     public static func expansion<N: FreestandingMacroExpansionSyntax, C: MacroExpansionContext>(
         of node: N,
         in context: C

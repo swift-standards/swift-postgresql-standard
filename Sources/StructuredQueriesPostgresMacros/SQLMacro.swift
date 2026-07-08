@@ -3,7 +3,9 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-public enum SQLMacro: ExpressionMacro {
+public enum SQLMacro: ExpressionMacro {}
+
+extension SQLMacro {
     public static func expansion<N: FreestandingMacroExpansionSyntax, C: MacroExpansionContext>(
         of node: N,
         in context: C

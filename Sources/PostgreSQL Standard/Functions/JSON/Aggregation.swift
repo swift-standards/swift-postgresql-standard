@@ -86,10 +86,17 @@ private struct ArrayAggregation<Expression: QueryExpression>: QueryExpression {
 }
 
 private struct JSONBuildObject: QueryExpression {
-    typealias QueryValue = Data
-
     let pairs: [(String, any QueryExpression)]
     let format: JSONFormat
+
+    init(pairs: [(String, any QueryExpression)], format: JSONFormat = .json) {
+        self.pairs = pairs
+        self.format = format
+    }
+}
+
+extension JSONBuildObject {
+    typealias QueryValue = Data
 
     enum JSONFormat {
         case json
@@ -101,11 +108,6 @@ private struct JSONBuildObject: QueryExpression {
             case .jsonb: return "jsonb_build_object"
             }
         }
-    }
-
-    init(pairs: [(String, any QueryExpression)], format: JSONFormat = .json) {
-        self.pairs = pairs
-        self.format = format
     }
 
     var queryFragment: QueryFragment {

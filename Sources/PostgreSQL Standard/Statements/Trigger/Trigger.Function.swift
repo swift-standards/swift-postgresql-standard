@@ -27,10 +27,6 @@ import Structured_Queries_Primitives
 /// ```
 extension Trigger {
     public struct Function: Sendable, Statement {
-        public typealias From = Never
-        public typealias Joins = ()
-        public typealias QueryValue = ()
-
         /// The function name
         public let name: String
 
@@ -45,50 +41,56 @@ extension Trigger {
             self.body = body
             self.orReplace = orReplace
         }
+    }
+}
 
-        public var query: QueryFragment {
-            var query: QueryFragment = "CREATE"
-            if orReplace {
-                query.append(" OR REPLACE")
-            }
-            query.append(" FUNCTION \(quote: name)()")
-            query.append("\(.newline)RETURNS TRIGGER AS $$")
-            query.append("\(.newline)\(generateBody())")
-            query.append("\(.newline)$$ LANGUAGE plpgsql")
-            return query
-        }
+extension Trigger.Function {
+    public typealias From = Never
+    public typealias Joins = ()
+    public typealias QueryValue = ()
 
-        private func generateBody() -> QueryFragment {
-            // Wrap raw PL/pgSQL in BEGIN...END if not already present
-            let bodyString = body.debugDescription
-            let trimmed = bodyString.trimmingCharacters(in: .whitespacesAndNewlines)
-            if trimmed.uppercased().hasPrefix("BEGIN") {
-                return body
-            } else {
-                var result: QueryFragment = "BEGIN"
-                result.append("\(.newline)\(body.indented())")
-                result.append("\(.newline)END")
-                return result
-            }
+    public var query: QueryFragment {
+        var query: QueryFragment = "CREATE"
+        if orReplace {
+            query.append(" OR REPLACE")
         }
+        query.append(" FUNCTION \(quote: name)()")
+        query.append("\(.newline)RETURNS TRIGGER AS $$")
+        query.append("\(.newline)\(generateBody())")
+        query.append("\(.newline)$$ LANGUAGE plpgsql")
+        return query
+    }
 
-        /// Returns a `DROP FUNCTION` statement for this function.
-        ///
-        /// - Parameters:
-        ///   - ifExists: Adds an `IF EXISTS` condition to the `DROP FUNCTION`.
-        ///   - cascade: Adds `CASCADE` to automatically drop dependent triggers.
-        /// - Returns: A `DROP FUNCTION` statement for this function.
-        public func drop(ifExists: Bool = false, cascade: Bool = false) -> some Statement<()> {
-            var query: QueryFragment = "DROP FUNCTION"
-            if ifExists {
-                query.append(" IF EXISTS")
-            }
-            query.append(" \(quote: name)()")
-            if cascade {
-                query.append(" CASCADE")
-            }
-            return SQLQueryExpression(query)
+    private func generateBody() -> QueryFragment {
+        // Wrap raw PL/pgSQL in BEGIN...END if not already present
+        let bodyString = body.debugDescription
+        let trimmed = bodyString.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.uppercased().hasPrefix("BEGIN") {
+            return body
+        } else {
+            var result: QueryFragment = "BEGIN"
+            result.append("\(.newline)\(body.indented())")
+            result.append("\(.newline)END")
+            return result
         }
+    }
+
+    /// Returns a `DROP FUNCTION` statement for this function.
+    ///
+    /// - Parameters:
+    ///   - ifExists: Adds an `IF EXISTS` condition to the `DROP FUNCTION`.
+    ///   - cascade: Adds `CASCADE` to automatically drop dependent triggers.
+    /// - Returns: A `DROP FUNCTION` statement for this function.
+    public func drop(ifExists: Bool = false, cascade: Bool = false) -> some Statement<()> {
+        var query: QueryFragment = "DROP FUNCTION"
+        if ifExists {
+            query.append(" IF EXISTS")
+        }
+        query.append(" \(quote: name)()")
+        if cascade {
+            query.append(" CASCADE")
+        }
+        return SQLQueryExpression(query)
     }
 }
 

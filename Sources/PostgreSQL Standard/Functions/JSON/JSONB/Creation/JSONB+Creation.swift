@@ -167,42 +167,46 @@ extension JSONB.Creation {
 
 extension JSONB.Creation {
     fileprivate struct JSONBuildArray: QueryExpression {
-        typealias QueryValue = Data
-
         let values: [any QueryExpression]
         let format: JSONFormat
-
-        enum JSONFormat: String {
-            case json
-            case jsonb
-        }
-
-        var queryFragment: QueryFragment {
-            var fragment: QueryFragment = "\(raw: format.rawValue)_build_array("
-
-            for (index, value) in values.enumerated() {
-                if index > 0 {
-                    fragment.append(", ")
-                }
-                fragment.append(value.queryFragment)
-            }
-
-            fragment.append(")")
-            return fragment
-        }
     }
 
     fileprivate struct JSONObjectFromArrays: QueryExpression {
-        typealias QueryValue = Data
-
         let keys: [String]
         let values: [String]
+    }
+}
 
-        var queryFragment: QueryFragment {
-            let keysArray = "'{" + keys.joined(separator: ",") + "}'"
-            let valuesArray = "'{" + values.joined(separator: ",") + "}'"
-            return "json_object(\(raw: keysArray), \(raw: valuesArray))"
+extension JSONB.Creation.JSONBuildArray {
+    typealias QueryValue = Data
+
+    enum JSONFormat: String {
+        case json
+        case jsonb
+    }
+
+    var queryFragment: QueryFragment {
+        var fragment: QueryFragment = "\(raw: format.rawValue)_build_array("
+
+        for (index, value) in values.enumerated() {
+            if index > 0 {
+                fragment.append(", ")
+            }
+            fragment.append(value.queryFragment)
         }
+
+        fragment.append(")")
+        return fragment
+    }
+}
+
+extension JSONB.Creation.JSONObjectFromArrays {
+    typealias QueryValue = Data
+
+    var queryFragment: QueryFragment {
+        let keysArray = "'{" + keys.joined(separator: ",") + "}'"
+        let valuesArray = "'{" + values.joined(separator: ",") + "}'"
+        return "json_object(\(raw: keysArray), \(raw: valuesArray))"
     }
 }
 

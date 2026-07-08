@@ -1,7 +1,9 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-public enum ColumnMacro: PeerMacro {
+public enum ColumnMacro: PeerMacro {}
+
+extension ColumnMacro {
     public static func expansion<D: DeclSyntaxProtocol, C: MacroExpansionContext>(
         of node: AttributeSyntax,
         providingPeersOf declaration: D,

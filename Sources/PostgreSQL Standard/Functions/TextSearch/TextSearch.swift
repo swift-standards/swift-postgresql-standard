@@ -129,24 +129,6 @@ extension TextSearch {
             self.min = min
             self.max = max
         }
-
-        /// Creates a word range with only a maximum, using PostgreSQL's default minimum (15).
-        ///
-        /// **Note**: This will fail if `max` is less than or equal to 15.
-        ///
-        /// - Parameter max: Maximum number of words (must be > 15)
-        /// - Returns: A valid word range, or nil if max <= 15
-        public static func upTo(_ max: Int) -> WordRange? {
-            WordRange(min: 15, max: max)
-        }
-
-        // Common word range presets
-        // swiftlint:disable:next force_unwrapping
-        public static let short = WordRange(min: 3, max: 10)!  // Concise snippets
-        // swiftlint:disable:next force_unwrapping
-        public static let medium = WordRange(min: 10, max: 25)!  // Balanced excerpts
-        // swiftlint:disable:next force_unwrapping
-        public static let long = WordRange(min: 20, max: 50)!  // Detailed excerpts
     }
 
     /// Normalization options for `ts_rank()` and `ts_rank_cd()`.
@@ -175,6 +157,26 @@ extension TextSearch {
             self.rawValue = value
         }
     }
+}
+
+extension TextSearch.WordRange {
+    /// Creates a word range with only a maximum, using PostgreSQL's default minimum (15).
+    ///
+    /// **Note**: This will fail if `max` is less than or equal to 15.
+    ///
+    /// - Parameter max: Maximum number of words (must be > 15)
+    /// - Returns: A valid word range, or nil if max <= 15
+    public static func upTo(_ max: Int) -> TextSearch.WordRange? {
+        TextSearch.WordRange(min: 15, max: max)
+    }
+
+    // Common word range presets
+    // swiftlint:disable:next force_unwrapping
+    public static let short = TextSearch.WordRange(min: 3, max: 10)!  // Concise snippets
+    // swiftlint:disable:next force_unwrapping
+    public static let medium = TextSearch.WordRange(min: 10, max: 25)!  // Balanced excerpts
+    // swiftlint:disable:next force_unwrapping
+    public static let long = TextSearch.WordRange(min: 20, max: 50)!  // Detailed excerpts
 }
 
 extension TextSearch.RankNormalization {

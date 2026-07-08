@@ -341,7 +341,9 @@ import Structured_Queries_Primitives
 ///
 /// **Implementation**: NEW conforms to `AliasName` with `shouldQuote = false`, ensuring the
 /// QueryFragment interpolation system generates unquoted `NEW` instead of quoted `"NEW"`.
-public enum NEW: AliasName {
+public enum NEW: AliasName {}
+
+extension NEW {
     /// Returns the alias name "NEW" for use in the TableAlias machinery.
     ///
     /// NEW is a PostgreSQL keyword for trigger pseudo-records and must not be quoted.
@@ -361,7 +363,9 @@ public enum NEW: AliasName {
 ///
 /// **Implementation**: OLD conforms to `AliasName` with `shouldQuote = false`, ensuring the
 /// QueryFragment interpolation system generates unquoted `OLD` instead of quoted `"OLD"`.
-public enum OLD: AliasName {
+public enum OLD: AliasName {}
+
+extension OLD {
     /// Returns the alias name "OLD" for use in the TableAlias machinery.
     ///
     /// OLD is a PostgreSQL keyword for trigger pseudo-records and must not be quoted.
