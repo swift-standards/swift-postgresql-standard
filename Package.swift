@@ -21,13 +21,12 @@ let package = Package(
             name: "PostgreSQL Standard Test Support",
             targets: ["PostgreSQL Standard Test Support"]
         ),
-        // Vends the macro implementation module so the nested Tests/Testing
-        // package can test it cross-package (macros cannot depend on a
-        // swift-macro-testing test dep in this manifest per [INST-TEST-001]).
-        .library(
-            name: "PostgreSQL Standard Macros",
-            targets: ["PostgreSQL Standard Macros"]
-        ),
+        // "PostgreSQL Standard Macros" is not vended explicitly: SwiftPM
+        // auto-vends an implicit product for .macro targets on current
+        // tools, which the nested Tests/Testing package consumes
+        // cross-package (macros cannot depend on a swift-macro-testing test
+        // dep in this manifest per [INST-TEST-001]). An explicit .library
+        // product of the same name duplicated that implicit product.
     ],
     traits: [
         .trait(
@@ -55,8 +54,7 @@ let package = Package(
                 "PostgreSQL Standard Macros",
                 .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
                 .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
-            ],
-            exclude: ["Documentation.docc"]
+            ]
         ),
 
         // MARK: - Macros
