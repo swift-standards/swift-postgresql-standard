@@ -26,7 +26,7 @@ extension SnapshotTests {
         }
 
         @Test func taggedUUID() async {
-            let userId = User.ID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!
+            let userId = User.ID(UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!)
             await assertSQL(
                 of: User.insert {
                     User(id: userId, name: "Alice")
@@ -42,7 +42,7 @@ extension SnapshotTests {
         }
 
         @Test func taggedUUIDWhereClause() async {
-            let userId = User.ID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!
+            let userId = User.ID(UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!)
             await assertSQL(of: User.where { $0.id == userId }) {
                 """
                 SELECT "users"."id", "users"."name"
@@ -54,9 +54,9 @@ extension SnapshotTests {
 
         @Test func taggedInClause() async {
             let reminderIds: [Reminder.ID] = [
-                Reminder.ID(rawValue: 1),
-                Reminder.ID(rawValue: 2),
-                Reminder.ID(rawValue: 3),
+                Reminder.ID(1),
+                Reminder.ID(2),
+                Reminder.ID(3),
             ]
 
             await assertSQL(of: Reminder.where { reminderIds.contains($0.id) }) {
@@ -69,7 +69,7 @@ extension SnapshotTests {
         }
 
         @Test func taggedUpdate() async {
-            let userId = User.ID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!
+            let userId = User.ID(UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!)
             await assertSQL(
                 of: User.where { $0.id == userId }.update { $0.name = "Bob" }
             ) {
@@ -83,8 +83,8 @@ extension SnapshotTests {
 
         @Test func taggedDelete() async {
             let reminderIds: [Reminder.ID] = [
-                Reminder.ID(rawValue: 1),
-                Reminder.ID(rawValue: 2),
+                Reminder.ID(1),
+                Reminder.ID(2),
             ]
             await assertSQL(of: Reminder.where { reminderIds.contains($0.id) }.delete()) {
                 """

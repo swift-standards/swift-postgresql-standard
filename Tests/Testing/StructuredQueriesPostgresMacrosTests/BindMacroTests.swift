@@ -1,5 +1,5 @@
 import MacroTesting
-import StructuredQueriesPostgresMacros
+import PostgreSQL_Standard_Macros
 import Testing
 
 extension SnapshotTests {

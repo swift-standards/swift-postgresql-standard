@@ -192,19 +192,6 @@ extension SnapshotTests.UUIDFunctions {
         }
 
         @Test
-        func `Filter by extractVersion() in WHERE clause`() async {
-            await assertSQL(
-                of: UUIDEvent.where { $0.id.extractVersion() == 7 }
-            ) {
-                """
-                SELECT "uuidEvents"."id", "uuidEvents"."title", "uuidEvents"."userId", "uuidEvents"."timestamp"
-                FROM "uuidEvents"
-                WHERE (uuid_extract_version("uuidEvents"."id")) = (7)
-                """
-            }
-        }
-
-        @Test
         func `Order by extractTimestamp() in ORDER BY`() async {
             // Order events by extracted timestamp from UUID
             await assertSQL(

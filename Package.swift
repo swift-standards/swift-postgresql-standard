@@ -21,6 +21,13 @@ let package = Package(
             name: "PostgreSQL Standard Test Support",
             targets: ["PostgreSQL Standard Test Support"]
         ),
+        // Vends the macro implementation module so the nested Tests/Testing
+        // package can test it cross-package (macros cannot depend on a
+        // swift-macro-testing test dep in this manifest per [INST-TEST-001]).
+        .library(
+            name: "PostgreSQL Standard Macros",
+            targets: ["PostgreSQL Standard Macros"]
+        ),
     ],
     traits: [
         .trait(
@@ -45,7 +52,7 @@ let package = Package(
         .target(
             name: "PostgreSQL Standard",
             dependencies: [
-                "StructuredQueriesPostgresMacros",
+                "PostgreSQL Standard Macros",
                 .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
                 .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
             ],
@@ -55,7 +62,7 @@ let package = Package(
         // MARK: - Macros
 
         .macro(
-            name: "StructuredQueriesPostgresMacros",
+            name: "PostgreSQL Standard Macros",
             dependencies: [
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
@@ -83,16 +90,6 @@ let package = Package(
             dependencies: [
                 "PostgreSQL Standard",
                 "PostgreSQL Standard Test Support",
-                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
-            ]
-        ),
-
-        .testTarget(
-            name: "StructuredQueriesPostgresMacrosTests",
-            dependencies: [
-                "PostgreSQL Standard",
-                "StructuredQueriesPostgresMacros",
-                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
             ]
         ),
