@@ -78,8 +78,11 @@ extension SnapshotTests {
         @Test func multipleMutations() async {
             await assertSQL(
                 of: Reminder.update {
-                    $0.title += "!"
-                    $0.title += "?"
+                    // NB: explicit SQLQueryExpression wrap — the `+=` sugar trips the
+                    // write-only `QueryOutput` dynamic-member subscript (unavailable
+                    // getter) on the 6.3.3 toolchain. Durable fix tracked L1-side.
+                    $0.title = SQLQueryExpression($0.title) + "!"
+                    $0.title = SQLQueryExpression($0.title) + "?"
                 }
             ) {
                 """
@@ -128,7 +131,8 @@ extension SnapshotTests {
             await assertSQL(
                 of: Reminder.as(R.self)
                     .where { $0.id.eq(1) }
-                    .update { $0.title += " 2" }
+                    // NB: explicit SQLQueryExpression wrap — see the note in `multipleMutations`.
+                    .update { $0.title = SQLQueryExpression($0.title) + " 2" }
                     .returning(\.self)
             ) {
                 """

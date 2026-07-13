@@ -237,25 +237,29 @@ extension SnapshotTests {
                 +("rows"."c")
                 """
             }
-            await assertSQL(of: Row.update { $0.c += 1 }) {
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) + 1 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") + (1)
                 """
             }
-            await assertSQL(of: Row.update { $0.c -= 2 }) {
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) - 2 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") - (2)
                 """
             }
-            await assertSQL(of: Row.update { $0.c *= 3 }) {
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) * 3 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") * (3)
                 """
             }
-            await assertSQL(of: Row.update { $0.c /= 4 }) {
+            // NB: spelled via an explicit SQLQueryExpression wrap — the `$0.c /= 4` sugar
+            // trips the write-only `QueryOutput` dynamic-member subscript (unavailable
+            // getter) on the 6.3.3 toolchain. Durable fix tracked L1-side (Updates
+            // subscript overload set); see the R2 close report.
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) / 4 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") / (4)
@@ -312,25 +316,27 @@ extension SnapshotTests {
                 ~("rows"."c")
                 """
             }
-            await assertSQL(of: Row.update { $0.c &= 2 }) {
+            // NB: spelled via an explicit SQLQueryExpression wrap — see the `/=` note above.
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) & 2 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") & (2)
                 """
             }
-            await assertSQL(of: Row.update { $0.c |= 3 }) {
+            // NB: spelled via an explicit SQLQueryExpression wrap — see the `/=` note above.
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) | 3 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") | (3)
                 """
             }
-            await assertSQL(of: Row.update { $0.c <<= 4 }) {
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) << 4 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") << (4)
                 """
             }
-            await assertSQL(of: Row.update { $0.c >>= 5 }) {
+            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) >> 5 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") >> (5)

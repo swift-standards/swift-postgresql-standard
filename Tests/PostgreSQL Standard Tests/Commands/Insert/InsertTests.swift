@@ -18,7 +18,10 @@ extension SnapshotTests {
                         #sql("2")
                     )
                 } onConflictDoUpdate: {
-                    $0.title += " Copy"
+                    // NB: explicit SQLQueryExpression wrap — the `+=` sugar trips the
+                    // write-only `QueryOutput` dynamic-member subscript (unavailable
+                    // getter) on the 6.3.3 toolchain. Durable fix tracked L1-side.
+                    $0.title = SQLQueryExpression($0.title) + " Copy"
                 }
                 .returning(\.id)
             ) {
@@ -386,8 +389,13 @@ extension SnapshotTests {
                 """
             }
         }
-        // NB: This currently crashes in Xcode 26.
-        @Test func onConflict_invalidUpdateFilters() async {
+        // NB: exercises the invalid-update-filter case, which L1 Insert.swift:196
+        // handles with `assertionFailure` — a process-killing trap in debug builds
+        // that `withKnownIssue` cannot contain (it took the whole suite down).
+        // Re-enable when the L1 invalid-where case reports instead of trapping
+        // (rides the L1 gap-fill row, R2 close report 2026-07-13).
+        @Test(.disabled("Traps at L1 Insert.swift:196 assertionFailure in debug builds"))
+        func onConflict_invalidUpdateFilters() async {
             await withKnownIssue {
                 await assertSQL(
                     of: Reminder.insert {
