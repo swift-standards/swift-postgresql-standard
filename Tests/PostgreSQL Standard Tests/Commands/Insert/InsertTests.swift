@@ -18,9 +18,11 @@ extension SnapshotTests {
                         #sql("2")
                     )
                 } onConflictDoUpdate: {
-                    // NB: explicit SQLQueryExpression wrap — the `+=` sugar trips the
-                    // write-only `QueryOutput` dynamic-member subscript (unavailable
-                    // getter) on the 6.3.3 toolchain. Durable fix tracked L1-side.
+                    // NB: explicit SQLQueryExpression wrap — `$0.title += " Copy"`
+                    // trips the write-only subscript's unavailable getter on 6.3.3:
+                    // `@_disfavoredOverload` is not counted at operator-operand loci
+                    // and stdlib's String `+=` is concrete. Compiler-catalog CANDIDATE;
+                    // see the L1 gap-fill close report 2026-07-13.
                     $0.title = SQLQueryExpression($0.title) + " Copy"
                 }
                 .returning(\.id)
@@ -389,28 +391,29 @@ extension SnapshotTests {
                 """
             }
         }
-        // NB: exercises the invalid-update-filter case, which L1 Insert.swift:196
-        // handles with `assertionFailure` — a process-killing trap in debug builds
-        // that `withKnownIssue` cannot contain (it took the whole suite down).
-        // Re-enable when the L1 invalid-where case reports instead of trapping
-        // (rides the L1 gap-fill row, R2 close report 2026-07-13).
-        @Test(.disabled("Traps at L1 Insert.swift:196 assertionFailure in debug builds"))
-        func onConflict_invalidUpdateFilters() async {
+        @Test func onConflict_invalidUpdateFilters() async {
+            // The invalid update filter reports through `QueryFragment.Report.invalid`;
+            // bound to `Issue.record`, the diagnostic lands as a known issue while the
+            // emitted SQL is still asserted (a snapshot mismatch stays a failure).
             await withKnownIssue {
-                await assertSQL(
-                    of: Reminder.insert {
-                        Reminder.Draft(remindersListID: 1)
-                    } where: {
-                        $0.isFlagged
+                await QueryFragment.Report.$invalid.withValue({ Issue.record(Comment(rawValue: $0)) }) {
+                    await assertSQL(
+                        of: Reminder.insert {
+                            Reminder.Draft(remindersListID: 1)
+                        } where: {
+                            $0.isFlagged
+                        }
+                    ) {
+                        """
+                        INSERT INTO "reminders"
+                        ("id", "assignedUserID", "dueDate", "isCompleted", "isFlagged", "notes", "priority", "remindersListID", "title", "updatedAt")
+                        VALUES
+                        (DEFAULT, NULL, NULL, false, false, '', NULL, 1, '', '2040-02-14 23:31:30.000')
+                        """
                     }
-                ) {
-                    """
-                    INSERT INTO "reminders"
-                    ("id", "assignedUserID", "dueDate", "isCompleted", "isFlagged", "notes", "priority", "remindersListID", "title", "updatedAt")
-                    VALUES
-                    (DEFAULT, NULL, NULL, false, false, '', NULL, 1, '', '2040-02-14 23:31:30.000')
-                    """
                 }
+            } matching: { issue in
+                issue.comments.contains { $0.rawValue.contains("invalid update 'where'") }
             }
         }
         @Test func onConflict_conditionalWhere() async {

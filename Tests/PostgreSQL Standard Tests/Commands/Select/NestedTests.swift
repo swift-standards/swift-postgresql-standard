@@ -38,7 +38,14 @@ extension SnapshotTests.Commands.Select {
         @Test func columnGroupUpdateNestedField() async {
             await assertSQL(
                 of: Item.update {
-                    $0.status.isOutOfStock = true
+                    // NB: explicit SQLQueryExpression wrap — with `= true`, overload
+                    // scores SUM across the chained subscripts on 6.3.3: the favored
+                    // ColumnGroup path plus a disfavored inner setter ties the
+                    // disfavored write-only group subscript (unavailable getter), and
+                    // the solver picks the latter. The concrete wrap resolves the inner
+                    // setter at the favored tier, breaking the tie. Compiler-catalog
+                    // CANDIDATE; see the L1 gap-fill close report 2026-07-13.
+                    $0.status.isOutOfStock = SQLQueryExpression(true)
                 }
             ) {
                 """

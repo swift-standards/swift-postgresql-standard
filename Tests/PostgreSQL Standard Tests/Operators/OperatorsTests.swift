@@ -237,6 +237,13 @@ extension SnapshotTests {
                 +("rows"."c")
                 """
             }
+            // NB: explicit SQLQueryExpression wrap — on 6.3.3 the dynamic-member
+            // subscript's `@_disfavoredOverload` is NOT counted at operator-operand
+            // loci, so `$0.c += 1`-form sugar resolves to the write-only `QueryOutput`
+            // subscript (unavailable getter) wherever the stdlib operator is CONCRETE
+            // (`+ - * /` on Int here; `<<=`/`>>=`, whose stdlib forms are generic,
+            // resolve correctly below). Compiler-catalog CANDIDATE; see the L1
+            // gap-fill close report 2026-07-13.
             await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) + 1 }) {
                 """
                 UPDATE "rows"
@@ -255,10 +262,6 @@ extension SnapshotTests {
                 SET "c" = ("rows"."c") * (3)
                 """
             }
-            // NB: spelled via an explicit SQLQueryExpression wrap — the `$0.c /= 4` sugar
-            // trips the write-only `QueryOutput` dynamic-member subscript (unavailable
-            // getter) on the 6.3.3 toolchain. Durable fix tracked L1-side (Updates
-            // subscript overload set); see the R2 close report.
             await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) / 4 }) {
                 """
                 UPDATE "rows"
@@ -316,27 +319,28 @@ extension SnapshotTests {
                 ~("rows"."c")
                 """
             }
-            // NB: spelled via an explicit SQLQueryExpression wrap — see the `/=` note above.
+            // NB: explicit SQLQueryExpression wrap — same disfavored-not-counted
+            // mechanism as the arithmetic block above (`&`/`|` on Int are concrete
+            // stdlib operators); `<<=`/`>>=` below stay sugar (generic stdlib forms).
             await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) & 2 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") & (2)
                 """
             }
-            // NB: spelled via an explicit SQLQueryExpression wrap — see the `/=` note above.
             await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) | 3 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") | (3)
                 """
             }
-            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) << 4 }) {
+            await assertSQL(of: Row.update { $0.c <<= 4 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") << (4)
                 """
             }
-            await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) >> 5 }) {
+            await assertSQL(of: Row.update { $0.c >>= 5 }) {
                 """
                 UPDATE "rows"
                 SET "c" = ("rows"."c") >> (5)
