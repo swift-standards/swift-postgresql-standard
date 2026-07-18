@@ -1,4 +1,4 @@
-import Structured_Queries_Primitives
+public import PostgreSQL_Standard
 
 /// Defines and implements a conformance to the ``/Structured_Queries_Primitives/Table`` protocol.
 ///
@@ -27,7 +27,7 @@ public macro Table(
     schema schemaName: String = ""
 ) =
     #externalMacro(
-        module: "PostgreSQL_Standard_Macros",
+        module: "PostgreSQL_Standard_Macros_Implementation",
         type: "TableMacro"
     )
 
@@ -84,7 +84,7 @@ public macro Selection(
     _ name: String = ""
 ) =
     #externalMacro(
-        module: "PostgreSQL_Standard_Macros",
+        module: "PostgreSQL_Standard_Macros_Implementation",
         type: "TableMacro"
     )
 
@@ -105,7 +105,7 @@ public macro Column(
     primaryKey: Bool = false
 ) =
     #externalMacro(
-        module: "PostgreSQL_Standard_Macros",
+        module: "PostgreSQL_Standard_Macros_Implementation",
         type: "ColumnMacro"
     )
 
@@ -118,7 +118,7 @@ public macro Columns(
     primaryKey: Bool = false
 ) =
     #externalMacro(
-        module: "PostgreSQL_Standard_Macros",
+        module: "PostgreSQL_Standard_Macros_Implementation",
         type: "ColumnsMacro"
     )
 
@@ -128,7 +128,7 @@ public macro Columns(
 @attached(peer)
 public macro Ephemeral() =
     #externalMacro(
-        module: "PostgreSQL_Standard_Macros",
+        module: "PostgreSQL_Standard_Macros_Implementation",
         type: "EphemeralMacro"
     )
 
@@ -148,7 +148,7 @@ public macro bind<QueryValue: QueryBindable>(
     _ queryValue: QueryValue.QueryOutput,
     as queryValueType: QueryValue.Type = QueryValue.self
 ) -> BindQueryExpression<QueryValue> =
-    #externalMacro(module: "PostgreSQL_Standard_Macros", type: "BindMacro")
+    #externalMacro(module: "PostgreSQL_Standard_Macros_Implementation", type: "BindMacro")
 
 /// Introduces a safe SQL fragment to a query.
 ///
@@ -164,11 +164,11 @@ public macro sql<QueryValue>(
     _ queryFragment: QueryFragment,
     as queryValueType: QueryValue.Type = QueryValue.self
 ) -> SQLQueryExpression<QueryValue> =
-    #externalMacro(module: "PostgreSQL_Standard_Macros", type: "SQLMacro")
+    #externalMacro(module: "PostgreSQL_Standard_Macros_Implementation", type: "SQLMacro")
 
 @freestanding(expression)
 public macro sql(
     _ queryFragment: QueryFragment,
     as queryValueType: Any.Type = Any.self
 ) -> SQLQueryExpression<Any> =
-    #externalMacro(module: "PostgreSQL_Standard_Macros", type: "SQLMacro")
+    #externalMacro(module: "PostgreSQL_Standard_Macros_Implementation", type: "SQLMacro")

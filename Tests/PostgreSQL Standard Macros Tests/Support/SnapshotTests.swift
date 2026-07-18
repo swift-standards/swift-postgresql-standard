@@ -1,5 +1,6 @@
 import MacroTesting
-import PostgreSQL_Standard_Macros
+import PostgreSQL_Standard_Macros_Implementation
+import SnapshotTesting
 import Testing
 import Tests_Snapshot
 

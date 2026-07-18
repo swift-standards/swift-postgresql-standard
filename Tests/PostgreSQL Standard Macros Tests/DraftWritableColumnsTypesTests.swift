@@ -1,5 +1,5 @@
 import MacroTesting
-import PostgreSQL_Standard_Macros
+import PostgreSQL_Standard_Macros_Implementation
 import Testing
 
 extension SnapshotTests {
@@ -25,22 +25,22 @@ extension SnapshotTests {
                   var name: String
                   var email: String
 
-                  public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition, StructuredQueriesCore.PrimaryKeyedTableDefinition {
+                  public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition, Structured_Queries_Primitives.PrimaryKeyedTableDefinition {
                     public typealias QueryValue = User
                     public typealias PrimaryKey = UUID
-                    public let id = StructuredQueriesCore._TableColumn<QueryValue, UUID>.for("id", keyPath: \QueryValue.id)
-                    public let primaryKey = StructuredQueriesCore._TableColumn<QueryValue, UUID>.for("id", keyPath: \QueryValue.id)
-                    public let name = StructuredQueriesCore._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
-                    public let email = StructuredQueriesCore._TableColumn<QueryValue, String>.for("email", keyPath: \QueryValue.email)
-                    public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                      var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                    public let id = Structured_Queries_Primitives._TableColumn<QueryValue, UUID>.for("id", keyPath: \QueryValue.id)
+                    public let primaryKey = Structured_Queries_Primitives._TableColumn<QueryValue, UUID>.for("id", keyPath: \QueryValue.id)
+                    public let name = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
+                    public let email = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("email", keyPath: \QueryValue.email)
+                    public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                      var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                       allColumns.append(contentsOf: QueryValue.columns.id._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.name._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.email._allColumns)
                       return allColumns
                     }
-                    public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                      var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                    public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                      var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                       writableColumns.append(contentsOf: QueryValue.columns.id._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.name._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.email._writableColumns)
@@ -51,15 +51,15 @@ extension SnapshotTests {
                     }
                   }
 
-                  public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                  public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                     public typealias QueryValue = User
-                    public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                    public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                     public init(
-                      id: some StructuredQueriesCore.QueryExpression<UUID>,
-                      name: some StructuredQueriesCore.QueryExpression<String>,
-                      email: some StructuredQueriesCore.QueryExpression<String>
+                      id: some Structured_Queries_Primitives.QueryExpression<UUID>,
+                      name: some Structured_Queries_Primitives.QueryExpression<String>,
+                      email: some Structured_Queries_Primitives.QueryExpression<String>
                     ) {
-                      var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                      var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                       allColumns.append(contentsOf: id._allColumns)
                       allColumns.append(contentsOf: name._allColumns)
                       allColumns.append(contentsOf: email._allColumns)
@@ -67,25 +67,25 @@ extension SnapshotTests {
                     }
                   }
 
-                  public struct Draft: StructuredQueriesCore.TableDraft {
+                  public struct Draft: Structured_Queries_Primitives.TableDraft {
                     public typealias PrimaryTable = User
                     let id: UUID?
                     var name: String
                     var email: String
-                    public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition {
+                    public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition {
                       public typealias QueryValue = Draft
-                      public let id = StructuredQueriesCore._TableColumn<QueryValue, UUID?>.for("id", keyPath: \QueryValue.id, default: nil)
-                      public let name = StructuredQueriesCore._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
-                      public let email = StructuredQueriesCore._TableColumn<QueryValue, String>.for("email", keyPath: \QueryValue.email)
-                      public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                        var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                      public let id = Structured_Queries_Primitives._TableColumn<QueryValue, UUID?>.for("id", keyPath: \QueryValue.id, default: nil)
+                      public let name = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
+                      public let email = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("email", keyPath: \QueryValue.email)
+                      public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                        var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                         allColumns.append(contentsOf: QueryValue.columns.id._allColumns)
                         allColumns.append(contentsOf: QueryValue.columns.name._allColumns)
                         allColumns.append(contentsOf: QueryValue.columns.email._allColumns)
                         return allColumns
                       }
-                      public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                        var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                      public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                        var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                         writableColumns.append(contentsOf: QueryValue.columns.id._writableColumns)
                         writableColumns.append(contentsOf: QueryValue.columns.name._writableColumns)
                         writableColumns.append(contentsOf: QueryValue.columns.email._writableColumns)
@@ -95,15 +95,15 @@ extension SnapshotTests {
                         "\(self.id), \(self.name), \(self.email)"
                       }
                     }
-                    public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                    public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                       public typealias QueryValue = Draft
-                      public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                      public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                       public init(
-                        id: some StructuredQueriesCore.QueryExpression<UUID?> = UUID?(queryOutput: nil),
-                        name: some StructuredQueriesCore.QueryExpression<String>,
-                        email: some StructuredQueriesCore.QueryExpression<String>
+                        id: some Structured_Queries_Primitives.QueryExpression<UUID?> = UUID?(queryOutput: nil),
+                        name: some Structured_Queries_Primitives.QueryExpression<String>,
+                        email: some Structured_Queries_Primitives.QueryExpression<String>
                       ) {
-                        var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                        var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                         allColumns.append(contentsOf: id._allColumns)
                         allColumns.append(contentsOf: name._allColumns)
                         allColumns.append(contentsOf: email._allColumns)
@@ -130,15 +130,15 @@ extension SnapshotTests {
                       User.tableName
                     }
 
-                    public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                    public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                       self.id = try decoder.decode(UUID.self) ?? nil
                       let name = try decoder.decode(String.self)
                       let email = try decoder.decode(String.self)
                       guard let name else {
-                        throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                        throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                       }
                       guard let email else {
-                        throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                        throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                       }
                       self.name = name
                       self.email = email
@@ -161,7 +161,7 @@ extension SnapshotTests {
                   }
                 }
 
-                nonisolated extension User: StructuredQueriesCore.Table, StructuredQueriesCore.PrimaryKeyedTable, StructuredQueriesCore.PartialSelectStatement {
+                nonisolated extension User: Structured_Queries_Primitives.Table, Structured_Queries_Primitives.PrimaryKeyedTable, Structured_Queries_Primitives.PartialSelectStatement {
                   public typealias QueryValue = Self
                   public typealias From = Swift.Never
                   public nonisolated static var columns: TableColumns {
@@ -177,18 +177,18 @@ extension SnapshotTests {
                   public nonisolated static var tableName: String {
                     "users"
                   }
-                  public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                  public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                     let id = try decoder.decode(UUID.self)
                     let name = try decoder.decode(String.self)
                     let email = try decoder.decode(String.self)
                     guard let id else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let name else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let email else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     self.id = id
                     self.name = name
@@ -217,22 +217,22 @@ extension SnapshotTests {
                   var name: String
                   var price: Double
 
-                  public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition, StructuredQueriesCore.PrimaryKeyedTableDefinition {
+                  public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition, Structured_Queries_Primitives.PrimaryKeyedTableDefinition {
                     public typealias QueryValue = Product
                     public typealias PrimaryKey = Int
-                    public let id = StructuredQueriesCore._TableColumn<QueryValue, Int>.for("id", keyPath: \QueryValue.id)
-                    public let primaryKey = StructuredQueriesCore._TableColumn<QueryValue, Int>.for("id", keyPath: \QueryValue.id)
-                    public let name = StructuredQueriesCore._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
-                    public let price = StructuredQueriesCore._TableColumn<QueryValue, Double>.for("price", keyPath: \QueryValue.price)
-                    public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                      var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                    public let id = Structured_Queries_Primitives._TableColumn<QueryValue, Int>.for("id", keyPath: \QueryValue.id)
+                    public let primaryKey = Structured_Queries_Primitives._TableColumn<QueryValue, Int>.for("id", keyPath: \QueryValue.id)
+                    public let name = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
+                    public let price = Structured_Queries_Primitives._TableColumn<QueryValue, Double>.for("price", keyPath: \QueryValue.price)
+                    public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                      var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                       allColumns.append(contentsOf: QueryValue.columns.id._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.name._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.price._allColumns)
                       return allColumns
                     }
-                    public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                      var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                    public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                      var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                       writableColumns.append(contentsOf: QueryValue.columns.id._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.name._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.price._writableColumns)
@@ -243,15 +243,15 @@ extension SnapshotTests {
                     }
                   }
 
-                  public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                  public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                     public typealias QueryValue = Product
-                    public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                    public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                     public init(
-                      id: some StructuredQueriesCore.QueryExpression<Int>,
-                      name: some StructuredQueriesCore.QueryExpression<String>,
-                      price: some StructuredQueriesCore.QueryExpression<Double>
+                      id: some Structured_Queries_Primitives.QueryExpression<Int>,
+                      name: some Structured_Queries_Primitives.QueryExpression<String>,
+                      price: some Structured_Queries_Primitives.QueryExpression<Double>
                     ) {
-                      var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                      var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                       allColumns.append(contentsOf: id._allColumns)
                       allColumns.append(contentsOf: name._allColumns)
                       allColumns.append(contentsOf: price._allColumns)
@@ -259,25 +259,25 @@ extension SnapshotTests {
                     }
                   }
 
-                  public struct Draft: StructuredQueriesCore.TableDraft {
+                  public struct Draft: Structured_Queries_Primitives.TableDraft {
                     public typealias PrimaryTable = Product
                     let id: Int?
                     var name: String
                     var price: Double
-                    public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition {
+                    public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition {
                       public typealias QueryValue = Draft
-                      public let id = StructuredQueriesCore._TableColumn<QueryValue, Int?>.for("id", keyPath: \QueryValue.id, default: nil)
-                      public let name = StructuredQueriesCore._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
-                      public let price = StructuredQueriesCore._TableColumn<QueryValue, Double>.for("price", keyPath: \QueryValue.price)
-                      public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                        var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                      public let id = Structured_Queries_Primitives._TableColumn<QueryValue, Int?>.for("id", keyPath: \QueryValue.id, default: nil)
+                      public let name = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("name", keyPath: \QueryValue.name)
+                      public let price = Structured_Queries_Primitives._TableColumn<QueryValue, Double>.for("price", keyPath: \QueryValue.price)
+                      public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                        var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                         allColumns.append(contentsOf: QueryValue.columns.id._allColumns)
                         allColumns.append(contentsOf: QueryValue.columns.name._allColumns)
                         allColumns.append(contentsOf: QueryValue.columns.price._allColumns)
                         return allColumns
                       }
-                      public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                        var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                      public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                        var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                         writableColumns.append(contentsOf: QueryValue.columns.id._writableColumns)
                         writableColumns.append(contentsOf: QueryValue.columns.name._writableColumns)
                         writableColumns.append(contentsOf: QueryValue.columns.price._writableColumns)
@@ -287,15 +287,15 @@ extension SnapshotTests {
                         "\(self.id), \(self.name), \(self.price)"
                       }
                     }
-                    public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                    public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                       public typealias QueryValue = Draft
-                      public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                      public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                       public init(
-                        id: some StructuredQueriesCore.QueryExpression<Int?> = Int?(queryOutput: nil),
-                        name: some StructuredQueriesCore.QueryExpression<String>,
-                        price: some StructuredQueriesCore.QueryExpression<Double>
+                        id: some Structured_Queries_Primitives.QueryExpression<Int?> = Int?(queryOutput: nil),
+                        name: some Structured_Queries_Primitives.QueryExpression<String>,
+                        price: some Structured_Queries_Primitives.QueryExpression<Double>
                       ) {
-                        var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                        var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                         allColumns.append(contentsOf: id._allColumns)
                         allColumns.append(contentsOf: name._allColumns)
                         allColumns.append(contentsOf: price._allColumns)
@@ -322,15 +322,15 @@ extension SnapshotTests {
                       Product.tableName
                     }
 
-                    public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                    public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                       self.id = try decoder.decode(Int.self) ?? nil
                       let name = try decoder.decode(String.self)
                       let price = try decoder.decode(Double.self)
                       guard let name else {
-                        throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                        throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                       }
                       guard let price else {
-                        throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                        throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                       }
                       self.name = name
                       self.price = price
@@ -353,7 +353,7 @@ extension SnapshotTests {
                   }
                 }
 
-                nonisolated extension Product: StructuredQueriesCore.Table, StructuredQueriesCore.PrimaryKeyedTable, StructuredQueriesCore.PartialSelectStatement {
+                nonisolated extension Product: Structured_Queries_Primitives.Table, Structured_Queries_Primitives.PrimaryKeyedTable, Structured_Queries_Primitives.PartialSelectStatement {
                   public typealias QueryValue = Self
                   public typealias From = Swift.Never
                   public nonisolated static var columns: TableColumns {
@@ -369,18 +369,18 @@ extension SnapshotTests {
                   public nonisolated static var tableName: String {
                     "products"
                   }
-                  public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                  public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                     let id = try decoder.decode(Int.self)
                     let name = try decoder.decode(String.self)
                     let price = try decoder.decode(Double.self)
                     guard let id else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let name else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let price else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     self.id = id
                     self.name = name
@@ -409,22 +409,22 @@ extension SnapshotTests {
                   var type: String
                   var processedAt: Date
 
-                  public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition, StructuredQueriesCore.PrimaryKeyedTableDefinition {
+                  public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition, Structured_Queries_Primitives.PrimaryKeyedTableDefinition {
                     public typealias QueryValue = StripeEvent
                     public typealias PrimaryKey = String
-                    public let id = StructuredQueriesCore._TableColumn<QueryValue, String>.for("id", keyPath: \QueryValue.id)
-                    public let primaryKey = StructuredQueriesCore._TableColumn<QueryValue, String>.for("id", keyPath: \QueryValue.id)
-                    public let type = StructuredQueriesCore._TableColumn<QueryValue, String>.for("type", keyPath: \QueryValue.type)
-                    public let processedAt = StructuredQueriesCore._TableColumn<QueryValue, Date>.for("processedAt", keyPath: \QueryValue.processedAt)
-                    public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                      var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                    public let id = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("id", keyPath: \QueryValue.id)
+                    public let primaryKey = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("id", keyPath: \QueryValue.id)
+                    public let type = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("type", keyPath: \QueryValue.type)
+                    public let processedAt = Structured_Queries_Primitives._TableColumn<QueryValue, Date>.for("processedAt", keyPath: \QueryValue.processedAt)
+                    public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                      var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                       allColumns.append(contentsOf: QueryValue.columns.id._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.type._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.processedAt._allColumns)
                       return allColumns
                     }
-                    public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                      var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                    public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                      var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                       writableColumns.append(contentsOf: QueryValue.columns.id._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.type._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.processedAt._writableColumns)
@@ -435,15 +435,15 @@ extension SnapshotTests {
                     }
                   }
 
-                  public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                  public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                     public typealias QueryValue = StripeEvent
-                    public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                    public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                     public init(
-                      id: some StructuredQueriesCore.QueryExpression<String>,
-                      type: some StructuredQueriesCore.QueryExpression<String>,
-                      processedAt: some StructuredQueriesCore.QueryExpression<Date>
+                      id: some Structured_Queries_Primitives.QueryExpression<String>,
+                      type: some Structured_Queries_Primitives.QueryExpression<String>,
+                      processedAt: some Structured_Queries_Primitives.QueryExpression<Date>
                     ) {
-                      var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                      var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                       allColumns.append(contentsOf: id._allColumns)
                       allColumns.append(contentsOf: type._allColumns)
                       allColumns.append(contentsOf: processedAt._allColumns)
@@ -451,25 +451,25 @@ extension SnapshotTests {
                     }
                   }
 
-                  public struct Draft: StructuredQueriesCore.TableDraft {
+                  public struct Draft: Structured_Queries_Primitives.TableDraft {
                     public typealias PrimaryTable = StripeEvent
                     let id: String?
                     var type: String
                     var processedAt: Date
-                    public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition {
+                    public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition {
                       public typealias QueryValue = Draft
-                      public let id = StructuredQueriesCore._TableColumn<QueryValue, String?>.for("id", keyPath: \QueryValue.id, default: nil)
-                      public let type = StructuredQueriesCore._TableColumn<QueryValue, String>.for("type", keyPath: \QueryValue.type)
-                      public let processedAt = StructuredQueriesCore._TableColumn<QueryValue, Date>.for("processedAt", keyPath: \QueryValue.processedAt)
-                      public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                        var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                      public let id = Structured_Queries_Primitives._TableColumn<QueryValue, String?>.for("id", keyPath: \QueryValue.id, default: nil)
+                      public let type = Structured_Queries_Primitives._TableColumn<QueryValue, String>.for("type", keyPath: \QueryValue.type)
+                      public let processedAt = Structured_Queries_Primitives._TableColumn<QueryValue, Date>.for("processedAt", keyPath: \QueryValue.processedAt)
+                      public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                        var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                         allColumns.append(contentsOf: QueryValue.columns.id._allColumns)
                         allColumns.append(contentsOf: QueryValue.columns.type._allColumns)
                         allColumns.append(contentsOf: QueryValue.columns.processedAt._allColumns)
                         return allColumns
                       }
-                      public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                        var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                      public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                        var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                         writableColumns.append(contentsOf: QueryValue.columns.id._writableColumns)
                         writableColumns.append(contentsOf: QueryValue.columns.type._writableColumns)
                         writableColumns.append(contentsOf: QueryValue.columns.processedAt._writableColumns)
@@ -479,15 +479,15 @@ extension SnapshotTests {
                         "\(self.id), \(self.type), \(self.processedAt)"
                       }
                     }
-                    public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                    public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                       public typealias QueryValue = Draft
-                      public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                      public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                       public init(
-                        id: some StructuredQueriesCore.QueryExpression<String?> = String?(queryOutput: nil),
-                        type: some StructuredQueriesCore.QueryExpression<String>,
-                        processedAt: some StructuredQueriesCore.QueryExpression<Date>
+                        id: some Structured_Queries_Primitives.QueryExpression<String?> = String?(queryOutput: nil),
+                        type: some Structured_Queries_Primitives.QueryExpression<String>,
+                        processedAt: some Structured_Queries_Primitives.QueryExpression<Date>
                       ) {
-                        var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                        var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                         allColumns.append(contentsOf: id._allColumns)
                         allColumns.append(contentsOf: type._allColumns)
                         allColumns.append(contentsOf: processedAt._allColumns)
@@ -514,15 +514,15 @@ extension SnapshotTests {
                       StripeEvent.tableName
                     }
 
-                    public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                    public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                       self.id = try decoder.decode(String.self) ?? nil
                       let type = try decoder.decode(String.self)
                       let processedAt = try decoder.decode(Date.self)
                       guard let type else {
-                        throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                        throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                       }
                       guard let processedAt else {
-                        throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                        throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                       }
                       self.type = type
                       self.processedAt = processedAt
@@ -545,7 +545,7 @@ extension SnapshotTests {
                   }
                 }
 
-                nonisolated extension StripeEvent: StructuredQueriesCore.Table, StructuredQueriesCore.PrimaryKeyedTable, StructuredQueriesCore.PartialSelectStatement {
+                nonisolated extension StripeEvent: Structured_Queries_Primitives.Table, Structured_Queries_Primitives.PrimaryKeyedTable, Structured_Queries_Primitives.PartialSelectStatement {
                   public typealias QueryValue = Self
                   public typealias From = Swift.Never
                   public nonisolated static var columns: TableColumns {
@@ -561,18 +561,18 @@ extension SnapshotTests {
                   public nonisolated static var tableName: String {
                     "stripe_events"
                   }
-                  public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                  public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                     let id = try decoder.decode(String.self)
                     let type = try decoder.decode(String.self)
                     let processedAt = try decoder.decode(Date.self)
                     guard let id else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let type else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let processedAt else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     self.id = id
                     self.type = type
@@ -601,20 +601,20 @@ extension SnapshotTests {
                   var customerId: UUID  // Not named 'id', so included even though UUID
                   var total: Double
 
-                  public nonisolated struct TableColumns: StructuredQueriesCore.TableDefinition {
+                  public nonisolated struct TableColumns: Structured_Queries_Primitives.TableDefinition {
                     public typealias QueryValue = Order
-                    public let orderId = StructuredQueriesCore._TableColumn<QueryValue, Int>.for("orderId", keyPath: \QueryValue.orderId)
-                    public let customerId = StructuredQueriesCore._TableColumn<QueryValue, UUID>.for("customerId", keyPath: \QueryValue.customerId)
-                    public let total = StructuredQueriesCore._TableColumn<QueryValue, Double>.for("total", keyPath: \QueryValue.total)
-                    public static var allColumns: [any StructuredQueriesCore.TableColumnExpression] {
-                      var allColumns: [any StructuredQueriesCore.TableColumnExpression] = []
+                    public let orderId = Structured_Queries_Primitives._TableColumn<QueryValue, Int>.for("orderId", keyPath: \QueryValue.orderId)
+                    public let customerId = Structured_Queries_Primitives._TableColumn<QueryValue, UUID>.for("customerId", keyPath: \QueryValue.customerId)
+                    public let total = Structured_Queries_Primitives._TableColumn<QueryValue, Double>.for("total", keyPath: \QueryValue.total)
+                    public static var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] {
+                      var allColumns: [any Structured_Queries_Primitives.TableColumnExpression] = []
                       allColumns.append(contentsOf: QueryValue.columns.orderId._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.customerId._allColumns)
                       allColumns.append(contentsOf: QueryValue.columns.total._allColumns)
                       return allColumns
                     }
-                    public static var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] {
-                      var writableColumns: [any StructuredQueriesCore.WritableTableColumnExpression] = []
+                    public static var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] {
+                      var writableColumns: [any Structured_Queries_Primitives.WritableTableColumnExpression] = []
                       writableColumns.append(contentsOf: QueryValue.columns.orderId._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.customerId._writableColumns)
                       writableColumns.append(contentsOf: QueryValue.columns.total._writableColumns)
@@ -625,15 +625,15 @@ extension SnapshotTests {
                     }
                   }
 
-                  public nonisolated struct Selection: StructuredQueriesCore.TableExpression {
+                  public nonisolated struct Selection: Structured_Queries_Primitives.TableExpression {
                     public typealias QueryValue = Order
-                    public let allColumns: [any StructuredQueriesCore.QueryExpression]
+                    public let allColumns: [any Structured_Queries_Primitives.QueryExpression]
                     public init(
-                      orderId: some StructuredQueriesCore.QueryExpression<Int>,
-                      customerId: some StructuredQueriesCore.QueryExpression<UUID>,
-                      total: some StructuredQueriesCore.QueryExpression<Double>
+                      orderId: some Structured_Queries_Primitives.QueryExpression<Int>,
+                      customerId: some Structured_Queries_Primitives.QueryExpression<UUID>,
+                      total: some Structured_Queries_Primitives.QueryExpression<Double>
                     ) {
-                      var allColumns: [any StructuredQueriesCore.QueryExpression] = []
+                      var allColumns: [any Structured_Queries_Primitives.QueryExpression] = []
                       allColumns.append(contentsOf: orderId._allColumns)
                       allColumns.append(contentsOf: customerId._allColumns)
                       allColumns.append(contentsOf: total._allColumns)
@@ -642,7 +642,7 @@ extension SnapshotTests {
                   }
                 }
 
-                nonisolated extension Order: StructuredQueriesCore.Table, StructuredQueriesCore.PartialSelectStatement {
+                nonisolated extension Order: Structured_Queries_Primitives.Table, Structured_Queries_Primitives.PartialSelectStatement {
                   public typealias QueryValue = Self
                   public typealias From = Swift.Never
                   public nonisolated static var columns: TableColumns {
@@ -658,18 +658,18 @@ extension SnapshotTests {
                   public nonisolated static var tableName: String {
                     "orders"
                   }
-                  public nonisolated init(decoder: inout some StructuredQueriesCore.QueryDecoder) throws {
+                  public nonisolated init(decoder: inout some Structured_Queries_Primitives.QueryDecoder) throws {
                     let orderId = try decoder.decode(Int.self)
                     let customerId = try decoder.decode(UUID.self)
                     let total = try decoder.decode(Double.self)
                     guard let orderId else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let customerId else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     guard let total else {
-                      throw StructuredQueriesCore.QueryDecodingError.missingRequiredColumn
+                      throw Structured_Queries_Primitives.QueryDecodingError.missingRequiredColumn
                     }
                     self.orderId = orderId
                     self.customerId = customerId

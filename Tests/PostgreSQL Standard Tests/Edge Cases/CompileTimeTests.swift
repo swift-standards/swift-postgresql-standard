@@ -1,4 +1,5 @@
 import PostgreSQL_Standard
+import PostgreSQL_Standard_Macros
 
 // NB: This is a compile-time test for a 'select' overload.
 @Selection

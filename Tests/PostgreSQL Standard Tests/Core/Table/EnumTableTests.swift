@@ -3,6 +3,7 @@
     import Foundation
     import Tests_Inline_Snapshot
     import PostgreSQL_Standard
+    import PostgreSQL_Standard_Macros
     import PostgreSQL_Standard_Test_Support
     import Testing
 

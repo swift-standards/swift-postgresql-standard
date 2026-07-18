@@ -1,5 +1,5 @@
 import MacroTesting
-import PostgreSQL_Standard_Macros
+import PostgreSQL_Standard_Macros_Implementation
 import Testing
 
 extension SnapshotTests {
@@ -12,7 +12,7 @@ extension SnapshotTests {
                 """#
             } expansion: {
                 #"""
-                \(date) < StructuredQueriesCore.BindQueryExpression(Date())
+                \(date) < Structured_Queries_Primitives.BindQueryExpression(Date())
                 """#
             }
         }
@@ -24,7 +24,7 @@ extension SnapshotTests {
                 """#
             } expansion: {
                 #"""
-                \(date) < StructuredQueriesCore.BindQueryExpression(Date(), as: Date.UnixTimeRepresentation.self)
+                \(date) < Structured_Queries_Primitives.BindQueryExpression(Date(), as: Date.UnixTimeRepresentation.self)
                 """#
             }
         }

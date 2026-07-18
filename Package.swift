@@ -21,12 +21,10 @@ let package = Package(
             name: "PostgreSQL Standard Test Support",
             targets: ["PostgreSQL Standard Test Support"]
         ),
-        // "PostgreSQL Standard Macros" is not vended explicitly: SwiftPM
-        // auto-vends an implicit product for .macro targets on current
-        // tools, which the nested Tests/Testing package consumes
-        // cross-package (macros cannot depend on a swift-macro-testing test
-        // dep in this manifest per [INST-TEST-001]). An explicit .library
-        // product of the same name duplicated that implicit product.
+        .library(
+            name: "PostgreSQL Standard Macros",
+            targets: ["PostgreSQL Standard Macros"]
+        ),
     ],
     traits: [
         .trait(
@@ -39,6 +37,8 @@ let package = Package(
         .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
 
         // Remote
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.6.3"),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", exact: "1.18.9"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
         .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
 
@@ -51,7 +51,6 @@ let package = Package(
         .target(
             name: "PostgreSQL Standard",
             dependencies: [
-                "PostgreSQL Standard Macros",
                 .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
                 .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
             ]
@@ -59,14 +58,23 @@ let package = Package(
 
         // MARK: - Macros
 
-        .macro(
+        .target(
             name: "PostgreSQL Standard Macros",
+            dependencies: [
+                "PostgreSQL Standard",
+                "PostgreSQL Standard Macros Implementation",
+            ],
+            path: "Sources/PostgreSQL Standard Macro Declarations"
+        ),
+        .macro(
+            name: "PostgreSQL Standard Macros Implementation",
             dependencies: [
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
             ],
+            path: "Sources/PostgreSQL Standard Macros",
             exclude: ["Symbolic Links/README.md"]
         ),
 
@@ -86,9 +94,20 @@ let package = Package(
         // MARK: - Tests
 
         .testTarget(
+            name: "PostgreSQL Standard Macros Tests",
+            dependencies: [
+                "PostgreSQL Standard Macros Implementation",
+                .product(name: "MacroTesting", package: "swift-macro-testing"),
+                .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+                .product(name: "Tests Snapshot", package: "swift-tests"),
+            ]
+        ),
+
+        .testTarget(
             name: "PostgreSQL Standard Tests",
             dependencies: [
                 "PostgreSQL Standard",
+                "PostgreSQL Standard Macros",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
             ]
@@ -98,6 +117,7 @@ let package = Package(
             name: "README Examples Tests",
             dependencies: [
                 "PostgreSQL Standard",
+                "PostgreSQL Standard Macros",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
                 .product(name: "Tests Apple Testing Bridge", package: "swift-tests"),

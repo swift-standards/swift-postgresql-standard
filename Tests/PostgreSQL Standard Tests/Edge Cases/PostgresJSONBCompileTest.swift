@@ -1,5 +1,6 @@
 import Foundation
 import PostgreSQL_Standard
+import PostgreSQL_Standard_Macros
 
 // Simple compile-time test to verify JSONB types are available
 struct CompileTest {

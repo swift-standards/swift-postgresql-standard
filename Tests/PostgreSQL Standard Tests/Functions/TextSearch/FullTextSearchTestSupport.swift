@@ -1,5 +1,6 @@
 import Foundation
 import PostgreSQL_Standard
+import PostgreSQL_Standard_Macros
 import Testing
 
 // Shared test tables for full-text search tests
