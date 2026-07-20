@@ -25,6 +25,11 @@ let package = Package(
             name: "PostgreSQL Standard Macros",
             targets: ["PostgreSQL Standard Macros"]
         ),
+        // Exposed for the nested testing package (Tests/Package.swift) only.
+        .library(
+            name: "PostgreSQL Standard Macros Implementation",
+            targets: ["PostgreSQL Standard Macros Implementation"]
+        ),
     ],
     traits: [
         .trait(
@@ -37,8 +42,6 @@ let package = Package(
         .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
 
         // Remote
-        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.6.3"),
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", exact: "1.18.9"),
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
         .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
 
@@ -93,15 +96,9 @@ let package = Package(
 
         // MARK: - Tests
 
-        .testTarget(
-            name: "PostgreSQL Standard Macros Tests",
-            dependencies: [
-                "PostgreSQL Standard Macros Implementation",
-                .product(name: "MacroTesting", package: "swift-macro-testing"),
-                .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
-                .product(name: "Tests Snapshot", package: "swift-tests"),
-            ]
-        ),
+        // "PostgreSQL Standard Macros Tests" lives in the nested testing package
+        // (Tests/Package.swift) per [INST-TEST-001]: pointfreeco test-only deps
+        // never enter this manifest.
 
         .testTarget(
             name: "PostgreSQL Standard Tests",
@@ -110,7 +107,8 @@ let package = Package(
                 "PostgreSQL Standard Macros",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
-            ]
+            ],
+            path: "Tests/PostgreSQL Standard Tests"
         ),
 
         .testTarget(
@@ -121,7 +119,8 @@ let package = Package(
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
                 .product(name: "Tests Apple Testing Bridge", package: "swift-tests"),
-            ]
+            ],
+            path: "Tests/README Examples Tests"
         ),
     ],
     swiftLanguageModes: [.v6]
