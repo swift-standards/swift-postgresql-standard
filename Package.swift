@@ -26,8 +26,18 @@ let package = Package(
             targets: ["PostgreSQL Standard Macros"]
         ),
         // Exposed for the nested testing package (Tests/Package.swift) only.
+        // NOTE: the product name MUST differ from the ".macro" target name
+        // "PostgreSQL Standard Macros Implementation". SwiftPM auto-vends an
+        // implicit product for the .macro target under that exact name; an
+        // explicit same-named .library collides with it ("ignoring duplicate
+        // product ... (macro)"), SwiftPM drops the plugin product, and every
+        // downstream @Table site fails "external macro ... could not be found".
+        // The distinct "... Library" name lets the importable library product
+        // and the macro plugin product coexist. The module the nested tests
+        // import is unchanged (module name derives from the target, not the
+        // product): `import PostgreSQL_Standard_Macros_Implementation`.
         .library(
-            name: "PostgreSQL Standard Macros Implementation",
+            name: "PostgreSQL Standard Macros Implementation Library",
             targets: ["PostgreSQL Standard Macros Implementation"]
         ),
     ],

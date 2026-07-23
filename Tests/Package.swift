@@ -25,7 +25,7 @@ let package = Package(
         .testTarget(
             name: "PostgreSQL Standard Macros Tests",
             dependencies: [
-                .product(name: "PostgreSQL Standard Macros Implementation", package: "swift-postgresql-standard"),
+                .product(name: "PostgreSQL Standard Macros Implementation Library", package: "swift-postgresql-standard"),
                 .product(name: "MacroTesting", package: "swift-macro-testing"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                 .product(name: "Tests Snapshot", package: "swift-tests"),
