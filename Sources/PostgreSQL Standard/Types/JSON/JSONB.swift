@@ -1,3 +1,4 @@
+import Byte_Primitives
 public import Foundation
 import Structured_Queries_Primitives
 
@@ -64,7 +65,7 @@ extension _JSONBRepresentation: QueryBindable {
     public var queryBinding: QueryBinding {
         do {
             let jsonData = try jsonEncoder.encode(queryOutput)
-            return .jsonb(jsonData)
+            return .jsonb(jsonData.map(Byte.init))
         } catch {
             return .invalid(error)
         }
@@ -94,7 +95,15 @@ extension _JSONBRepresentation: Sendable where QueryOutput: Sendable {}
 private let jsonDecoder: JSONDecoder = {
     var decoder = JSONDecoder()
     decoder.dateDecodingStrategy = .custom {
-        try Date(iso8601String: $0.singleValueContainer().decode(String.self))
+        let timestamp = try $0.singleValueContainer().decode(String.self)
+        // The fractional part is the only optional element of the shape, and a `.`
+        // appears nowhere else in it, so its presence selects the strategy outright.
+        return try Date(
+            timestamp,
+            strategy: timestamp.contains(where: { $0 == "." })
+                ? jsonbTimestampFractional
+                : jsonbTimestampWhole
+        )
     }
     return decoder
 }()
@@ -103,10 +112,32 @@ private let jsonEncoder: JSONEncoder = {
     var encoder = JSONEncoder()
     encoder.dateEncodingStrategy = .custom { date, encoder in
         var container = encoder.singleValueContainer()
-        try container.encode(date.iso8601String)
+        try container.encode(date.formatted(jsonbTimestampFractional))
     }
     #if DEBUG
         encoder.outputFormatting = [.sortedKeys]  // Remove prettyPrinted for SQL
     #endif
     return encoder
 }()
+
+// MARK: - JSONB Timestamp Representation
+
+// `yyyy-MM-dd HH:mm:ss.SSS` in UTC — the shape this package has always written
+// into JSONB documents. It was supplied by `Date.iso8601String` in the L1 core
+// until the Foundation drain deleted it; re-homing it here keeps the stored
+// representation byte-identical.
+//
+// Deliberately *not* routed through `swift-rfc-3339`: RFC 3339 requires a `T`
+// (or `t`) date/time separator and a mandatory `time-offset`, so that package
+// can neither emit nor parse this shape. Adopting it would silently rewrite the
+// timestamps in every existing JSONB column.
+
+private let jsonbTimestampFractional = Date.ISO8601FormatStyle()
+    .year().month().day()
+    .dateTimeSeparator(.space)
+    .time(includingFractionalSeconds: true)
+
+private let jsonbTimestampWhole = Date.ISO8601FormatStyle()
+    .year().month().day()
+    .dateTimeSeparator(.space)
+    .time(includingFractionalSeconds: false)

@@ -50,6 +50,7 @@ let package = Package(
     dependencies: [
         // L1
         .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
 
         // Remote
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
@@ -66,6 +67,17 @@ let package = Package(
             dependencies: [
                 .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
                 .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
+                // This target's public surface binds Foundation's `Date`, `UUID`,
+                // `Data`, `URL` and `Decimal` (see `Cast.swift`, `PostgresArray.swift`,
+                // `Trigger.Function+Helpers.swift`). Those `QueryBindable`
+                // conformances moved out of the L1 core into this opt-in
+                // integration target when the core went Foundation-free, so the
+                // dependency is what keeps this package's own API unchanged.
+                .product(
+                    name: "Structured Queries Primitives Foundation Integration",
+                    package: "swift-structured-queries-primitives"
+                ),
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
             ]
         ),
 
@@ -117,6 +129,9 @@ let package = Package(
                 "PostgreSQL Standard Macros",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+                // `QueryBinding`'s blob/jsonb payloads are `[Byte]` since the L1
+                // Foundation drain; the binding tests read those bytes back.
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
             ],
             path: "Tests/PostgreSQL Standard Tests"
         ),

@@ -1,3 +1,4 @@
+import Byte_Primitives
 import Foundation
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Macros
@@ -30,7 +31,7 @@ extension SnapshotTests.JSONB {
 
             switch arrayBinding {
             case .jsonb(let data):
-                let decoded = String(decoding: data, as: UTF8.self)
+                let decoded = String(decoding: data.map(\.underlying), as: UTF8.self)
                 #expect(decoded.contains("feature1"))
                 #expect(decoded.contains("feature2"))
             default:
@@ -43,7 +44,7 @@ extension SnapshotTests.JSONB {
 
             switch dictBinding {
             case .jsonb(let data):
-                let decoded = String(decoding: data, as: UTF8.self)
+                let decoded = String(decoding: data.map(\.underlying), as: UTF8.self)
                 #expect(decoded.contains("key1"))
                 #expect(decoded.contains("value1"))
             default:

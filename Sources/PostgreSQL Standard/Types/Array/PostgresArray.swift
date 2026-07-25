@@ -1,5 +1,7 @@
+import Byte_Primitives
 import Foundation
 import Structured_Queries_Primitives
+import Structured_Queries_Primitives_Foundation_Integration
 
 // MARK: - Native PostgreSQL Array Support
 
@@ -55,19 +57,19 @@ import Structured_Queries_Primitives
 
 // MARK: - Array QueryBindable Conformance
 
-// Note: [UInt8] has special conformance in Structured_Queries_Primitives for bytea (blob) support.
-// Due to Swift's conformance rules, that more-specific conformance takes precedence.
+// Note: [UInt8] is bound as bytea (blob) rather than as a native array. The
+// core's blob payload is `[Byte]` since its Foundation drain (it was `[UInt8]`
+// before), so the element bytes are lifted at the boundary.
 // This extension provides native array support for all other QueryBindable element types.
 extension Array: QueryBindable, QueryExpression where Element: QueryBindable {
     public typealias QueryValue = [Element]
 
     public var queryBinding: QueryBinding {
-        // Special case: [UInt8] is handled by the more-specific conformance in Core
-        // for bytea (binary data) support
+        // Special case: [UInt8] carries bytea (binary data), not a native array
         if Element.self == UInt8.self {
             // Element verified as UInt8.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
-            return .blob(self as! [UInt8])
+            return .blob((self as! [UInt8]).map(Byte.init))
         }
 
         // Map primitive types to their specific PostgreSQL array binding cases
@@ -108,11 +110,11 @@ extension Array: QueryBindable, QueryExpression where Element: QueryBindable {
         case is UUID.Type:
             // Element verified as UUID.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
-            return .uuidArray(self as! [UUID])
+            return .uuidArray((self as! [UUID]).map(QueryBinding.UUID.init))
         case is Date.Type:
             // Element verified as Date.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
-            return .dateArray(self as! [Date])
+            return .dateArray((self as! [Date]).map(\.instant))
         default:
             // Fallback: Use genericArray for any other QueryBindable element type
             // This supports custom types like enums with RawRepresentable conformance
@@ -120,6 +122,10 @@ extension Array: QueryBindable, QueryExpression where Element: QueryBindable {
         }
     }
 }
+
+// The element-level `QueryBinding.UUID.init(_ uuid: Foundation.UUID)` used above
+// is vended by the Foundation Integration target, so the 16-byte expansion is
+// spelled once upstream rather than re-derived here.
 
 // MARK: - Array _OptionalPromotable Conformance
 
@@ -131,11 +137,11 @@ extension Array: QueryDecodable where Element: QueryDecodable {
     public init(decoder: inout some QueryDecoder) throws {
         // Special case: [UInt8] is for bytea (binary data)
         if Element.self == UInt8.self {
-            guard let result = try decoder.decode([UInt8].self)
+            guard let result = try decoder.decode([Byte].self)
             else { throw QueryDecodingError.missingRequiredColumn }
             // Element verified as UInt8.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
-            self = result as! [Element]
+            self = result.map(\.underlying) as! [Element]
             return
         }
 
