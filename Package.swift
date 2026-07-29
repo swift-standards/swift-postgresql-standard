@@ -17,6 +17,16 @@ let package = Package(
             name: "PostgreSQL Standard",
             targets: ["PostgreSQL Standard"]
         ),
+        // The DSL -> execution bridge. Opt-in: a consumer that only builds statements never
+        // resolves swift-sql, and a consumer of the engine-free `SQL` interface never resolves
+        // this dialect. It lives here rather than in swift-sql because a generic, engine-free
+        // execution interface must not depend on a dialect — with the bridge moved out, the
+        // `SQL` core rests on L1 primitives alone and `swift-postgresql-standard -> swift-sql`
+        // is a downward edge.
+        .library(
+            name: "PostgreSQL Standard SQL Integration",
+            targets: ["PostgreSQL Standard SQL Integration"]
+        ),
         .library(
             name: "PostgreSQL Standard Test Support",
             targets: ["PostgreSQL Standard Test Support"]
@@ -58,6 +68,9 @@ let package = Package(
 
         // Ecosystem (test support + tests)
         .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
+
+        // L3 engine-free execution interface, consumed only by the SQL Integration target.
+        .package(url: "https://github.com/swift-foundations/swift-sql.git", branch: "main"),
     ],
     targets: [
         // MARK: - PostgreSQL Standard
@@ -104,6 +117,34 @@ let package = Package(
         ),
 
         // MARK: - Test Support
+
+        // MARK: - SQL Integration (the DSL -> execution bridge)
+
+        .target(
+            name: "PostgreSQL Standard SQL Integration",
+            dependencies: [
+                "PostgreSQL Standard",
+                .product(name: "SQL", package: "swift-sql"),
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+            ],
+            path: "Sources/PostgreSQL Standard SQL Integration"
+        ),
+
+        .testTarget(
+            name: "PostgreSQL Standard SQL Integration Tests",
+            dependencies: [
+                "PostgreSQL Standard SQL Integration",
+                "PostgreSQL Standard",
+                .product(name: "SQL", package: "swift-sql"),
+                // The scripted `SQL.Database` / `SQL.Row` doubles the fetch tests run against.
+                .product(name: "SQL Test Support", package: "swift-sql"),
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+                // `@Table` is a macro attribute, so it is not reachable through the runtime
+                // library's `@_exported import` and the fixtures need the macro product directly.
+                "PostgreSQL Standard Macros",
+            ],
+            path: "Tests/PostgreSQL Standard SQL Integration Tests"
+        ),
 
         .target(
             name: "PostgreSQL Standard Test Support",
