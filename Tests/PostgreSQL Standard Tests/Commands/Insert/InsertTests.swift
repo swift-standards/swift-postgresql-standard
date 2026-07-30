@@ -397,22 +397,25 @@ extension SnapshotTests {
             // bound to `Issue.record`, the diagnostic lands as a known issue while the
             // emitted SQL is still asserted (a snapshot mismatch stays a failure).
             await withKnownIssue {
-                await QueryFragment.Report.$invalid.withValue({ Issue.record(Comment(rawValue: $0)) }) {
-                    await assertSQL(
-                        of: Reminder.insert {
-                            Reminder.Draft(remindersListID: 1)
-                        } where: {
-                            $0.isFlagged
+                await QueryFragment.Report.$invalid.withValue(
+                    { Issue.record(Comment(rawValue: $0)) },
+                    operation: {
+                        await assertSQL(
+                            of: Reminder.insert {
+                                Reminder.Draft(remindersListID: 1)
+                            } where: {
+                                $0.isFlagged
+                            }
+                        ) {
+                            """
+                            INSERT INTO "reminders"
+                            ("id", "assignedUserID", "dueDate", "isCompleted", "isFlagged", "notes", "priority", "remindersListID", "title", "updatedAt")
+                            VALUES
+                            (DEFAULT, NULL, NULL, false, false, '', NULL, 1, '', '2040-02-14 23:31:30.000')
+                            """
                         }
-                    ) {
-                        """
-                        INSERT INTO "reminders"
-                        ("id", "assignedUserID", "dueDate", "isCompleted", "isFlagged", "notes", "priority", "remindersListID", "title", "updatedAt")
-                        VALUES
-                        (DEFAULT, NULL, NULL, false, false, '', NULL, 1, '', '2040-02-14 23:31:30.000')
-                        """
                     }
-                }
+                )
             } matching: { issue in
                 issue.comments.contains { $0.rawValue.contains("invalid update 'where'") }
             }

@@ -1,7 +1,7 @@
 import Foundation
-import Tests_Inline_Snapshot
 import Structured_Queries_Primitives
 import Testing
+import Tests_Inline_Snapshot
 
 #if SQLValidation
     import Logging
@@ -169,7 +169,9 @@ public func assertSQL<T>(
 
         // Normalize whitespace to handle newlines and multiple spaces
         let normalizedSQL = sql.replacingOccurrences(
-            of: "\\s+", with: " ", options: .regularExpression
+            of: "\\s+",
+            with: " ",
+            options: .regularExpression
         )
         .trimmingCharacters(in: .whitespaces)
         .uppercased()

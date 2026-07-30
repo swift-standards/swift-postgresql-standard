@@ -1,5 +1,5 @@
-import Test_Snapshot_Primitives
 import Structured_Queries_Primitives
+import Test_Snapshot_Primitives
 
 extension Test.Snapshot.Strategy where Value: Statement, Format == String {
     /// A snapshot strategy for comparing a query based on its SQL output.
