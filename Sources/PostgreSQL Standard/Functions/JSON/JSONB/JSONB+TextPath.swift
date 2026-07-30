@@ -1,4 +1,6 @@
 import Structured_Queries_Primitives
+// `QuoteDelimiter.text`, used by `literalFragment`, is declared here.
+import Structured_Queries_Primitives_Support
 
 // MARK: - JSONB.TextPath
 
