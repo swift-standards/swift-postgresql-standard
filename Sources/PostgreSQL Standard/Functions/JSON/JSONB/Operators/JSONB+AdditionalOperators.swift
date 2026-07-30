@@ -321,7 +321,7 @@ extension JSONB.AdditionalOperators {
         /// Example:
         /// ```swift
         /// User.update { $0.profile = $0.profile.removing(path: ["address", "zipcode"]) }
-        /// // UPDATE users SET profile = profile #- '{address,zipcode}'
+        /// // UPDATE users SET profile = profile #- ARRAY['address', 'zipcode']::text[]
         /// ```
         public struct Path<LHS: QueryExpression>: QueryExpression {
             public typealias QueryValue = Data
@@ -330,8 +330,7 @@ extension JSONB.AdditionalOperators {
             let path: [String]
 
             public var queryFragment: QueryFragment {
-                let pathArray = "'{" + path.joined(separator: ",") + "}'"
-                return "(\(jsonb.queryFragment) #- \(raw: pathArray))"
+                "(\(jsonb.queryFragment) #- \(JSONB.TextPath(path).queryFragment))"
             }
         }
     }
@@ -410,8 +409,7 @@ extension JSONB.AdditionalOperators {
             let path: [String]
 
             public var queryFragment: QueryFragment {
-                let pathArray = "'{" + path.joined(separator: ",") + "}'"
-                return "(\(jsonb.queryFragment) #- \(raw: pathArray))"
+                "(\(jsonb.queryFragment) #- \(JSONB.TextPath(path).queryFragment))"
             }
         }
     }

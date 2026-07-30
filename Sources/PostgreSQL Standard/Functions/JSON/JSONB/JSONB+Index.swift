@@ -126,7 +126,7 @@ extension Table {
     /// )
     /// // CREATE INDEX "idx_user_profiles_metadata_stats_visits_gin"
     /// // ON "user_profiles"
-    /// // USING GIN (("metadata" #> '{stats,visits}'))
+    /// // USING GIN (("metadata" #> '{"stats","visits"}'::text[]))
     /// ```
     ///
     /// **Use this when:**
@@ -153,7 +153,9 @@ extension Table {
     ) -> QueryFragment {
         let col = columns[keyPath: column]
         let indexName = name ?? "idx_\(tableName)_\(col.name)_\(path.joined(separator: "_"))_gin"
-        let pathExpr = "'{" + path.joined(separator: ",") + "}'"
+        // A CREATE INDEX expression must be a constant — PostgreSQL admits no parameter
+        // here — so the path is written as a quoted `text[]` literal rather than bound.
+        let pathExpr = JSONB.TextPath(path).literalFragment
         let opClass = operatorClass == .jsonb_ops ? "" : " \(operatorClass.rawValue)"
 
         var fragment: QueryFragment = "CREATE INDEX \(quote: indexName) ON "
@@ -161,7 +163,7 @@ extension Table {
             fragment.append("\(quote: schemaName).")
         }
         fragment.append(
-            "\(quote: tableName) USING GIN ((\(quote: col.name) #> \(raw: pathExpr))\(raw: opClass))"
+            "\(quote: tableName) USING GIN ((\(quote: col.name) #> \(pathExpr))\(raw: opClass))"
         )
 
         return fragment
@@ -295,7 +297,9 @@ extension Table {
     ) -> QueryFragment {
         let col = columns[keyPath: column]
         let indexName = name ?? "idx_\(tableName)_\(col.name)_\(path.joined(separator: "_"))_gin"
-        let pathExpr = "'{" + path.joined(separator: ",") + "}'"
+        // A CREATE INDEX expression must be a constant — PostgreSQL admits no parameter
+        // here — so the path is written as a quoted `text[]` literal rather than bound.
+        let pathExpr = JSONB.TextPath(path).literalFragment
         let opClass = operatorClass == .jsonb_ops ? "" : " \(operatorClass.rawValue)"
 
         var fragment: QueryFragment = "CREATE INDEX \(quote: indexName) ON "
@@ -303,7 +307,7 @@ extension Table {
             fragment.append("\(quote: schemaName).")
         }
         fragment.append(
-            "\(quote: tableName) USING GIN ((\(quote: col.name) #> \(raw: pathExpr))\(raw: opClass))"
+            "\(quote: tableName) USING GIN ((\(quote: col.name) #> \(pathExpr))\(raw: opClass))"
         )
 
         return fragment

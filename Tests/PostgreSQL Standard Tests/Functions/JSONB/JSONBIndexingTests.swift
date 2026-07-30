@@ -83,7 +83,7 @@ extension SnapshotTests.JSONB {
 
             assertInlineSnapshot(of: SQLQueryExpression(fragment), as: .sql) {
                 """
-                CREATE INDEX "idx_test_users_metadata_stats_visits_gin" ON "test_users" USING GIN (("metadata" #> '{stats,visits}'))
+                CREATE INDEX "idx_test_users_metadata_stats_visits_gin" ON "test_users" USING GIN (("metadata" #> '{"stats","visits"}'::text[]))
                 """
             }
         }
@@ -97,7 +97,7 @@ extension SnapshotTests.JSONB {
 
             assertInlineSnapshot(of: SQLQueryExpression(fragment), as: .sql) {
                 """
-                CREATE INDEX "idx_test_users_metadata_user_address_city_gin" ON "test_users" USING GIN (("metadata" #> '{user,address,city}') jsonb_path_ops)
+                CREATE INDEX "idx_test_users_metadata_user_address_city_gin" ON "test_users" USING GIN (("metadata" #> '{"user","address","city"}'::text[]) jsonb_path_ops)
                 """
             }
         }
@@ -111,7 +111,7 @@ extension SnapshotTests.JSONB {
 
             assertInlineSnapshot(of: SQLQueryExpression(fragment), as: .sql) {
                 """
-                CREATE INDEX "custom_path_idx" ON "test_users" USING GIN (("settings" #> '{theme}'))
+                CREATE INDEX "custom_path_idx" ON "test_users" USING GIN (("settings" #> '{"theme"}'::text[]))
                 """
             }
         }
@@ -124,7 +124,7 @@ extension SnapshotTests.JSONB {
 
             assertInlineSnapshot(of: SQLQueryExpression(fragment), as: .sql) {
                 """
-                CREATE INDEX "idx_test_users_metadata_preferences_ui_theme_color_gin" ON "test_users" USING GIN (("metadata" #> '{preferences,ui,theme,color}'))
+                CREATE INDEX "idx_test_users_metadata_preferences_ui_theme_color_gin" ON "test_users" USING GIN (("metadata" #> '{"preferences","ui","theme","color"}'::text[]))
                 """
             }
         }
@@ -222,13 +222,13 @@ extension SnapshotTests.JSONB {
 
             assertInlineSnapshot(of: SQLQueryExpression(visitsIndex), as: .sql) {
                 """
-                CREATE INDEX "idx_visits" ON "test_users" USING GIN (("metadata" #> '{stats,visits}'))
+                CREATE INDEX "idx_visits" ON "test_users" USING GIN (("metadata" #> '{"stats","visits"}'::text[]))
                 """
             }
 
             assertInlineSnapshot(of: SQLQueryExpression(postsIndex), as: .sql) {
                 """
-                CREATE INDEX "idx_posts" ON "test_users" USING GIN (("metadata" #> '{stats,posts}'))
+                CREATE INDEX "idx_posts" ON "test_users" USING GIN (("metadata" #> '{"stats","posts"}'::text[]))
                 """
             }
         }

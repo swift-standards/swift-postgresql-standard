@@ -80,10 +80,10 @@ extension SnapshotTests.JSONB {
         //        Expected functionality that should be supported:
         //
         //        1. jsonbSet - Update JSONB at path:
-        //           UPDATE "test_users" SET "settings" = jsonb_set("test_users"."settings", '{preferences,theme}', '"dark"'::jsonb, true)
+        //           UPDATE "test_users" SET "settings" = jsonb_set("test_users"."settings", ARRAY['preferences', 'theme']::text[], '"dark"'::jsonb, true)
         //
         //        2. jsonbInsert - Insert into JSONB at path:
-        //           UPDATE "test_users" SET "tags" = jsonb_insert("test_users"."tags", '{items,0}', '{"name":"swift","version":6}'::jsonb, false)
+        //           UPDATE "test_users" SET "tags" = jsonb_insert("test_users"."tags", ARRAY['items', '0']::text[], '{"name":"swift","version":6}'::jsonb, false)
         //
         //        3. jsonbStripNulls - Remove null values:
         //           UPDATE "test_users" SET "settings" = jsonb_strip_nulls("test_users"."settings")
@@ -95,7 +95,7 @@ extension SnapshotTests.JSONB {
         //           UPDATE "test_users" SET "settings" = jsonb_object('{key1,value1,key2,value2,key3,value3}')
         //
         //        6. Chaining JSONB functions:
-        //           UPDATE "test_users" SET "settings" = jsonb_strip_nulls(jsonb_set("test_users"."settings", '{new_field}', '"new_value"'::jsonb, true))
+        //           UPDATE "test_users" SET "settings" = jsonb_strip_nulls(jsonb_set("test_users"."settings", ARRAY['new_field']::text[], '"new_value"'::jsonb, true))
         //        */
     }
 }

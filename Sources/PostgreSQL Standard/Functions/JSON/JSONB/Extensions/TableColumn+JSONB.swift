@@ -127,7 +127,7 @@ extension TableColumn where Value: _JSONBColumnValue {
     /// Example:
     /// ```swift
     /// User.select { $0.profile.value(at: ["address", "city"]) }
-    /// // SELECT profile #> '{address,city}' FROM users
+    /// // SELECT profile #> ARRAY['address', 'city']::text[] FROM users
     /// ```
     public func value(at path: [String]) -> some QueryExpression<Data> {
         JSONB.Operators.Path(jsonb: self, path: path)
@@ -138,7 +138,7 @@ extension TableColumn where Value: _JSONBColumnValue {
     /// Example:
     /// ```swift
     /// User.select { $0.profile.valueAsText(at: ["address", "city"]) }
-    /// // SELECT profile #>> '{address,city}' FROM users
+    /// // SELECT profile #>> ARRAY['address', 'city']::text[] FROM users
     /// ```
     public func valueAsText(at path: [String]) -> some QueryExpression<String?> {
         JSONB.Operators.PathText(jsonb: self, path: path)
@@ -353,7 +353,7 @@ extension TableColumn where Value: _JSONBRepresentationProtocol {
     /// Example:
     /// ```swift
     /// User.update { $0.profile = $0.profile.removing(path: ["address", "zipcode"]) }
-    /// // UPDATE users SET profile = profile #- '{address,zipcode}'
+    /// // UPDATE users SET profile = profile #- ARRAY['address', 'zipcode']::text[]
     /// ```
     public func removing(path: [String]) -> some QueryExpression<Value> {
         JSONB.AdditionalOperators.TypedDelete.Path(jsonb: self, path: path)
@@ -370,7 +370,7 @@ extension TableColumn where Value: _JSONBRepresentationProtocol {
     /// User.update {
     ///     $0.settings = $0.settings.setting(["preferences", "theme"], to: "dark")
     /// }
-    /// // UPDATE users SET settings = jsonb_set(settings, '{preferences,theme}', '"dark"'::jsonb, true)
+    /// // UPDATE users SET settings = jsonb_set(settings, ARRAY['preferences', 'theme']::text[], '"dark"'::jsonb, true)
     /// ```
     public func setting<T: Encodable>(
         _ path: [String],
@@ -394,7 +394,7 @@ extension TableColumn where Value: _JSONBRepresentationProtocol {
     /// User.update {
     ///     $0.settings = $0.settings.inserting(["id": 123], at: ["items", "0"])
     /// }
-    /// // UPDATE users SET settings = jsonb_insert(settings, '{items,0}', '{"id": 123}'::jsonb, false)
+    /// // UPDATE users SET settings = jsonb_insert(settings, ARRAY['items', '0']::text[], '{"id": 123}'::jsonb, false)
     /// ```
     public func inserting<T: Encodable>(
         _ value: T,
@@ -476,7 +476,7 @@ extension TableColumn where Value == Data {
     /// Example:
     /// ```swift
     /// User.update { $0.profile = $0.profile.removing(path: ["address", "zipcode"]) }
-    /// // UPDATE users SET profile = profile #- '{address,zipcode}'
+    /// // UPDATE users SET profile = profile #- ARRAY['address', 'zipcode']::text[]
     /// ```
     public func removing(path: [String]) -> some QueryExpression<Data> {
         JSONB.AdditionalOperators.Delete.Path(jsonb: self, path: path)

@@ -179,7 +179,7 @@ extension SnapshotTests.JSONB {
                 of: query
             ) {
                 """
-                SELECT "test_users"."id", ("test_users"."metadata" #> '{address,city}')
+                SELECT "test_users"."id", ("test_users"."metadata" #> ARRAY['address', 'city']::text[])
                 FROM "test_users"
                 """
             }
@@ -195,7 +195,7 @@ extension SnapshotTests.JSONB {
                 of: query
             ) {
                 """
-                SELECT "test_users"."id", ("test_users"."metadata" #>> '{contact,email}')
+                SELECT "test_users"."id", ("test_users"."metadata" #>> ARRAY['contact', 'email']::text[])
                 FROM "test_users"
                 """
             }
@@ -259,7 +259,7 @@ extension SnapshotTests.JSONB {
              UPDATE "test_users" SET "tags" = ("test_users"."tags" - 2)
 
              5. Delete at path (#- operator):
-             UPDATE "test_users" SET "metadata" = ("test_users"."metadata" #- '{address,street2}')
+             UPDATE "test_users" SET "metadata" = ("test_users"."metadata" #- ARRAY['address', 'street2']::text[])
              */
     }
 }
