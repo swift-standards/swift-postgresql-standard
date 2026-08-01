@@ -8,7 +8,7 @@ import Structured_Queries_Primitives
 //
 // Operators for array comparison, containment, and concatenation.
 
-extension QueryExpression where QueryValue: Collection, QueryValue.Element: QueryBindable {
+extension QueryExpression where QueryValue: Swift.Collection, QueryValue.Element: QueryBindable {
     // MARK: - Containment Operators
 
     /// Tests whether an array contains another array (all elements)
@@ -208,7 +208,7 @@ public func prependToArray<Element>(
 // MARK: - Array Equality Operators
 
 extension QueryExpression
-where QueryValue: Collection, QueryValue.Element: QueryBindable & Equatable {
+where QueryValue: Swift.Collection, QueryValue.Element: QueryBindable & Equatable {
     /// Tests whether two arrays are equal
     ///
     /// PostgreSQL's `=` operator for arrays.
@@ -262,7 +262,7 @@ where QueryValue: Collection, QueryValue.Element: QueryBindable & Equatable {
 // MARK: - Array Comparison Operators
 
 extension QueryExpression
-where QueryValue: Collection, QueryValue.Element: QueryBindable & Comparable {
+where QueryValue: Swift.Collection, QueryValue.Element: QueryBindable & Comparable {
     /// Tests whether an array is less than another
     ///
     /// PostgreSQL's `<` operator for arrays (lexicographic comparison).

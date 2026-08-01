@@ -150,7 +150,7 @@ extension PostgreSQL.String {
 
 // MARK: - QueryExpression Extension (Fluent API)
 
-extension QueryExpression where QueryValue: Collection {
+extension QueryExpression where QueryValue: Swift.Collection {
     /// Returns the number of elements in a collection such as a string or array length.
     ///
     /// PostgreSQL's `length()` function.

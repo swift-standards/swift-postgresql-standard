@@ -7,7 +7,7 @@ extension QueryExpression where QueryValue: QueryExpression {
     ///
     /// - Parameter expression: A sequence of expressions.
     /// - Returns: A predicate expression indicating whether this expression is in the given sequence
-    public func `in`<S: Sequence>(_ expression: S) -> some QueryExpression<Bool>
+    public func `in`<S: Swift.Sequence>(_ expression: S) -> some QueryExpression<Bool>
     where S.Element: QueryExpression<QueryValue> {
         BinaryOperator(lhs: self, operator: "IN", rhs: S.Expression(elements: expression))
     }

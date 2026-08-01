@@ -10,7 +10,7 @@ import Structured_Queries_Primitives
 
 // MARK: - Swifty Array Manipulation Methods
 
-extension QueryExpression where QueryValue: Collection, QueryValue.Element: QueryBindable {
+extension QueryExpression where QueryValue: Swift.Collection, QueryValue.Element: QueryBindable {
     /// Removes all occurrences of an element from an array
     ///
     /// PostgreSQL's `array_remove(anyarray, anyelement)` function.

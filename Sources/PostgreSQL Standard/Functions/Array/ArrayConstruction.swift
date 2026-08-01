@@ -10,7 +10,7 @@ import Structured_Queries_Primitives
 
 // MARK: - Extension Methods (Swifty API)
 
-extension QueryExpression where QueryValue: Collection, QueryValue.Element: QueryBindable {
+extension QueryExpression where QueryValue: Swift.Collection, QueryValue.Element: QueryBindable {
     /// Appends an element to the end of an array
     ///
     /// PostgreSQL's `array_append(anyarray, anyelement)` function.

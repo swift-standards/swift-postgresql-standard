@@ -8,7 +8,7 @@ import Structured_Queries_Primitives
 //
 // Functions for querying array properties and searching arrays.
 
-extension QueryExpression where QueryValue: Collection, QueryValue.Element: QueryBindable {
+extension QueryExpression where QueryValue: Swift.Collection, QueryValue.Element: QueryBindable {
     /// Returns the length (number of elements) of an array
     ///
     /// PostgreSQL's `array_length(anyarray, int)` function.

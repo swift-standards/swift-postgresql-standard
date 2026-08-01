@@ -99,7 +99,7 @@ extension Sequence where Element: QueryExpression, Element.QueryValue: QueryExpr
     typealias Expression = _SequenceExpression<Self>
 }
 
-struct _SequenceExpression<S: Sequence>: QueryExpression
+struct _SequenceExpression<S: Swift.Sequence>: QueryExpression
 where S.Element: QueryExpression, S.Element.QueryValue: QueryExpression {
     typealias QueryValue = S
     let queryFragment: QueryFragment
