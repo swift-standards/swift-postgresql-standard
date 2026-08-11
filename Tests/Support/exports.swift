@@ -1,2 +1,2 @@
-@_exported import PostgreSQL_Standard
+@_exported import PostgreSQL_Standard_Foundation_Integration
 @_exported import Tests_Inline_Snapshot

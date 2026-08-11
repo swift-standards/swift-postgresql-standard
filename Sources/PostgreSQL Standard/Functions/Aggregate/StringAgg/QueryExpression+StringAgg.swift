@@ -1,4 +1,3 @@
-import Foundation
 import Structured_Queries_Primitives
 
 // MARK: - PostgreSQL STRING_AGG Function

@@ -31,6 +31,11 @@ Add the product to your target:
 )
 ```
 
+Applications that use Foundation-backed query values such as `Date`, `UUID`,
+`Data`, `URL`, or `Decimal` should depend on and import
+`PostgreSQL Standard Foundation Integration` instead. That leaf product
+re-exports the Foundation-free core.
+
 ## License
 
 Apache 2.0. See [LICENSE.md](LICENSE.md).
