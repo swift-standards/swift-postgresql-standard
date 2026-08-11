@@ -17,8 +17,8 @@ let package = Package(
     ],
     dependencies: [
         .package(path: ".."),
-        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", from: "0.6.3"),
-        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", exact: "1.18.9"),
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing.git", branch: "main"),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing.git", branch: "main"),
         .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
     ],
     targets: [
