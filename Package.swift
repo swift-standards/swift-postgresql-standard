@@ -49,7 +49,10 @@ let package = Package(
     ],
     dependencies: [
         // L1
-        .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
+        .package(
+            url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git",
+            revision: "6bb7361a5d0edb60d49863ba2c4d49e1394edc7c"
+        ),
         .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
 
         // Remote
