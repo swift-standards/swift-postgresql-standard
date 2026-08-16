@@ -1,5 +1,9 @@
 public import PostgreSQL_Standard
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: Public macro declarations mirror Swift macro type-erasure and variadic table contracts;
+// their existential spelling is part of that externally consumed declaration surface.
+
 /// Defines and implements a conformance to the ``/Structured_Queries_Primitives/Table`` protocol.
 ///
 /// - Parameters
@@ -172,3 +176,5 @@ public macro sql(
     as queryValueType: Any.Type = Any.self
 ) -> SQLQueryExpression<Any> =
     #externalMacro(module: "PostgreSQL_Standard_Macros_Implementation", type: "SQLMacro")
+
+// swiftlint:enable no_any_protocol_existential

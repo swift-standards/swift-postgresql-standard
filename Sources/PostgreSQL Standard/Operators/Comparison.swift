@@ -1,5 +1,9 @@
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: These compatibility overloads deliberately open type-erased query expressions to work
+// around the documented dynamic-member overload-resolution defect.
+
 // MARK: - 9.2. Comparison Functions and Operators
 
 extension QueryExpression where QueryValue: QueryRepresentable {
@@ -491,3 +495,5 @@ extension ClosedRange where Bound: QueryBindable {
         element.between(lowerBound, and: upperBound)
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

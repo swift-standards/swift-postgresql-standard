@@ -1,6 +1,9 @@
 import Foundation
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: Aggregate filters are deliberately type-erased SQL expression nodes.
+
 extension TableColumn {
     /// PostgreSQL ARRAY_AGG function - aggregates values into an array
     ///
@@ -37,3 +40,5 @@ extension TableColumn {
         )
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

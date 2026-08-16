@@ -38,9 +38,9 @@ extension JSONB.AdditionalOperators {
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
-            if let data = try? jsonbEncoder.encode(rhs) {
-                self.rhs = data
-            } else {
+            do {
+                self.rhs = try jsonbEncoder.encode(rhs)
+            } catch {
                 self.rhs = Data()
             }
         }
@@ -68,9 +68,9 @@ extension JSONB.AdditionalOperators {
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
-            if let data = try? jsonbEncoder.encode(rhs) {
-                self.rhs = data
-            } else {
+            do {
+                self.rhs = try jsonbEncoder.encode(rhs)
+            } catch {
                 self.rhs = Data()
             }
         }
@@ -189,9 +189,9 @@ extension JSONB.AdditionalOperators {
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
-            if let data = try? jsonbEncoder.encode(rhs) {
-                self.rhs = data
-            } else {
+            do {
+                self.rhs = try jsonbEncoder.encode(rhs)
+            } catch {
                 self.rhs = Data()
             }
         }
@@ -223,9 +223,9 @@ extension JSONB.AdditionalOperators {
 
         init(lhs: LHS, rhs: some Encodable) {
             self.lhs = lhs
-            if let data = try? jsonbEncoder.encode(rhs) {
-                self.rhs = data
-            } else {
+            do {
+                self.rhs = try jsonbEncoder.encode(rhs)
+            } catch {
                 self.rhs = Data()
             }
         }

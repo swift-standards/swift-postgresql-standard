@@ -1,5 +1,8 @@
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: The count aggregate stores a deliberately type-erased filter expression in the SQL AST.
+
 // MARK: - Count Aggregate Primitives
 
 extension QueryExpression where QueryValue: QueryBindable {
@@ -49,3 +52,5 @@ extension QueryExpression where Self == AggregateFunction<Int> {
         AggregateFunction("count", ["*"], filter: filter?.queryFragment)
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

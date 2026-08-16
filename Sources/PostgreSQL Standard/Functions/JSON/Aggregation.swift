@@ -1,6 +1,10 @@
 public import Foundation
 public import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: JSON object aggregation accepts heterogeneous SQL expression nodes, so its stored AST
+// representation deliberately uses dynamic dispatch.
+
 // MARK: - PostgreSQL JSON Aggregation Functions
 
 extension QueryExpression {
@@ -201,3 +205,5 @@ where Condition.QueryValue == Bool {
         "\(aggregate.queryFragment) FILTER (WHERE \(condition.queryFragment))"
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

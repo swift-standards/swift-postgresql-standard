@@ -2,6 +2,10 @@ public import Foundation
 public import Structured_Queries_Primitives
 import Structured_Queries_Primitives_Support
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: Trigger helpers compose heterogeneous SQL expression nodes and deliberately erase their
+// concrete types at the stored AST boundary.
+
 // MARK: - Convenience Helpers
 
 /// Convenience function helpers for common trigger patterns.
@@ -1814,3 +1818,5 @@ extension Trigger.Function where On: Table {
 // AuditTable protocol is defined in AuditTable.swift
 
 // AuditTable protocol is defined in AuditTable.swift
+
+// swiftlint:enable no_any_protocol_existential

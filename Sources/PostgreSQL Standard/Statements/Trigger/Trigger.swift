@@ -1,6 +1,10 @@
 import Foundation
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: Trigger predicates and arguments form heterogeneous SQL expression trees and require
+// deliberate type erasure at the stored AST boundary.
+
 // MARK: - PostgreSQL Triggers
 
 // # Type-Safe PostgreSQL Triggers
@@ -1119,7 +1123,7 @@ extension Table {
         let events = event.map(\.event)
 
         let triggerName: String
-        if let name = name {
+        if let name {
             triggerName = name
         } else {
             let timingStr: String
@@ -1180,3 +1184,5 @@ extension Table {
         return "\(Self.tableName)_\(timing)_\(eventDesc)_\(functionDesc)"
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

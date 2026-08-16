@@ -7,6 +7,8 @@ import SwiftSyntaxMacros
 public enum TableMacro {}
 
 extension TableMacro: ExtensionMacro {
+    // swiftlint:disable typed_throws_required
+    // REASON: ExtensionMacro requires this external witness signature.
     public static func expansion<
         D: DeclGroupSyntax,
         T: TypeSyntaxProtocol,
@@ -941,9 +943,12 @@ extension TableMacro: ExtensionMacro {
             .cast(ExtensionDeclSyntax.self)
         ]
     }
+    // swiftlint:enable typed_throws_required
 }
 
 extension TableMacro: MemberMacro {
+    // swiftlint:disable typed_throws_required
+    // REASON: MemberMacro requires this external witness signature.
     public static func expansion<D: DeclGroupSyntax, C: MacroExpansionContext>(
         of node: AttributeSyntax,
         providingMembersOf declaration: D,
@@ -1565,9 +1570,12 @@ extension TableMacro: MemberMacro {
         ]
         .compactMap { $0 }
     }
+    // swiftlint:enable typed_throws_required
 }
 
 extension TableMacro: MemberAttributeMacro {
+    // swiftlint:disable typed_throws_required
+    // REASON: MemberAttributeMacro requires this external witness signature.
     public static func expansion<
         D: DeclGroupSyntax,
         T: DeclSyntaxProtocol,
@@ -1631,4 +1639,5 @@ extension TableMacro: MemberAttributeMacro {
             """
         ]
     }
+    // swiftlint:enable typed_throws_required
 }

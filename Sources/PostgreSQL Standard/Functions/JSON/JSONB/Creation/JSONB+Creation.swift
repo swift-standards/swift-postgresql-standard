@@ -1,6 +1,10 @@
 public import Foundation
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: JSON construction owns heterogeneous key/value SQL expression lists and deliberately
+// erases their concrete node types at the AST boundary.
+
 // MARK: - JSONB.Creation (Table 9.49)
 
 extension JSONB {
@@ -255,3 +259,5 @@ extension QueryExpression {
         QueryFunction("to_json", self)
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

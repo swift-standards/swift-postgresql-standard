@@ -1,6 +1,10 @@
 import Foundation
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: Aggregate ordering and filters form heterogeneous SQL expression lists and require
+// deliberate type erasure at the AST boundary.
+
 // MARK: - PostgreSQL STRING_AGG Function
 
 extension QueryExpression where QueryValue == String {
@@ -122,3 +126,5 @@ extension TableColumn {
         )
     }
 }
+
+// swiftlint:enable no_any_protocol_existential
