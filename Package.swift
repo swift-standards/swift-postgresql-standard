@@ -18,6 +18,10 @@ let package = Package(
             targets: ["PostgreSQL Standard"]
         ),
         .library(
+            name: "PostgreSQL Standard Foundation Integration",
+            targets: ["PostgreSQL Standard Foundation Integration"]
+        ),
+        .library(
             name: "PostgreSQL Standard Test Support",
             targets: ["PostgreSQL Standard Test Support"]
         ),
@@ -49,12 +53,15 @@ let package = Package(
     ],
     dependencies: [
         // L1
-        .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
+        .package(
+            url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git",
+            branch: "main"
+        ),
         .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
 
         // Remote
-        .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
+        .package(url: "https://github.com/swiftlang/swift-syntax.git", branch: "main"),
+        .package(url: "https://github.com/vapor/postgres-nio.git", branch: "main"),
 
         // Ecosystem (test support + tests)
         .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
@@ -67,18 +74,20 @@ let package = Package(
             dependencies: [
                 .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
                 .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
-                // This target's public surface binds Foundation's `Date`, `UUID`,
-                // `Data`, `URL` and `Decimal` (see `Cast.swift`, `PostgresArray.swift`,
-                // `Trigger.Function+Helpers.swift`). Those `QueryBindable`
-                // conformances moved out of the L1 core into this opt-in
-                // integration target when the core went Foundation-free, so the
-                // dependency is what keeps this package's own API unchanged.
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+            ]
+        ),
+        .target(
+            name: "PostgreSQL Standard Foundation Integration",
+            dependencies: [
+                "PostgreSQL Standard",
                 .product(
                     name: "Structured Queries Primitives Foundation Integration",
                     package: "swift-structured-queries-primitives"
                 ),
                 .product(name: "Byte Primitives", package: "swift-byte-primitives"),
-            ]
+            ],
+            path: "Sources/PostgreSQL Standard Foundation Integration"
         ),
 
         // MARK: - Macros
@@ -108,7 +117,7 @@ let package = Package(
         .target(
             name: "PostgreSQL Standard Test Support",
             dependencies: [
-                "PostgreSQL Standard",
+                "PostgreSQL Standard Foundation Integration",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
                 .product(name: "PostgresNIO", package: "postgres-nio",
                          condition: .when(traits: ["SQLValidation"])),
@@ -125,7 +134,7 @@ let package = Package(
         .testTarget(
             name: "PostgreSQL Standard Tests",
             dependencies: [
-                "PostgreSQL Standard",
+                "PostgreSQL Standard Foundation Integration",
                 "PostgreSQL Standard Macros",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
@@ -139,7 +148,7 @@ let package = Package(
         .testTarget(
             name: "README Examples Tests",
             dependencies: [
-                "PostgreSQL Standard",
+                "PostgreSQL Standard Foundation Integration",
                 "PostgreSQL Standard Macros",
                 "PostgreSQL Standard Test Support",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
