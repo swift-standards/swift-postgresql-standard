@@ -171,13 +171,21 @@ extension SnapshotTests {
             // Verify return types compile correctly
 
             // Table.arrayAgg returns Select<String?, Customer, ()>
-            let _: Select<String?, Customer, ()> = Customer.arrayAgg { $0.name }
+            let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.arrayAgg {
+                $0.name
+            }
 
             // Where.arrayAgg returns Select<String?, Order, ()>
-            let _: Select<String?, Order, ()> = Order.where { $0.isPaid }.arrayAgg { $0.orderID }
+            let _: Structured_Queries_Primitives.Select<String?, Order, ()> = Order.where {
+                $0.isPaid
+            }.arrayAgg {
+                $0.orderID
+            }
 
             // Int column returns String? (array serialized as string)
-            let _: Select<String?, Customer, ()> = Customer.arrayAgg { $0.id }
+            let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.arrayAgg {
+                $0.id
+            }
         }
 
         // MARK: - Edge Cases

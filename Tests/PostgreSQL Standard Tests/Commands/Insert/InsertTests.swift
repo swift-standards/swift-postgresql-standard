@@ -398,7 +398,7 @@ extension SnapshotTests {
             // emitted SQL is still asserted (a snapshot mismatch stays a failure).
             await withKnownIssue {
                 await QueryFragment.Report.$invalid.withValue(
-                    { Issue.record(Comment(rawValue: $0)) },
+                    .init { Issue.record(Comment(rawValue: $0)) },
                     operation: {
                         await assertSQL(
                             of: Reminder.insert {

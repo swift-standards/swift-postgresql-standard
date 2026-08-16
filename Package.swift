@@ -51,6 +51,10 @@ let package = Package(
         // L1
         .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
+        .package(
+            url: "https://github.com/swift-primitives/swift-test-primitives.git",
+            branch: "main"
+        ),
 
         // Remote
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
@@ -109,6 +113,10 @@ let package = Package(
             dependencies: [
                 "PostgreSQL Standard",
                 .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+                .product(
+                    name: "Test Snapshot Primitives",
+                    package: "swift-test-primitives"
+                ),
                 .product(name: "PostgresNIO", package: "postgres-nio",
                          condition: .when(traits: ["SQLValidation"])),
             ],

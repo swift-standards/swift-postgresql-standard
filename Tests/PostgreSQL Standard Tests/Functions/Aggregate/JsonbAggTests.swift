@@ -171,13 +171,21 @@ extension SnapshotTests {
             // Verify return types compile correctly
 
             // Table.jsonbAgg returns Select<String?, Customer, ()>
-            let _: Select<String?, Customer, ()> = Customer.jsonbAgg { $0.name }
+            let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.jsonbAgg {
+                $0.name
+            }
 
             // Where.jsonbAgg returns Select<String?, Order, ()>
-            let _: Select<String?, Order, ()> = Order.where { $0.isPaid }.jsonbAgg { $0.orderID }
+            let _: Structured_Queries_Primitives.Select<String?, Order, ()> = Order.where {
+                $0.isPaid
+            }.jsonbAgg {
+                $0.orderID
+            }
 
             // Int column returns String? (JSONB array serialized as string)
-            let _: Select<String?, Customer, ()> = Customer.jsonbAgg { $0.id }
+            let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.jsonbAgg {
+                $0.id
+            }
         }
 
         // MARK: - Edge Cases

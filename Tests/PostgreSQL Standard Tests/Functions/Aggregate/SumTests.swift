@@ -238,21 +238,39 @@ extension SnapshotTests {
             // Verify return types compile correctly
 
             // Table.sum returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.sum { $0.amount }
-            let _: Select<Double?, Order, ()> = Order.sum(of: \.amount)
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+                $0.amount
+            }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum(
+                of: \.amount
+            )
 
             // Where.sum returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.where { $0.isPaid }.sum { $0.amount }
-            let _: Select<Double?, Order, ()> = Order.where { $0.isPaid }.sum(of: \.amount)
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+                $0.isPaid
+            }.sum {
+                $0.amount
+            }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+                $0.isPaid
+            }.sum(
+                of: \.amount
+            )
 
             // Double column returns Double?
-            let _: Select<Double?, Order, ()> = Order.sum { $0.quantity }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+                $0.quantity
+            }
 
             // Nullable column returns single optional, not double
-            let _: Select<Double?, Order, ()> = Order.sum { $0.discount }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+                $0.discount
+            }
 
             // Complex expression
-            let _: Select<Double?, Order, ()> = Order.sum { $0.quantity * $0.unitPrice }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+                $0.quantity * $0.unitPrice
+            }
         }
 
         // MARK: - Edge Cases
