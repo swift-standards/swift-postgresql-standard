@@ -1,6 +1,10 @@
 import Foundation
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: Trigger argument lists are heterogeneous SQL expression trees and therefore require
+// deliberate dynamic dispatch at their type-erasure boundary.
+
 /// A PostgreSQL trigger function written in PL/pgSQL.
 ///
 /// Trigger functions are the first tier of PostgreSQL's two-tier trigger system. A trigger function
@@ -222,3 +226,5 @@ extension Trigger.Function {
         define(name, orReplace: orReplace, performs: body)
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

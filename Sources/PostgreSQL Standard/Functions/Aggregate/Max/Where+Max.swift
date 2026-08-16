@@ -21,7 +21,7 @@ extension Where {
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
-        _aggregateSelect(of: expression) { $0.max() }
+        _aggregateSelect(of: expression) { $0._max(filter: nil) }
     }
 
     /// A select statement for the maximum of an expression from the filtered table with a filter clause.
@@ -44,6 +44,6 @@ extension Where {
         Value: QueryBindable & _OptionalPromotable,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
-        _aggregateSelect(of: expression, filter: filter) { $0.max(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) { $0._max(filter: $1.queryFragment) }
     }
 }

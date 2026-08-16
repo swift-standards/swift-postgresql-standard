@@ -1,10 +1,11 @@
+import Test_Primitives_Core
 import Tests_Inline_Snapshot
 
 /// Compatibility shim mapping Point-Free's `assertInlineSnapshot(of:as:...)` to the ecosystem's `snapshot(as:)`.
 @discardableResult
 public func assertInlineSnapshot<Value>(
     of value: @autoclosure () -> Value,
-    as strategy: Test.Snapshot.Strategy<Value, String>,
+    as strategy: Test_Primitives_Core.Test.Snapshot.Strategy<Value, String>,
     message: String? = nil,
     matches expected: (() -> String)? = nil,
     fileID: String = #fileID,
@@ -12,7 +13,7 @@ public func assertInlineSnapshot<Value>(
     function: String = #function,
     line: Int = #line,
     column: Int = #column
-) -> Test.Expectation {
+) -> Test_Primitives_Core.Test.Expectation {
     snapshot(
         as: strategy,
         { value() },

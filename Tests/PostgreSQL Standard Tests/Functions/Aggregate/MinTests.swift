@@ -248,24 +248,44 @@ extension SnapshotTests {
             // Verify return types compile correctly
 
             // Table.min returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.min { $0.amount }
-            let _: Select<Double?, Order, ()> = Order.min(of: \.amount)
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
+                $0.amount
+            }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min(
+                of: \.amount
+            )
 
             // Where.min returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.where { $0.isPaid }.min { $0.amount }
-            let _: Select<Double?, Order, ()> = Order.where { $0.isPaid }.min(of: \.amount)
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+                $0.isPaid
+            }.min {
+                $0.amount
+            }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+                $0.isPaid
+            }.min(
+                of: \.amount
+            )
 
             // Int column returns Int?
-            let _: Select<Int?, Order, ()> = Order.min { $0.customerID }
+            let _: Structured_Queries_Primitives.Select<Int?, Order, ()> = Order.min {
+                $0.customerID
+            }
 
             // Date column returns Date?
-            let _: Select<Date?, Order, ()> = Order.min { $0.createdAt }
+            let _: Structured_Queries_Primitives.Select<Date?, Order, ()> = Order.min {
+                $0.createdAt
+            }
 
             // Nullable column returns single optional, not double
-            let _: Select<Double?, Order, ()> = Order.min { $0.discount }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
+                $0.discount
+            }
 
             // Complex expression
-            let _: Select<Double?, Order, ()> = Order.min { $0.quantity * $0.unitPrice }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
+                $0.quantity * $0.unitPrice
+            }
         }
 
         // MARK: - Edge Cases

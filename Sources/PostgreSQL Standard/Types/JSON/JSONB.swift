@@ -75,6 +75,7 @@ extension _JSONBRepresentation: QueryBindable {
 // MARK: - QueryDecodable
 
 extension _JSONBRepresentation: QueryDecodable {
+    // swiftlint:disable:next typed_throws_required - QueryDecodable requires this external witness.
     public init(decoder: inout some QueryDecoder) throws {
         self.init(
             queryOutput: try jsonDecoder.decode(

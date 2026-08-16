@@ -1,7 +1,8 @@
 import Structured_Queries_Primitives
+import Test_Primitives_Core
 import Test_Snapshot_Primitives
 
-extension Test.Snapshot.Strategy where Value: Statement, Format == String {
+extension Test_Primitives_Core.Test.Snapshot.Strategy where Value: Statement, Format == String {
     /// A snapshot strategy for comparing a query based on its SQL output.
     ///
     /// ```swift
@@ -14,13 +15,18 @@ extension Test.Snapshot.Strategy where Value: Statement, Format == String {
     /// }
     /// ```
     public static var sql: Self {
-        Test.Snapshot.Strategy<String, String>.lines.pullback(\.query.debugDescription)
+        Test_Primitives_Core.Test.Snapshot.Strategy<String, String>.lines.pullback(
+            \.query.debugDescription
+        )
     }
 }
 
-extension Test.Snapshot.Strategy where Value: QueryExpression, Format == String {
+extension Test_Primitives_Core.Test.Snapshot.Strategy
+where Value: QueryExpression, Format == String {
     /// A snapshot strategy for comparing a query expression based on its SQL output.
     public static var sql: Self {
-        Test.Snapshot.Strategy<String, String>.lines.pullback(\.queryFragment.debugDescription)
+        Test_Primitives_Core.Test.Snapshot.Strategy<String, String>.lines.pullback(
+            \.queryFragment.debugDescription
+        )
     }
 }

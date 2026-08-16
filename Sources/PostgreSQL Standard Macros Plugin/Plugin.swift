@@ -1,8 +1,9 @@
+import PostgreSQL_Standard_Macros_Implementation
 import SwiftCompilerPlugin
 import SwiftSyntaxMacros
 
 @main
-struct StructuredQueriesPlugin: CompilerPlugin {
+struct PostgreSQLStandardPlugin: CompilerPlugin {
     let providingMacros: [Macro.Type] = [
         BindMacro.self,
         ColumnMacro.self,

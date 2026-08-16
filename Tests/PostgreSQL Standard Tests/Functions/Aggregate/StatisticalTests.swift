@@ -326,19 +326,33 @@ extension SnapshotTests {
             // Verify return types compile correctly
 
             // Table.stddev returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.stddev { $0.amount }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.stddev {
+                $0.amount
+            }
 
             // Table.variance returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.variance { $0.amount }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.variance {
+                $0.amount
+            }
 
             // Where.stddev returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.where { $0.isPaid }.stddev { $0.amount }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+                $0.isPaid
+            }.stddev {
+                $0.amount
+            }
 
             // Where.variance returns Select<Double?, Order, ()>
-            let _: Select<Double?, Order, ()> = Order.where { $0.isPaid }.variance { $0.amount }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+                $0.isPaid
+            }.variance {
+                $0.amount
+            }
 
             // Int column returns Double?
-            let _: Select<Double?, Order, ()> = Order.stddev { $0.quantity }
+            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.stddev {
+                $0.quantity
+            }
         }
 
         // MARK: - Edge Cases

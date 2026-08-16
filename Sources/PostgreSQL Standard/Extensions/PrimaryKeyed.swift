@@ -36,7 +36,7 @@ extension PrimaryKeyedTable {
     public static func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<PrimaryKey>>
     ) -> Where<Self> {
-        Self.where { $0.primaryKey.in(primaryKeys) }
+        Self.where { $0.primaryKey._in(primaryKeys) }
     }
 
     public var primaryKey: PrimaryKey.QueryOutput {
@@ -62,7 +62,7 @@ extension TableDraft {
     public static func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<PrimaryKey>>
     ) -> Where<Self> {
-        Self.where { $0.primaryKey.in(primaryKeys) }
+        Self.where { $0.primaryKey._in(primaryKeys) }
     }
 }
 
@@ -82,7 +82,7 @@ extension Where where From: PrimaryKeyedTable {
     public func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<From.PrimaryKey>>
     ) -> Self {
-        Self.where { $0.primaryKey.in(primaryKeys) }
+        Self.where { $0.primaryKey._in(primaryKeys) }
     }
 }
 
@@ -106,7 +106,7 @@ extension Where where From: TableDraft {
     public func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<From.PrimaryKey>>
     ) -> Self {
-        Self.where { $0.primaryKey.in(primaryKeys) }
+        Self.where { $0.primaryKey._in(primaryKeys) }
     }
 }
 
@@ -168,7 +168,7 @@ extension Update where From: PrimaryKeyedTable {
     public func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<From.PrimaryKey>>
     ) -> Self {
-        self.where { $0.primaryKey.in(primaryKeys) }
+        self.where { $0.primaryKey._in(primaryKeys) }
     }
 }
 
@@ -192,7 +192,7 @@ extension Update where From: TableDraft {
     public func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<From.PrimaryKey>>
     ) -> Self {
-        self.where { $0.primaryKey.in(primaryKeys) }
+        self.where { $0.primaryKey._in(primaryKeys) }
     }
 }
 
@@ -212,7 +212,7 @@ extension Delete where From: PrimaryKeyedTable {
     public func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<From.PrimaryKey>>
     ) -> Self {
-        self.where { $0.primaryKey.in(primaryKeys) }
+        self.where { $0.primaryKey._in(primaryKeys) }
     }
 }
 
@@ -236,6 +236,6 @@ extension Delete where From: TableDraft {
     public func find(
         _ primaryKeys: some Swift.Sequence<some QueryExpression<From.PrimaryKey>>
     ) -> Self {
-        self.where { $0.primaryKey.in(primaryKeys) }
+        self.where { $0.primaryKey._in(primaryKeys) }
     }
 }

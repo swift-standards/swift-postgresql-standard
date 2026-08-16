@@ -14,7 +14,7 @@ extension Table {
     public static func stddev(
         of expression: (TableColumns) -> some QueryExpression<some Numeric>
     ) -> Select<Double?, Self, ()> {
-        _aggregateSelect(of: expression) { $0.stddev() }
+        _aggregateSelect(of: expression) { $0._stddev(filter: nil) }
     }
 
     /// Computes the standard deviation with a filter for the entire table.
@@ -33,7 +33,9 @@ extension Table {
         of expression: (TableColumns) -> some QueryExpression<some Numeric>,
         filter: @escaping (TableColumns) -> Filter
     ) -> Select<Double?, Self, ()> {
-        _aggregateSelect(of: expression, filter: filter) { $0.stddev(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) {
+            $0._stddev(filter: $1.queryFragment)
+        }
     }
 
     /// Computes the variance of a numeric column for the entire table.
@@ -49,7 +51,7 @@ extension Table {
     public static func variance(
         of expression: (TableColumns) -> some QueryExpression<some Numeric>
     ) -> Select<Double?, Self, ()> {
-        _aggregateSelect(of: expression) { $0.variance() }
+        _aggregateSelect(of: expression) { $0._variance(filter: nil) }
     }
 
     /// Computes the variance with a filter for the entire table.
@@ -68,6 +70,8 @@ extension Table {
         of expression: (TableColumns) -> some QueryExpression<some Numeric>,
         filter: @escaping (TableColumns) -> Filter
     ) -> Select<Double?, Self, ()> {
-        _aggregateSelect(of: expression, filter: filter) { $0.variance(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) {
+            $0._variance(filter: $1.queryFragment)
+        }
     }
 }

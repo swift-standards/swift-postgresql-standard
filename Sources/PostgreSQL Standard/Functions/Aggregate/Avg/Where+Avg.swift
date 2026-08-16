@@ -17,7 +17,7 @@ extension Where {
         of expression: (From.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Double?, From, ()>
     where Value: _OptionalPromotable, Value._Optionalized.Wrapped: Numeric {
-        _aggregateSelect(of: expression) { $0.avg() }
+        _aggregateSelect(of: expression) { $0._avg(distinct: false, filter: nil) }
     }
 
     /// Computes the average of a numeric column for rows matching the WHERE clause with a filter.
@@ -37,6 +37,8 @@ extension Where {
         filter: @escaping (From.TableColumns) -> Filter
     ) -> Select<Double?, From, ()>
     where Value: _OptionalPromotable, Value._Optionalized.Wrapped: Numeric {
-        _aggregateSelect(of: expression, filter: filter) { $0.avg(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) {
+            $0._avg(distinct: false, filter: $1.queryFragment)
+        }
     }
 }

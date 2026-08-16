@@ -2,6 +2,19 @@ import Structured_Queries_Primitives
 
 extension QueryExpression
 where QueryValue: _OptionalPromotable, QueryValue._Optionalized.Wrapped: Numeric {
+    @usableFromInline
+    internal func _avg(
+        distinct isDistinct: Bool,
+        filter: QueryFragment?
+    ) -> AggregateFunction<Double?> {
+        AggregateFunction(
+            "avg",
+            isDistinct: isDistinct,
+            [queryFragment],
+            filter: filter
+        )
+    }
+
     /// An average aggregate of this expression.
     ///
     /// ```swift
@@ -18,11 +31,6 @@ where QueryValue: _OptionalPromotable, QueryValue._Optionalized.Wrapped: Numeric
         distinct isDistinct: Bool = false,
         filter: (some QueryExpression<Bool>)? = Bool?.none
     ) -> some QueryExpression<Double?> {
-        AggregateFunction(
-            "avg",
-            isDistinct: isDistinct,
-            [queryFragment],
-            filter: filter?.queryFragment
-        )
+        _avg(distinct: isDistinct, filter: filter?.queryFragment)
     }
 }

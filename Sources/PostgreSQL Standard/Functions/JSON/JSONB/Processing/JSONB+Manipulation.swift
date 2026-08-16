@@ -19,9 +19,9 @@ extension JSONB.Processing {
             self.jsonb = jsonb
             self.path = path
             self.createIfMissing = createIfMissing
-            if let data = try? jsonbEncoder.encode(value) {
-                self.value = data
-            } else {
+            do {
+                self.value = try jsonbEncoder.encode(value)
+            } catch {
                 self.value = Foundation.Data()
             }
         }
@@ -48,9 +48,9 @@ extension JSONB.Processing {
             self.jsonb = jsonb
             self.path = path
             self.after = after
-            if let data = try? jsonbEncoder.encode(value) {
-                self.value = data
-            } else {
+            do {
+                self.value = try jsonbEncoder.encode(value)
+            } catch {
                 self.value = Foundation.Data()
             }
         }
@@ -96,9 +96,9 @@ extension JSONB.Processing {
             self.jsonb = jsonb
             self.path = path
             self.createIfMissing = createIfMissing
-            if let data = try? jsonbEncoder.encode(value) {
-                self.value = data
-            } else {
+            do {
+                self.value = try jsonbEncoder.encode(value)
+            } catch {
                 self.value = Foundation.Data()
             }
         }
@@ -127,9 +127,9 @@ extension JSONB.Processing {
             self.jsonb = jsonb
             self.path = path
             self.after = after
-            if let data = try? jsonbEncoder.encode(value) {
-                self.value = data
-            } else {
+            do {
+                self.value = try jsonbEncoder.encode(value)
+            } catch {
                 self.value = Foundation.Data()
             }
         }

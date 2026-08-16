@@ -79,42 +79,52 @@ extension Array: QueryBindable, QueryExpression where Element: QueryBindable {
             // Element verified as Bool.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .boolArray(self as! [Bool])
+
         case is String.Type:
             // Element verified as String.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .stringArray(self as! [String])
+
         case is Int.Type:
             // Element verified as Int.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .intArray(self as! [Int])
+
         case is Int16.Type:
             // Element verified as Int16.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .int16Array(self as! [Int16])
+
         case is Int32.Type:
             // Element verified as Int32.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .int32Array(self as! [Int32])
+
         case is Int64.Type:
             // Element verified as Int64.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .int64Array(self as! [Int64])
+
         case is Float.Type:
             // Element verified as Float.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .floatArray(self as! [Float])
+
         case is Double.Type:
             // Element verified as Double.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .doubleArray(self as! [Double])
+
         case is UUID.Type:
             // Element verified as UUID.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .uuidArray((self as! [UUID]).map(QueryBinding.UUID.init))
+
         case is Date.Type:
             // Element verified as Date.Type above; cast is guaranteed safe.
             // swiftlint:disable:next force_cast
             return .dateArray((self as! [Date]).map(\.instant))
+
         default:
             // Fallback: Use genericArray for any other QueryBindable element type
             // This supports custom types like enums with RawRepresentable conformance
@@ -134,6 +144,7 @@ extension Array: _OptionalPromotable where Element: QueryDecodable {}
 // MARK: - Array QueryDecodable Conformance
 
 extension Array: QueryDecodable where Element: QueryDecodable {
+    // swiftlint:disable:next typed_throws_required - QueryDecodable requires this external witness.
     public init(decoder: inout some QueryDecoder) throws {
         // Special case: [UInt8] is for bytea (binary data)
         if Element.self == UInt8.self {

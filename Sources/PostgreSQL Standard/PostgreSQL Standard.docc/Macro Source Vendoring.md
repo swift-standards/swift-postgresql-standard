@@ -1,4 +1,4 @@
-# Symbolic Links
+# Macro Source Vendoring
 
 This directory contains vendored **copies** of shared source code from
 `swift-structured-queries-primitives`'s `Sources/Structured Queries Primitives

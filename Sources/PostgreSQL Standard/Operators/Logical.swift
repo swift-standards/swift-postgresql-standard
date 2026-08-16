@@ -1,5 +1,9 @@
 import Structured_Queries_Primitives
 
+// swiftlint:disable no_any_protocol_existential
+// REASON: These compatibility overloads deliberately open type-erased query expressions to work
+// around the documented dynamic-member overload-resolution defect.
+
 // MARK: - 9.1. Logical Operators
 
 extension QueryExpression where QueryValue == Bool {
@@ -83,3 +87,5 @@ extension SQLQueryExpression<Bool> {
         self = Self(not())
     }
 }
+
+// swiftlint:enable no_any_protocol_existential

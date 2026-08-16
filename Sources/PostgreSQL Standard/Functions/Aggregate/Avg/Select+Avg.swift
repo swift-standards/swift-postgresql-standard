@@ -24,7 +24,7 @@ extension Select {
         Value._Optionalized.Wrapped: QueryRepresentable
     {
         let expr = expression(From.columns)
-        return select { _ in expr.avg() }
+        return select { _ in expr._avg(distinct: false, filter: nil) }
     }
 
     /// Creates a new select statement from this one by appending an average aggregate to its selection (with joins).
@@ -44,7 +44,7 @@ extension Select {
         Value._Optionalized.Wrapped: QueryRepresentable
     {
         let expr = expression(From.columns, repeat (each J).columns)
-        return select { _ in expr.avg() }
+        return select { _ in expr._avg(distinct: false, filter: nil) }
     }
 
     /// Creates a new select statement from this one by appending an average aggregate to its selection (with existing columns).
@@ -64,7 +64,7 @@ extension Select {
         Value._Optionalized.Wrapped: QueryRepresentable
     {
         let expr = expression(From.columns, repeat (each J).columns)
-        return select { _ in expr.avg() }
+        return select { _ in expr._avg(distinct: false, filter: nil) }
     }
 
     /// Creates a new select statement from this one by appending an average aggregate to its selection (with single join).
@@ -82,7 +82,7 @@ extension Select {
         Value._Optionalized.Wrapped: QueryRepresentable
     {
         let expr = expression(From.columns, Joins.columns)
-        return select { _, _ in expr.avg() }
+        return select { _, _ in expr._avg(distinct: false, filter: nil) }
     }
 
     /// Creates a new select statement from this one by appending an average aggregate to its selection (with single join and existing columns).
@@ -100,6 +100,6 @@ extension Select {
         Value._Optionalized.Wrapped: QueryRepresentable
     {
         let expr = expression(From.columns, Joins.columns)
-        return select { _, _ in expr.avg() }
+        return select { _, _ in expr._avg(distinct: false, filter: nil) }
     }
 }

@@ -104,7 +104,7 @@ import Tests_Inline_Snapshot
     private let sharedValidationClient = SharedValidationClient()
 
     /// Register shutdown handler on first use
-    private nonisolated(unsafe) var shutdownHandlerRegistered = false
+    nonisolated(unsafe) private var shutdownHandlerRegistered = false
 #endif
 
 // MARK: - SQL Validation

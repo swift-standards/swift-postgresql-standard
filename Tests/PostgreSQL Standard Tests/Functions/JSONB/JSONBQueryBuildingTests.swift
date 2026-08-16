@@ -34,6 +34,7 @@ extension SnapshotTests.JSONB {
                 let decoded = String(decoding: data.map(\.underlying), as: UTF8.self)
                 #expect(decoded.contains("feature1"))
                 #expect(decoded.contains("feature2"))
+
             default:
                 Issue.record("Expected .jsonb binding, got \(arrayBinding)")
             }
@@ -47,6 +48,7 @@ extension SnapshotTests.JSONB {
                 let decoded = String(decoding: data.map(\.underlying), as: UTF8.self)
                 #expect(decoded.contains("key1"))
                 #expect(decoded.contains("value1"))
+
             default:
                 Issue.record("Expected .jsonb binding, got \(dictBinding)")
             }

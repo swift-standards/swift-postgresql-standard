@@ -17,6 +17,7 @@ public enum Conditional {}
 
 // MARK: - Convenience Constructors
 
+// swift-format-ignore: AlwaysUseLowerCamelCase
 /// Creates a SQL `CASE` expression builder with a base expression.
 ///
 /// ```swift
@@ -28,6 +29,7 @@ public func Case<Base, QueryValue: _OptionalPromotable>(
     Conditional.Case(base)
 }
 
+// swift-format-ignore: AlwaysUseLowerCamelCase
 /// Creates a SQL `CASE` expression builder without a base expression.
 ///
 /// ```swift

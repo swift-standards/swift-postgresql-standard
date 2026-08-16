@@ -51,6 +51,7 @@ extension TextSearch.Vector: QueryBindable {
 
 extension TextSearch.Vector: QueryDecodable {
     @inlinable
+    // swiftlint:disable:next typed_throws_required - QueryDecodable requires this external witness.
     public init(decoder: inout some QueryDecoder) throws {
         guard let result = try decoder.decode(String.self)
         else { throw QueryDecodingError.missingRequiredColumn }
@@ -93,9 +94,13 @@ extension TextSearch {
     /// - `.C` - Medium importance (typically abstracts, summaries)
     /// - `.D` - Lowest importance (typically body text, default)
     public enum Weight: String, Sendable {
+        // swift-format-ignore: AlwaysUseLowerCamelCase
         case A  // Highest importance
+        // swift-format-ignore: AlwaysUseLowerCamelCase
         case B  // High importance
+        // swift-format-ignore: AlwaysUseLowerCamelCase
         case C  // Medium importance
+        // swift-format-ignore: AlwaysUseLowerCamelCase
         case D  // Lowest importance (default)
     }
 }

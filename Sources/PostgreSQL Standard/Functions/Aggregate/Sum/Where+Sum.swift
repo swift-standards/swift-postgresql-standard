@@ -22,7 +22,7 @@ extension Where {
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
-        _aggregateSelect(of: expression) { $0.sum() }
+        _aggregateSelect(of: expression) { $0._sum(distinct: false, filter: nil) }
     }
 
     /// A select statement for the sum of an expression from the filtered table with a filter clause.
@@ -46,6 +46,8 @@ extension Where {
         Value._Optionalized.Wrapped: Numeric,
         Value._Optionalized.Wrapped: QueryRepresentable
     {
-        _aggregateSelect(of: expression, filter: filter) { $0.sum(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) {
+            $0._sum(distinct: false, filter: $1.queryFragment)
+        }
     }
 }

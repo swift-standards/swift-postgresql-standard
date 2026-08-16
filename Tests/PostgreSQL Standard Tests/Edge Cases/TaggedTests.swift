@@ -110,14 +110,18 @@ extension SnapshotTests {
 
         @Test func taggedSelectPreservesType() {
             // Compile-time test: verify that selecting Tagged columns preserves the Tagged wrapper
-            let _: Select<Reminder.ID, Reminder, ()> = Reminder.select { $0.id }
-            let _: Select<User.ID, User, ()> = User.select { $0.id }
+            let _: Structured_Queries_Primitives.Select<Reminder.ID, Reminder, ()> = Reminder.select
+            { $0.id }
+            let _: Structured_Queries_Primitives.Select<User.ID, User, ()> = User.select { $0.id }
 
             // Verify tuple selections preserve Tagged types
-            let _: Select<(Reminder.ID, Int), Reminder, ()> = Reminder.select {
-                ($0.id, $0.remindersListID)
+            let _: Structured_Queries_Primitives.Select<(Reminder.ID, Int), Reminder, ()> =
+                Reminder.select {
+                    ($0.id, $0.remindersListID)
+                }
+            let _: Structured_Queries_Primitives.Select<(User.ID, String), User, ()> = User.select {
+                ($0.id, $0.name)
             }
-            let _: Select<(User.ID, String), User, ()> = User.select { ($0.id, $0.name) }
         }
 
         @Table

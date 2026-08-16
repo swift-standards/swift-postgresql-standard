@@ -1,6 +1,13 @@
 import Structured_Queries_Primitives
 
 extension QueryExpression where QueryValue: QueryBindable & _OptionalPromotable {
+    @usableFromInline
+    internal func _max(
+        filter: QueryFragment?
+    ) -> AggregateFunction<QueryValue._Optionalized.Wrapped?> {
+        AggregateFunction("max", [queryFragment], filter: filter)
+    }
+
     /// A maximum aggregate of this expression.
     ///
     /// ```swift
@@ -13,6 +20,6 @@ extension QueryExpression where QueryValue: QueryBindable & _OptionalPromotable 
     public func max(
         filter: (some QueryExpression<Bool>)? = Bool?.none
     ) -> some QueryExpression<QueryValue._Optionalized.Wrapped?> {
-        AggregateFunction("max", [queryFragment], filter: filter?.queryFragment)
+        _max(filter: filter?.queryFragment)
     }
 }
