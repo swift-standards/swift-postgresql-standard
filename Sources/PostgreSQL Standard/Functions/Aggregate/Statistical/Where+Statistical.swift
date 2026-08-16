@@ -14,7 +14,7 @@ extension Where {
     public func stddev(
         of expression: (From.TableColumns) -> some QueryExpression<some Numeric>
     ) -> Select<Double?, From, ()> {
-        _aggregateSelect(of: expression) { $0.stddev() }
+        _aggregateSelect(of: expression) { $0._stddev(filter: nil) }
     }
 
     /// Computes the standard deviation with a filter for rows matching the WHERE clause.
@@ -33,7 +33,9 @@ extension Where {
         of expression: (From.TableColumns) -> some QueryExpression<some Numeric>,
         filter: @escaping (From.TableColumns) -> Filter
     ) -> Select<Double?, From, ()> {
-        _aggregateSelect(of: expression, filter: filter) { $0.stddev(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) {
+            $0._stddev(filter: $1.queryFragment)
+        }
     }
 
     /// Computes the variance of a numeric column for rows matching the WHERE clause.
@@ -49,7 +51,7 @@ extension Where {
     public func variance(
         of expression: (From.TableColumns) -> some QueryExpression<some Numeric>
     ) -> Select<Double?, From, ()> {
-        _aggregateSelect(of: expression) { $0.variance() }
+        _aggregateSelect(of: expression) { $0._variance(filter: nil) }
     }
 
     /// Computes the variance with a filter for rows matching the WHERE clause.
@@ -68,6 +70,8 @@ extension Where {
         of expression: (From.TableColumns) -> some QueryExpression<some Numeric>,
         filter: @escaping (From.TableColumns) -> Filter
     ) -> Select<Double?, From, ()> {
-        _aggregateSelect(of: expression, filter: filter) { $0.variance(filter: $1) }
+        _aggregateSelect(of: expression, filter: filter) {
+            $0._variance(filter: $1.queryFragment)
+        }
     }
 }

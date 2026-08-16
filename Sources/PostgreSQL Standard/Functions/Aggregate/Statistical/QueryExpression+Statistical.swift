@@ -4,6 +4,24 @@ import Structured_Queries_Primitives
 // MARK: - PostgreSQL Statistical Aggregate Functions
 
 extension QueryExpression where QueryValue: Numeric {
+    @usableFromInline
+    internal func _stddev(filter: QueryFragment?) -> AggregateFunction<Double?> {
+        AggregateFunction(
+            "STDDEV",
+            [queryFragment],
+            filter: filter
+        )
+    }
+
+    @usableFromInline
+    internal func _variance(filter: QueryFragment?) -> AggregateFunction<Double?> {
+        AggregateFunction(
+            "VARIANCE",
+            [queryFragment],
+            filter: filter
+        )
+    }
+
     /// PostgreSQL STDDEV function - standard deviation
     ///
     /// ```swift
@@ -19,11 +37,7 @@ extension QueryExpression where QueryValue: Numeric {
     public func stddev(
         filter: (some QueryExpression<Bool>)? = Bool?.none
     ) -> some QueryExpression<Double?> {
-        AggregateFunction<Double?>(
-            "STDDEV",
-            [queryFragment],
-            filter: filter?.queryFragment
-        )
+        _stddev(filter: filter?.queryFragment)
     }
 
     /// PostgreSQL STDDEV_POP function - population standard deviation
@@ -85,11 +99,7 @@ extension QueryExpression where QueryValue: Numeric {
     public func variance(
         filter: (some QueryExpression<Bool>)? = Bool?.none
     ) -> some QueryExpression<Double?> {
-        AggregateFunction<Double?>(
-            "VARIANCE",
-            [queryFragment],
-            filter: filter?.queryFragment
-        )
+        _variance(filter: filter?.queryFragment)
     }
 
     /// PostgreSQL VAR_POP function - population variance
