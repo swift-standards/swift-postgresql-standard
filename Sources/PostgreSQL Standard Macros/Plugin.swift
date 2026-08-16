@@ -1,4 +1,3 @@
-import PostgreSQL_Standard_Macros_Implementation
 import SwiftCompilerPlugin
 import SwiftSyntaxMacros
 
