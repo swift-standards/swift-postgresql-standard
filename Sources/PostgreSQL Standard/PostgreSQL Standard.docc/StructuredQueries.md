@@ -23,3 +23,7 @@ See [`StructuredQueriesCore`](StructuredQueriesCore) for general library usage.
 - ``Selection()``
 - ``sql(_:as:)``
 - ``bind(_:as:)``
+
+### Maintainer Documentation
+
+- <doc:Macro-Source-Vendoring>

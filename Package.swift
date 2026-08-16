@@ -99,8 +99,7 @@ let package = Package(
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
             ],
-            path: "Sources/PostgreSQL Standard Macros",
-            exclude: ["Symbolic Links/README.md"]
+            path: "Sources/PostgreSQL Standard Macros"
         ),
 
         // MARK: - Test Support
