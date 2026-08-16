@@ -3,13 +3,26 @@ import Structured_Queries_Primitives
 // MARK: - Collection Operators (IN, EXISTS)
 
 extension QueryExpression where QueryValue: QueryExpression {
+    func _in<S: Swift.Sequence>(_ expression: S) -> BinaryOperator<Bool>
+    where S.Element: QueryExpression<QueryValue> {
+        BinaryOperator(lhs: self, operator: "IN", rhs: S.Expression(elements: expression))
+    }
+
     /// Returns a predicate expression indicating whether the expression is in a sequence.
     ///
     /// - Parameter expression: A sequence of expressions.
     /// - Returns: A predicate expression indicating whether this expression is in the given sequence
     public func `in`<S: Swift.Sequence>(_ expression: S) -> some QueryExpression<Bool>
     where S.Element: QueryExpression<QueryValue> {
-        BinaryOperator(lhs: self, operator: "IN", rhs: S.Expression(elements: expression))
+        _in(expression)
+    }
+
+    func _in(_ query: some Statement<QueryValue>) -> BinaryOperator<Bool> {
+        BinaryOperator(
+            lhs: self,
+            operator: "IN",
+            rhs: SQLQueryExpression("(\(query.query))", as: Void.self)
+        )
     }
 
     /// Returns a predicate expression indicating whether the expression is in a subquery.
@@ -17,11 +30,7 @@ extension QueryExpression where QueryValue: QueryExpression {
     /// - Parameter query: A subquery.
     /// - Returns: A predicate expression indicating whether this expression is in the given subquery.
     public func `in`(_ query: some Statement<QueryValue>) -> some QueryExpression<Bool> {
-        BinaryOperator(
-            lhs: self,
-            operator: "IN",
-            rhs: SQLQueryExpression("(\(query.query))", as: Void.self)
-        )
+        _in(query)
     }
 }
 
@@ -35,7 +44,7 @@ extension Sequence where Element: QueryBindable {
     public func contains(
         _ element: some QueryExpression<Element.QueryValue>
     ) -> some QueryExpression<Bool> {
-        element.in(self)
+        element._in(self)
     }
 }
 
@@ -49,7 +58,7 @@ extension Statement where QueryValue: QueryBindable {
     public func contains(
         _ element: some QueryExpression<QueryValue>
     ) -> some QueryExpression<Bool> {
-        element.in(self)
+        element._in(self)
     }
 }
 
