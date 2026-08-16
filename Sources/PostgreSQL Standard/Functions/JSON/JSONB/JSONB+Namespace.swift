@@ -26,8 +26,6 @@ public enum JSONB {}
 internal let jsonbEncoder: JSONEncoder = {
     var encoder = JSONEncoder()
     encoder.dateEncodingStrategy = .iso8601
-    #if DEBUG
-        encoder.outputFormatting = [.sortedKeys]
-    #endif
+    encoder.outputFormatting = [.sortedKeys]
     return encoder
 }()
