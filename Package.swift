@@ -25,17 +25,8 @@ let package = Package(
             name: "PostgreSQL Standard Macros",
             targets: ["PostgreSQL Standard Macros"]
         ),
-        // Exposed for the nested testing package (Tests/Package.swift) only.
-        // NOTE: the product name MUST differ from the ".macro" target name
-        // "PostgreSQL Standard Macros Implementation". SwiftPM auto-vends an
-        // implicit product for the .macro target under that exact name; an
-        // explicit same-named .library collides with it ("ignoring duplicate
-        // product ... (macro)"), SwiftPM drops the plugin product, and every
-        // downstream @Table site fails "external macro ... could not be found".
-        // The distinct "... Library" name lets the importable library product
-        // and the macro plugin product coexist. The module the nested tests
-        // import is unchanged (module name derives from the target, not the
-        // product): `import PostgreSQL_Standard_Macros_Implementation`.
+        // The importable implementation stays separate from the compiler-plugin executable so the
+        // nested testing package can depend on a regular library product.
         .library(
             name: "PostgreSQL Standard Macros Implementation Library",
             targets: ["PostgreSQL Standard Macros Implementation"]
@@ -91,19 +82,30 @@ let package = Package(
             name: "PostgreSQL Standard Macros",
             dependencies: [
                 "PostgreSQL Standard",
-                "PostgreSQL Standard Macros Implementation",
+                "PostgreSQL Standard Macros Plugin",
             ],
             path: "Sources/PostgreSQL Standard Macro Declarations"
         ),
-        .macro(
+        .target(
             name: "PostgreSQL Standard Macros Implementation",
             dependencies: [
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "SwiftBasicFormat", package: "swift-syntax"),
+                .product(name: "SwiftDiagnostics", package: "swift-syntax"),
+                .product(name: "SwiftParser", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
             ],
             path: "Sources/PostgreSQL Standard Macros"
+        ),
+        .macro(
+            name: "PostgreSQL Standard Macros Plugin",
+            dependencies: [
+                "PostgreSQL Standard Macros Implementation",
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+            ],
+            path: "Sources/PostgreSQL Standard Macros Plugin"
         ),
 
         // MARK: - Test Support
