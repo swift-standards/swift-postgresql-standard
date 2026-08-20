@@ -1,4 +1,4 @@
-// swift-tools-version: 6.3.3
+// swift-tools-version: 6.4
 //
 // Nested testing package ([INST-TEST-001]): isolates third-party test-only
 // dependencies (pointfreeco/swift-macro-testing, swift-snapshot-testing) from
@@ -9,11 +9,11 @@ import PackageDescription
 let package = Package(
     name: "testing",
     platforms: [
-        .macOS(.v26),
-        .iOS(.v26),
-        .tvOS(.v26),
-        .watchOS(.v26),
-        .visionOS(.v26),
+        .macOS(.v27),
+        .iOS(.v27),
+        .tvOS(.v27),
+        .watchOS(.v27),
+        .visionOS(.v27),
     ],
     dependencies: [
         .package(path: ".."),

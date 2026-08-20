@@ -1,4 +1,4 @@
-// swift-tools-version: 6.3.3
+// swift-tools-version: 6.4
 
 import CompilerPluginSupport
 import PackageDescription
@@ -6,11 +6,11 @@ import PackageDescription
 let package = Package(
     name: "swift-postgresql-standard",
     platforms: [
-        .macOS("27"),
-        .iOS("27"),
-        .tvOS("27"),
-        .watchOS("27"),
-        .visionOS("27"),
+        .macOS(.v27),
+        .iOS(.v27),
+        .tvOS(.v27),
+        .watchOS(.v27),
+        .visionOS(.v27),
     ],
     products: [
         .library(
@@ -54,12 +54,18 @@ let package = Package(
         .trait(
             name: "SQLValidation",
             description: "Enable SQL syntax validation against PostgreSQL using postgres-nio."
-        ),
+        )
     ],
     dependencies: [
         // L1
-        .package(url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
+        .package(
+            url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-primitives/swift-byte-primitives.git",
+            branch: "main"
+        ),
         .package(
             url: "https://github.com/swift-primitives/swift-test-primitives.git",
             branch: "main"
@@ -78,8 +84,14 @@ let package = Package(
         .target(
             name: "PostgreSQL Standard",
             dependencies: [
-                .product(name: "Structured Queries Primitives", package: "swift-structured-queries-primitives"),
-                .product(name: "Structured Queries Primitives Support", package: "swift-structured-queries-primitives"),
+                .product(
+                    name: "Structured Queries Primitives",
+                    package: "swift-structured-queries-primitives"
+                ),
+                .product(
+                    name: "Structured Queries Primitives Support",
+                    package: "swift-structured-queries-primitives"
+                ),
                 // This target's public surface binds Foundation's `Date`, `UUID`,
                 // `Data`, `URL` and `Decimal` (see `Cast.swift`, `PostgresArray.swift`,
                 // `Trigger.Function+Helpers.swift`). Those `QueryBindable`
@@ -129,8 +141,11 @@ let package = Package(
                     name: "Test Snapshot Primitives",
                     package: "swift-test-primitives"
                 ),
-                .product(name: "PostgresNIO", package: "postgres-nio",
-                         condition: .when(traits: ["SQLValidation"])),
+                .product(
+                    name: "PostgresNIO",
+                    package: "postgres-nio",
+                    condition: .when(traits: ["SQLValidation"])
+                ),
             ],
             path: "Tests/Support"
         ),
