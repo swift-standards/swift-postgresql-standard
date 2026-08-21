@@ -5,11 +5,8 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-/// Tests for JSONB examples shown in README.md
 @Suite("README Examples - JSONB Operations")
 struct JSONBExamplesTests {
-
-    // MARK: - Test Model
 
     @Table
     struct User {
@@ -17,8 +14,6 @@ struct JSONBExamplesTests {
         var name: String
         var settings: Foundation.Data
     }
-
-    // MARK: - JSONB Containment
 
     @Test
     func `README Example: JSONB contains (@>) operator`() async {
@@ -33,8 +28,6 @@ struct JSONBExamplesTests {
         }
     }
 
-    // MARK: - JSONB Path Operators
-
     @Test
     func `README Example: JSONB get text field (->>) operator`() async {
         await assertSQL(
@@ -47,8 +40,6 @@ struct JSONBExamplesTests {
             """
         }
     }
-
-    // MARK: - JSONB Key Existence
 
     @Test
     func `README Example: JSONB has key (?) operator`() async {

@@ -6,7 +6,6 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct StatisticalTests {
-        // MARK: - Table.stddev Tests
 
         @Test
         func `Table.stddev with closure syntax`() async {
@@ -48,8 +47,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Table.variance Tests
-
         @Test
         func `Table.variance with closure syntax`() async {
             await assertSQL(of: Order.variance { $0.amount }) {
@@ -79,8 +76,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Where.stddev Tests
 
         @Test
         func `Where.stddev with closure syntax`() async {
@@ -125,8 +120,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Where.variance Tests
-
         @Test
         func `Where.variance with closure syntax`() async {
             await assertSQL(of: Order.where { $0.isPaid }.variance { $0.amount }) {
@@ -169,8 +162,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Select Tests (Low-Level API)
 
         @Test
         func `Select.stddev using low-level API`() async {
@@ -230,8 +221,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Statistical Variants
-
         @Test
         func `StddevPop function`() async {
             await assertSQL(of: Order.select { $0.amount.stddevPop() }) {
@@ -271,8 +260,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Complex Expression Tests
 
         @Test
         func `Stddev of calculated expression`() async {
@@ -320,42 +307,32 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Compile-Time Type Tests
-
         func compileTimeTypeTests() {
-            // Verify return types compile correctly
 
-            // Table.stddev returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.stddev {
                 $0.amount
             }
 
-            // Table.variance returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.variance {
                 $0.amount
             }
 
-            // Where.stddev returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.stddev {
                 $0.amount
             }
 
-            // Where.variance returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.variance {
                 $0.amount
             }
 
-            // Int column returns Double?
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.stddev {
                 $0.quantity
             }
         }
-
-        // MARK: - Edge Cases
 
         @Test
         func `Stddev with GROUP BY`() async {

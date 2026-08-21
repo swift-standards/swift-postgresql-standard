@@ -7,14 +7,9 @@ import Testing
 import Tests_Inline_Snapshot
 
 extension SnapshotTests.TriggerTests {
-    /// Tests for Trigger.Function helper methods.
-    ///
-    /// These helpers provide semantic, type-safe ways to create common trigger functions.
-    /// Each test demonstrates realistic usage patterns and validates the generated SQL.
+
     @Suite("Function Helpers")
     struct FunctionHelperTests {
-
-        // MARK: - Test Models
 
         @Table("users")
         struct User: Identifiable {
@@ -57,8 +52,6 @@ extension SnapshotTests.TriggerTests {
             var changedAt: Date
             var changedBy: String
         }
-
-        // MARK: - Timestamp Helpers
 
         @Test
         func `updateTimestamp() - Auto-update timestamp on row modification`() async {
@@ -154,8 +147,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - Version Increment
-
         @Test
         func `incrementVersion() - Optimistic locking with version column`() async {
             let trigger = Document.createTrigger(
@@ -186,8 +177,6 @@ extension SnapshotTests.TriggerTests {
                 """
             }
         }
-
-        // MARK: - Audit Logging
 
         @Test
         func `audit() - Log all changes to audit table`() async {
@@ -237,7 +226,7 @@ extension SnapshotTests.TriggerTests {
 
         @Test
         func `audit() - Reusable function for multiple trigger events`() async {
-            // Demonstrate that one audit function works for all events
+
             let auditFunc = Trigger<User>.Function.audit(to: AuditLog.self)
 
             let insertTrigger = User.createTrigger(
@@ -256,13 +245,10 @@ extension SnapshotTests.TriggerTests {
                 function: auditFunc
             )
 
-            // All triggers use the same function
             #expect(insertTrigger.function.name == updateTrigger.function.name)
             #expect(updateTrigger.function.name == deleteTrigger.function.name)
             #expect(insertTrigger.function.name == "audit_users_to_audit_log")
         }
-
-        // MARK: - Validation
 
         @Test
         func `validate() - Custom validation logic with PL/pgSQL`() async {
@@ -302,8 +288,6 @@ extension SnapshotTests.TriggerTests {
                 """#
             }
         }
-
-        // MARK: - Deletion Prevention
 
         @Test
         func `preventDeletion() - Block all deletions with error message`() async {
@@ -409,8 +393,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - Row-Level Security
-
         @Test
         func `enforceRowLevelSecurity() - Ensure users can only modify their own rows`() async {
             let trigger = Document.createTrigger(
@@ -448,11 +430,9 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - Real-World Scenarios
-
         @Test
         func `Scenario: Complete audit trail for user table`() async {
-            // One function handles all events
+
             let auditFunc = Trigger<User>.Function.audit(to: AuditLog.self)
 
             let insertTrigger = User.createTrigger(
@@ -474,7 +454,6 @@ extension SnapshotTests.TriggerTests {
                 function: auditFunc
             )
 
-            // Verify all triggers use same function (efficient - one function, multiple triggers)
             #expect(insertTrigger.function.name == "audit_users_to_audit_log")
             #expect(updateTrigger.function.name == "audit_users_to_audit_log")
             #expect(deleteTrigger.function.name == "audit_users_to_audit_log")
@@ -482,7 +461,7 @@ extension SnapshotTests.TriggerTests {
 
         @Test
         func `Scenario: Document with timestamp, version, and security`() async {
-            // Multiple triggers for different concerns
+
             let timestampTrigger = Document.createTrigger(
                 timing: .before,
                 event: .update,
@@ -504,7 +483,6 @@ extension SnapshotTests.TriggerTests {
                 )
             )
 
-            // Each trigger has its own function (separation of concerns)
             #expect(timestampTrigger.function.name == "update_updatedAt_documents")
             #expect(versionTrigger.function.name == "increment_version_documents")
             #expect(securityTrigger.function.name == "enforce_rls_documents")
@@ -512,21 +490,19 @@ extension SnapshotTests.TriggerTests {
 
         @Test
         func `Scenario: User lifecycle with timestamps and soft delete`() async {
-            // Creation timestamp
+
             let createTrigger = User.createTrigger(
                 timing: .before,
                 event: .insert,
                 function: .createdAt(column: \.createdAt)
             )
 
-            // Update timestamp
             let updateTrigger = User.createTrigger(
                 timing: .before,
                 event: .update,
                 function: .updateTimestamp(column: \.updatedAt)
             )
 
-            // Soft delete instead of hard delete
             let deleteTrigger = User.createTrigger(
                 timing: .before,
                 event: .delete,

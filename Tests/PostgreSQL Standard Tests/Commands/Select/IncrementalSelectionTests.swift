@@ -8,24 +8,9 @@ extension SnapshotTests.Commands.Select {
     @Suite("Selection Semantics")
     struct SelectionSemanticsTests {
 
-        // MARK: - Answer: Incremental Selection is NOT Supported
-
         @Test
         func `Incremental .select() is NOT supported by design`() async {
-            // FINDING from academic review:
-            // Question: Does User.select { $0.id }.select { $0.name } work?
-            // Answer: NO - Type system prevents it
-            //
-            // Explanation:
-            // - User.select { $0.id } returns Select<Int, User, ()> where Columns=Int
-            // - .select() requires Columns=() or Columns=(repeat each C1)
-            // - Since Columns=Int, no matching overload exists
-            //
-            // Design Decision: "Last wins" semantics would require Columns to be Any,
-            // losing type safety. Current design sacrifices incremental selection for
-            // compile-time correctness.
 
-            // ✅ Correct: Batch selection
             await assertSQL(
                 of: User.select { ($0.id, $0.name) }
             ) {
@@ -35,12 +20,7 @@ extension SnapshotTests.Commands.Select {
                 """
             }
 
-            // ❌ This does NOT compile (which is intentional):
-            // User.select { $0.id }.select { $0.name }
-            //                      ^^^^^^^^ Error: requires Columns == ()
         }
-
-        // MARK: - Selection Patterns That DO Work
 
         @Test
         func `Multiple column selection via tuple`() async {
@@ -56,7 +36,7 @@ extension SnapshotTests.Commands.Select {
 
         @Test
         func `Selection order matches tuple order`() async {
-            // Verify that column order in SQL matches tuple order
+
             await assertSQL(
                 of: User.select { ($0.name, $0.id) }
             ) {
@@ -99,40 +79,32 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - Algebraic Properties: WHERE Clause Monoid Laws
-
         @Test
         func `WHERE clause monoid: Identity law (WHERE true)`() async {
-            // Monoid identity: query.where { true } should be equivalent to query
+
             let withoutWhere = User.all
             let withTrueWhere = User.where { _ in true }
 
             let sql1 = withoutWhere.query.prepare { "$\($0)" }.sql
             let sql2 = withTrueWhere.query.prepare { "$\($0)" }.sql
 
-            // NOTE: These are NOT structurally identical (one has WHERE $1 binding for true),
-            // but they are semantically equivalent
             #expect(sql1.contains("SELECT"))
-            #expect(sql2.contains("WHERE $1"))  // true becomes a bind parameter
+            #expect(sql2.contains("WHERE $1"))
         }
 
         @Test
         func `WHERE clause composition: Associativity`() async {
-            // (p1 AND p2) AND p3 generates different SQL than p1 AND (p2 AND p3)
-            // due to BinaryOperator parenthesization
+
             let left = User.where { ($0.id > 10 && $0.id < 100) && $0.id != 50 }
             let right = User.where { $0.id > 10 && ($0.id < 100 && $0.id != 50) }
 
             let leftSQL = left.query.prepare { "$\($0)" }.sql
             let rightSQL = right.query.prepare { "$\($0)" }.sql
 
-            // Parenthesization differs, but both are valid SQL
-            // Left:  WHERE ((p1 AND p2) AND p3)
-            // Right: WHERE (p1 AND (p2 AND p3))
-            #expect(leftSQL != rightSQL)  // Syntactically different
+            #expect(leftSQL != rightSQL)
             #expect(leftSQL.contains("WHERE"))
             #expect(rightSQL.contains("WHERE"))
-            // Both are semantically equivalent in PostgreSQL
+
         }
 
         @Test
@@ -166,14 +138,10 @@ extension SnapshotTests.Commands.Select {
             let sql1 = query1.query.prepare { "$\($0)" }.sql
             let sql2 = query2.query.prepare { "$\($0)" }.sql
 
-            // SQL WHERE clauses respect call order, so these WILL differ
-            // (AND is commutative semantically, but not syntactically in the DSL)
             #expect(sql1.contains("WHERE"))
             #expect(sql2.contains("WHERE"))
-            // Document: Call order determines SQL order (NOT commutative)
-        }
 
-        // MARK: - Idempotence Properties
+        }
 
         @Test
         func `DISTINCT is idempotent (last call wins)`() async {
@@ -185,7 +153,6 @@ extension SnapshotTests.Commands.Select {
             let sql2 = twice.query.prepare { "$\($0)" }.sql
             let sql3 = thrice.query.prepare { "$\($0)" }.sql
 
-            // All should generate identical SQL
             #expect(sql1 == sql2)
             #expect(sql2 == sql3)
             #expect(sql1.contains("DISTINCT"))
@@ -199,20 +166,16 @@ extension SnapshotTests.Commands.Select {
             let sql1 = limit10.query.prepare { "$\($0)" }.sql
             let sql2 = limit5.query.prepare { "$\($0)" }.sql
 
-            // NOTE: Literal integers become bind parameters ($1)
             #expect(sql1.contains("LIMIT $1"))
             #expect(sql2.contains("LIMIT $1"))
-            #expect(sql1 == sql2)  // SQL is identical (bindings differ)
+            #expect(sql1 == sql2)
 
-            // To verify different bindings, check the bindings array:
             let bindings1 = limit10.query.prepare { "$\($0)" }.bindings
             let bindings2 = limit5.query.prepare { "$\($0)" }.bindings
             #expect(bindings1.count == 1)
             #expect(bindings2.count == 1)
-            // Bindings contain different values (10 vs 5)
-        }
 
-        // MARK: - Query Combinator Semantics
+        }
 
         @Test
         func `Query combinators preserve all clauses`() async {

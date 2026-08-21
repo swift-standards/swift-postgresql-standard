@@ -1,17 +1,11 @@
 import Structured_Queries_Primitives
 
 extension Conditional {
-    /// A `CASE` expression builder with accumulated WHEN clauses.
+
     public struct Builder<Base, QueryValue: _OptionalProtocol>: QueryExpression {
         var base: QueryFragment?
         var cases: [QueryFragment]
 
-        /// Adds a `WHEN` clause to a `CASE` expression.
-        ///
-        /// - Parameters:
-        ///   - condition: A condition to test.
-        ///   - expression: A return value should the condition pass.
-        /// - Returns: A `CASE` expression builder.
         public func when(
             _ condition: some QueryExpression<Base>,
             then expression: some QueryExpression<QueryValue>
@@ -27,12 +21,6 @@ extension Conditional {
             return cases
         }
 
-        /// Adds a `WHEN` clause to a `CASE` expression.
-        ///
-        /// - Parameters:
-        ///   - condition: A condition to test.
-        ///   - expression: A return value should the condition pass.
-        /// - Returns: A `CASE` expression builder.
         public func when(
             _ condition: some QueryExpression<Base>,
             then expression: some QueryExpression<QueryValue.Wrapped>
@@ -48,10 +36,6 @@ extension Conditional {
             return cases
         }
 
-        /// Terminates a `CASE` expression with an `ELSE` clause.
-        ///
-        /// - Parameter expression: A return value should every `WHEN` condition fail.
-        /// - Returns: A `CASE` expression.
         public func `else`(
             _ expression: some QueryExpression<QueryValue.Wrapped>
         ) -> some QueryExpression<QueryValue.Wrapped> {

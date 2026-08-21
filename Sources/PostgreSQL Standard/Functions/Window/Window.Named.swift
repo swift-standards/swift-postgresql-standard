@@ -1,20 +1,8 @@
 import Foundation
 import Structured_Queries_Primitives
 
-// MARK: - Named Window Function
-
 extension Window {
-    /// A window function that references a named window specification
-    ///
-    /// This internal type is used when a window function references a named window
-    /// defined in the query's WINDOW clause.
-    ///
-    /// ```swift
-    /// Employee
-    ///     .window("dept_window") { $0.partition(by: $0.department) }
-    ///     .select { rank().over("dept_window") }
-    /// // RANK() OVER dept_window
-    /// ```
+
     struct Named<Value: QueryBindable>: QueryExpression {
         typealias QueryValue = Value
 

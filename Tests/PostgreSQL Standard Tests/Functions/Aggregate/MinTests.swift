@@ -6,7 +6,6 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct MinTests {
-        // MARK: - Table.min Tests
 
         @Test
         func `Table.min with closure syntax`() async {
@@ -78,8 +77,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Where.min Tests
-
         @Test
         func `Where.min with closure syntax`() async {
             await assertSQL(of: Order.where({ $0.isPaid }).min { $0.amount }) {
@@ -133,8 +130,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Select.min Tests
 
         @Test
         func `Select.min using low-level API`() async {
@@ -204,12 +199,9 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Nullable Column Tests
-
         @Test
         func `Min of nullable column returns single optional`() async {
-            // Test that nullable column (discount: Double?) returns Select<Double?, ...>
-            // NOT Select<Double??, ...> (double optional)
+
             await assertSQL(of: Order.min { $0.discount }) {
                 """
                 SELECT min("orders"."discount")
@@ -217,8 +209,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Complex Expression Tests
 
         @Test
         func `Min of calculated expression`() async {
@@ -242,12 +232,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Compile-Time Type Tests
-
         func compileTimeTypeTests() {
-            // Verify return types compile correctly
 
-            // Table.min returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
                 $0.amount
             }
@@ -255,7 +241,6 @@ extension SnapshotTests {
                 of: \.amount
             )
 
-            // Where.min returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.min {
@@ -267,28 +252,22 @@ extension SnapshotTests {
                 of: \.amount
             )
 
-            // Int column returns Int?
             let _: Structured_Queries_Primitives.Select<Int?, Order, ()> = Order.min {
                 $0.customerID
             }
 
-            // Date column returns Date?
             let _: Structured_Queries_Primitives.Select<Date?, Order, ()> = Order.min {
                 $0.createdAt
             }
 
-            // Nullable column returns single optional, not double
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
                 $0.discount
             }
 
-            // Complex expression
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
                 $0.quantity * $0.unitPrice
             }
         }
-
-        // MARK: - Edge Cases
 
         @Test
         func `Min with GROUP BY`() async {
@@ -364,7 +343,7 @@ extension SnapshotTests {
 
         @Test
         func `Min with HAVING using different operators`() async {
-            // Test less than
+
             await assertSQL(
                 of:
                     Order
@@ -380,7 +359,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Test greater than or equal
             await assertSQL(
                 of:
                     Order
@@ -396,7 +374,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Test less than or equal
             await assertSQL(
                 of:
                     Order

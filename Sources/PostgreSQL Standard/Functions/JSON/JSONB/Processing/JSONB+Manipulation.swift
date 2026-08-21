@@ -1,12 +1,8 @@
 public import Foundation
 import Structured_Queries_Primitives
 
-// MARK: - JSONB.Processing.Manipulation (Table 9.51)
-
 extension JSONB.Processing {
-    /// PostgreSQL jsonb_set function - sets a value at the specified path
-    ///
-    /// **PostgreSQL Documentation**: Table 9.51
+
     public struct Set<LHS: QueryExpression>: QueryExpression {
         public typealias QueryValue = Foundation.Data
 
@@ -33,9 +29,6 @@ extension JSONB.Processing {
         }
     }
 
-    /// PostgreSQL jsonb_insert function - inserts a value at the specified path
-    ///
-    /// **PostgreSQL Documentation**: Table 9.51
     public struct Insert<LHS: QueryExpression>: QueryExpression {
         public typealias QueryValue = Foundation.Data
 
@@ -62,9 +55,6 @@ extension JSONB.Processing {
         }
     }
 
-    /// PostgreSQL jsonb_strip_nulls function - removes null values from a JSONB object
-    ///
-    /// **PostgreSQL Documentation**: Table 9.51
     public struct StripNulls<LHS: QueryExpression>: QueryExpression {
         public typealias QueryValue = Foundation.Data
 
@@ -76,12 +66,8 @@ extension JSONB.Processing {
     }
 }
 
-// MARK: - JSONB.Processing.Typed (preserve JSONB type)
-
 extension JSONB.Processing {
-    /// PostgreSQL jsonb_set function - sets a value at the specified path (typed)
-    ///
-    /// **PostgreSQL Documentation**: Table 9.51
+
     public struct TypedSet<LHS: QueryExpression, Value: _JSONBRepresentationProtocol>:
         QueryExpression
     {
@@ -110,9 +96,6 @@ extension JSONB.Processing {
         }
     }
 
-    /// PostgreSQL jsonb_insert function - inserts a value at the specified path (typed)
-    ///
-    /// **PostgreSQL Documentation**: Table 9.51
     public struct TypedInsert<LHS: QueryExpression, Value: _JSONBRepresentationProtocol>:
         QueryExpression
     {
@@ -141,9 +124,6 @@ extension JSONB.Processing {
         }
     }
 
-    /// PostgreSQL jsonb_strip_nulls function - removes null values from a JSONB object (typed)
-    ///
-    /// **PostgreSQL Documentation**: Table 9.51
     public struct TypedStripNulls<LHS: QueryExpression, Value: _JSONBRepresentationProtocol>:
         QueryExpression
     {
@@ -157,18 +137,8 @@ extension JSONB.Processing {
     }
 }
 
-// MARK: - QueryExpression Function Extensions
-
 extension QueryExpression where QueryValue == Foundation.Data {
-    /// PostgreSQL's jsonb_set function - Update JSONB at path
-    ///
-    /// Example:
-    /// ```swift
-    /// User.update {
-    ///     $0.settings = $0.settings.setting(["preferences", "theme"], to: "dark")
-    /// }
-    /// // UPDATE users SET settings = jsonb_set(settings, ARRAY['preferences', 'theme']::text[], '"dark"'::jsonb, true)
-    /// ```
+
     public func setting<T: Encodable>(
         _ path: [String],
         to value: T,
@@ -182,15 +152,6 @@ extension QueryExpression where QueryValue == Foundation.Data {
         )
     }
 
-    /// PostgreSQL's jsonb_insert function - Insert into JSONB at path
-    ///
-    /// Example:
-    /// ```swift
-    /// User.update {
-    ///     $0.settings = $0.settings.inserting(["id": 123], at: ["items", "0"])
-    /// }
-    /// // UPDATE users SET settings = jsonb_insert(settings, ARRAY['items', '0']::text[], '{"id": 123}'::jsonb, false)
-    /// ```
     public func inserting<T: Encodable>(
         _ value: T,
         at path: [String],
@@ -199,49 +160,18 @@ extension QueryExpression where QueryValue == Foundation.Data {
         JSONB.Processing.Insert(jsonb: self, path: path, value: value, after: after)
     }
 
-    /// PostgreSQL's jsonb_strip_nulls function - Remove null values from JSONB
-    ///
-    /// Example:
-    /// ```swift
-    /// User.update { $0.settings = $0.settings.strippingNulls() }
-    /// // UPDATE users SET settings = jsonb_strip_nulls(settings)
-    /// ```
     public func strippingNulls() -> some QueryExpression<Foundation.Data> {
         JSONB.Processing.StripNulls(jsonb: self)
     }
 
-    /// PostgreSQL's jsonb_pretty function - Format JSONB for display
-    ///
-    /// Example:
-    /// ```swift
-    /// User.select { $0.settings.prettyFormatted() }
-    /// // SELECT jsonb_pretty(settings) FROM users
-    /// ```
     public func prettyFormatted() -> some QueryExpression<String> {
         JSONB.Processing.Pretty(jsonb: self)
     }
 
-    /// PostgreSQL's jsonb_typeof function - Get JSONB value type
-    ///
-    /// Example:
-    /// ```swift
-    /// User.select { $0.settings.typeString() }
-    /// // SELECT jsonb_typeof(settings) FROM users
-    /// ```
     public func typeString() -> some QueryExpression<String> {
         JSONB.Processing.TypeOf(jsonb: self)
     }
 
-    /// PostgreSQL's jsonb_array_length function - Get JSONB array length
-    ///
-    /// Example:
-    /// ```swift
-    /// User.select { $0.tags.arrayLength() }
-    /// // SELECT jsonb_array_length(tags) FROM users
-    /// ```
-    ///
-    /// > Note: This method is specifically for JSONB arrays. For PostgreSQL array types,
-    /// > use the `arrayLength()` method on Collection types instead.
     public func arrayLength() -> some QueryExpression<Int> {
         JSONB.Processing.ArrayLength(jsonb: self)
     }

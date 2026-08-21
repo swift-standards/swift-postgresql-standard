@@ -7,8 +7,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.FullTextSearch {
     @Suite("Functions") struct FunctionsTests {
 
-        // MARK: - Column-Level Functions
-
         @Test
         func `Convert text to tsvector`() async {
             await assertSQL(of: Article.select { $0.title.searchVector() }) {
@@ -122,8 +120,6 @@ extension SnapshotTests.FullTextSearch {
                 """
             }
         }
-
-        // MARK: - Complex Queries
 
         @Test
         func `Search with pagination and ranking`() async {

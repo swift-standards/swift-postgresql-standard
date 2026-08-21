@@ -1,6 +1,5 @@
 import Structured_Queries_Primitives
 
-/// A query expression of an aggregate function.
 public struct AggregateFunction<QueryValue>: QueryExpression, Sendable {
     var name: QueryFragment
     var isDistinct: Bool

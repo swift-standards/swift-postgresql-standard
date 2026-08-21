@@ -7,8 +7,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.JSONB {
     @Suite("Functions") struct FunctionTests {
 
-        // MARK: - Query Function Tests (SELECT)
-
         @Test func jsonbPrettyFunction() async {
             let query = TestUser.select { user in
                 (user.id, user.settings.prettyFormatted())
@@ -71,31 +69,5 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - Disabled Tests (Type Inference Issues)
-        //
-        //         The following tests document the expected SQL output for UPDATE operations with JSONB functions
-        //         but are currently disabled due to Swift type inference issues with the update DSL
-        //
-        //        /*
-        //        Expected functionality that should be supported:
-        //
-        //        1. jsonbSet - Update JSONB at path:
-        //           UPDATE "test_users" SET "settings" = jsonb_set("test_users"."settings", ARRAY['preferences', 'theme']::text[], '"dark"'::jsonb, true)
-        //
-        //        2. jsonbInsert - Insert into JSONB at path:
-        //           UPDATE "test_users" SET "tags" = jsonb_insert("test_users"."tags", ARRAY['items', '0']::text[], '{"name":"swift","version":6}'::jsonb, false)
-        //
-        //        3. jsonbStripNulls - Remove null values:
-        //           UPDATE "test_users" SET "settings" = jsonb_strip_nulls("test_users"."settings")
-        //
-        //        4. jsonbBuildArray - Create JSONB array:
-        //           UPDATE "test_users" SET "tags" = jsonb_build_array('tag1', 'tag2', 'tag3')
-        //
-        //        5. jsonbObject - Create JSONB object from text array:
-        //           UPDATE "test_users" SET "settings" = jsonb_object('{key1,value1,key2,value2,key3,value3}')
-        //
-        //        6. Chaining JSONB functions:
-        //           UPDATE "test_users" SET "settings" = jsonb_strip_nulls(jsonb_set("test_users"."settings", ARRAY['new_field']::text[], '"new_value"'::jsonb, true))
-        //        */
     }
 }

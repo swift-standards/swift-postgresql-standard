@@ -7,8 +7,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.FullTextSearch {
     @Suite("Vectors & Edge Cases") struct VectorsTests {
 
-        // MARK: - Phrase Match Tests
-
         @Test
         func `Phrase match basic`() async {
             await assertSQL(of: Article.where { $0.phraseMatch("quick brown fox") }) {
@@ -64,8 +62,6 @@ extension SnapshotTests.FullTextSearch {
                 """
             }
         }
-
-        // MARK: - Vector Manipulation Tests
 
         @Test
         func `Setweight on tsvector column`() async {
@@ -176,8 +172,6 @@ extension SnapshotTests.FullTextSearch {
                 """
             }
         }
-
-        // MARK: - Edge Case Tests
 
         @Test
         func `Empty search query`() async {

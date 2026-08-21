@@ -2,14 +2,7 @@ import Foundation
 import Structured_Queries_Primitives
 
 extension Subquery {
-    /// Wrapper for ANY quantified comparison
-    ///
-    /// PostgreSQL's ANY operator returns true if the comparison is true for any value in the subquery.
-    ///
-    /// ```swift
-    /// Product.where { $0.price < .any(competitorPrices) }
-    /// // SELECT … FROM "products" WHERE "products"."price" < ANY (SELECT price FROM competitors)
-    /// ```
+
     public struct `Any`<Value: QueryBindable>: QueryExpression {
         public typealias QueryValue = Value
 

@@ -6,7 +6,6 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct JsonbAggTests {
-        // MARK: - Table.jsonbAgg Tests
 
         @Test
         func `Table.jsonbAgg with closure syntax`() async {
@@ -47,8 +46,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Where.jsonbAgg Tests
 
         @Test
         func `Where.jsonbAgg with closure syntax`() async {
@@ -92,8 +89,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Select.jsonbAgg Tests (Low-Level API)
 
         @Test
         func `Select.jsonbAgg using low-level API`() async {
@@ -153,8 +148,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Complex Expression Tests
-
         @Test
         func `JsonbAgg of calculated expression`() async {
             await assertSQL(of: Order.select { ($0.quantity * $0.unitPrice).jsonbAgg() }) {
@@ -165,30 +158,22 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Compile-Time Type Tests
-
         func compileTimeTypeTests() {
-            // Verify return types compile correctly
 
-            // Table.jsonbAgg returns Select<String?, Customer, ()>
             let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.jsonbAgg {
                 $0.name
             }
 
-            // Where.jsonbAgg returns Select<String?, Order, ()>
             let _: Structured_Queries_Primitives.Select<String?, Order, ()> = Order.where {
                 $0.isPaid
             }.jsonbAgg {
                 $0.orderID
             }
 
-            // Int column returns String? (JSONB array serialized as string)
             let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.jsonbAgg {
                 $0.id
             }
         }
-
-        // MARK: - Edge Cases
 
         @Test
         func `JsonbAgg with GROUP BY`() async {

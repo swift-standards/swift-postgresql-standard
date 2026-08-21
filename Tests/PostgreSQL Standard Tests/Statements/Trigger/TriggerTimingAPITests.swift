@@ -7,22 +7,9 @@ import Testing
 import Tests_Inline_Snapshot
 
 extension SnapshotTests.TriggerTests {
-    /// Tests for trigger timing (BEFORE, AFTER, INSTEAD OF).
-    ///
-    /// These tests demonstrate the unified `createTrigger` API with explicit timing and event parameters.
-    ///
-    /// ## Example Usage
-    ///
-    /// ```swift
-    /// // Unified API with explicit timing and event
-    /// User.createTrigger(timing: .before, event: .update, function: .updateTimestamp(column: \.updatedAt))
-    /// User.createTrigger(timing: .after, event: .insert, function: .audit(to: AuditLog.self))
-    /// UserView.createTrigger(timing: .insteadOf, event: .delete, function: .handleDelete())
-    /// ```
+
     @Suite("Trigger Timing")
     struct TimingAPITests {
-
-        // MARK: - Test Models
 
         @Table("tasks")
         struct Task {
@@ -66,7 +53,6 @@ extension SnapshotTests.TriggerTests {
             var changedBy: String
         }
 
-        // MARK: - BEFORE Timing
         @Test
         func `BEFORE INSERT - Set creation timestamp`() async {
             let trigger = Task.createTrigger(
@@ -200,9 +186,7 @@ extension SnapshotTests.TriggerTests {
 
         @Test
         func `BEFORE with ifNotExists - parameter stored but not in SQL`() async {
-            // Note: PostgreSQL does NOT support IF NOT EXISTS for CREATE TRIGGER
-            // The ifNotExists parameter is stored in the Trigger struct for application-level
-            // handling (e.g., catching "already exists" errors), but doesn't affect SQL generation
+
             let trigger = Task.createTrigger(
                 timing: .before,
                 event: .insert,
@@ -249,8 +233,6 @@ extension SnapshotTests.TriggerTests {
 
             #expect(trigger.level == .statement)
         }
-
-        // MARK: - AFTER Timing
 
         @Test
         func `AFTER INSERT - Audit logging`() async {
@@ -394,8 +376,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - INSTEAD OF Timing (Views)
-
         @Test
         func `INSTEAD OF INSERT - Handle view inserts`() async {
             let function = Trigger<Task>.Function.plpgsql(
@@ -489,11 +469,9 @@ extension SnapshotTests.TriggerTests {
             #expect(trigger.events[0].kind == .delete)
         }
 
-        // MARK: - Auto-Generated Names
-
         @Test
         func `Auto-generated names are stable and descriptive`() async {
-            // Same call produces same name (no hash, no line numbers)
+
             let trigger1 = Task.createTrigger(
                 timing: .before,
                 event: .insert,
@@ -506,7 +484,6 @@ extension SnapshotTests.TriggerTests {
                 function: .createdAt(column: \.createdAt)
             )
 
-            // Names are identical and descriptive
             #expect(trigger1.name == trigger2.name)
             #expect(trigger1.name == "tasks_before_insert_set_createdAt")
         }
@@ -525,23 +502,19 @@ extension SnapshotTests.TriggerTests {
                 function: .updateTimestamp(column: \.updatedAt)
             )
 
-            // Names encode timing difference
             #expect(beforeTrigger.name == "tasks_before_update_update_updatedAt")
             #expect(afterTrigger.name == "tasks_after_update_update_updatedAt")
         }
 
-        // MARK: - Real-World Scenarios
-
         @Test
         func `Scenario: Complete order lifecycle`() async {
-            // Set creation timestamp
+
             let createTrigger = Order.createTrigger(
                 timing: .before,
                 event: .insert,
                 function: .createdAt(column: \.createdAt)
             )
 
-            // Audit all changes
             let auditFunc = Trigger<Order>.Function.audit(to: OrderAudit.self)
             let auditInsert = Order.createTrigger(
                 timing: .after,
@@ -559,13 +532,11 @@ extension SnapshotTests.TriggerTests {
                 function: auditFunc
             )
 
-            // Verify timing is explicit and correct
             #expect(createTrigger.timing == .before)
             #expect(auditInsert.timing == .after)
             #expect(auditUpdate.timing == .after)
             #expect(auditDelete.timing == .after)
 
-            // Audit function is reused
             #expect(auditInsert.function.name == auditUpdate.function.name)
             #expect(auditUpdate.function.name == auditDelete.function.name)
         }
@@ -603,7 +574,7 @@ extension SnapshotTests.TriggerTests {
 
         @Test
         func `Scenario: Multiple triggers fire in alphabetical order`() async {
-            // PostgreSQL fires triggers in alphabetical order by name
+
             let trigger1 = Task.createTrigger(
                 name: "a_first_trigger",
                 timing: .before,
@@ -625,21 +596,19 @@ extension SnapshotTests.TriggerTests {
                 function: .validate("RETURN NEW;")
             )
 
-            // Explicit names ensure predictable execution order
             #expect(trigger1.name < trigger2.name)
             #expect(trigger2.name < trigger3.name)
         }
 
         @Test
         func `Scenario: Combining before and after for complete workflow`() async {
-            // BEFORE: Validate and set timestamp
+
             let beforeTrigger = Task.createTrigger(
                 timing: .before,
                 event: .update,
                 function: .updateTimestamp(column: \.updatedAt)
             )
 
-            // AFTER: Notify and audit
             let notifyFunc = Trigger<Task>.Function.plpgsql(
                 "notify_change",
                 """
@@ -654,9 +623,8 @@ extension SnapshotTests.TriggerTests {
                 function: notifyFunc
             )
 
-            // Clear separation of concerns
-            #expect(beforeTrigger.timing == .before)  // Modifies row before commit
-            #expect(afterTrigger.timing == .after)  // Notification after commit
+            #expect(beforeTrigger.timing == .before)
+            #expect(afterTrigger.timing == .after)
         }
     }
 }

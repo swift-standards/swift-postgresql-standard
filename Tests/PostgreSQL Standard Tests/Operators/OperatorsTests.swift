@@ -36,8 +36,7 @@ extension SnapshotTests {
                 ("rows"."a") = ("rows"."a")
                 """
             }
-            // These tests verify that NULL comparisons generate correct PostgreSQL syntax.
-            // In PostgreSQL, IS NULL/IS NOT NULL must be used for NULL checks.
+
             assertInlineSnapshot(of: Row.columns.a == nil, as: .sql) {
                 """
                 ("rows"."a") IS NOT DISTINCT FROM (NULL)
@@ -138,7 +137,7 @@ extension SnapshotTests {
         }
 
         @Test func comparisonWithOptionals() {
-            // Optional > Non-optional
+
             assertInlineSnapshot(of: Row.columns.a > Row.columns.c, as: .sql) {
                 """
                 ("rows"."a") > ("rows"."c")
@@ -160,7 +159,6 @@ extension SnapshotTests {
                 """
             }
 
-            // With literal values
             assertInlineSnapshot(of: Row.columns.a > 100, as: .sql) {
                 """
                 ("rows"."a") > (100)
@@ -238,13 +236,7 @@ extension SnapshotTests {
                 +("rows"."c")
                 """
             }
-            // NB: explicit SQLQueryExpression wrap — on 6.3.3 the dynamic-member
-            // subscript's `@_disfavoredOverload` is NOT counted at operator-operand
-            // loci, so `$0.c += 1`-form sugar resolves to the write-only `QueryOutput`
-            // subscript (unavailable getter) wherever the stdlib operator is CONCRETE
-            // (`+ - * /` on Int here; `<<=`/`>>=`, whose stdlib forms are generic,
-            // resolve correctly below). Compiler-catalog CANDIDATE; see the L1
-            // gap-fill close report 2026-07-13.
+
             await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) + 1 }) {
                 """
                 UPDATE "rows"
@@ -320,9 +312,7 @@ extension SnapshotTests {
                 ~("rows"."c")
                 """
             }
-            // NB: explicit SQLQueryExpression wrap — same disfavored-not-counted
-            // mechanism as the arithmetic block above (`&`/`|` on Int are concrete
-            // stdlib operators); `<<=`/`>>=` below stay sugar (generic stdlib forms).
+
             await assertSQL(of: Row.update { $0.c = SQLQueryExpression($0.c) & 2 }) {
                 """
                 UPDATE "rows"

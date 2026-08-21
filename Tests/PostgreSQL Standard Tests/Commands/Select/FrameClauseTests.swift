@@ -7,9 +7,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.Commands.Select {
     @Suite struct FrameClauseTests {
 
-        // MARK: - ROWS Frame Type Tests
-
-        /// Test ROWS frame with BETWEEN...AND using UNBOUNDED PRECEDING
         @Test func rowsUnboundedPrecedingToCurrentRow() async {
             await assertSQL(
                 of: Reminder.all
@@ -36,7 +33,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS frame with BETWEEN...AND using N PRECEDING
         @Test func rowsNPrecedingToCurrentRow() async {
             await assertSQL(
                 of: Reminder.all
@@ -61,7 +57,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS frame with CURRENT ROW to N FOLLOWING
         @Test func rowsCurrentRowToNFollowing() async {
             await assertSQL(
                 of: Reminder.all
@@ -86,7 +81,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS frame with CURRENT ROW to UNBOUNDED FOLLOWING
         @Test func rowsCurrentRowToUnboundedFollowing() async {
             await assertSQL(
                 of: Reminder.all
@@ -111,7 +105,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS frame with UNBOUNDED PRECEDING to UNBOUNDED FOLLOWING (entire partition)
         @Test func rowsEntirePartition() async {
             await assertSQL(
                 of: Reminder.all
@@ -138,7 +131,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS frame with N PRECEDING to N FOLLOWING (symmetric window)
         @Test func rowsSymmetricWindow() async {
             await assertSQL(
                 of: Reminder.all
@@ -163,9 +155,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - ROWS Shorthand Syntax Tests
-
-        /// Test ROWS shorthand with N PRECEDING
         @Test func rowsShorthandPreceding() async {
             await assertSQL(
                 of: Reminder.all
@@ -187,7 +176,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS shorthand with UNBOUNDED PRECEDING
         @Test func rowsShorthandUnboundedPreceding() async {
             await assertSQL(
                 of: Reminder.all
@@ -209,7 +197,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test ROWS shorthand with CURRENT ROW
         @Test func rowsShorthandCurrentRow() async {
             await assertSQL(
                 of: Reminder.all
@@ -231,9 +218,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - RANGE Frame Type Tests
-
-        /// Test RANGE frame with BETWEEN...AND
         @Test func rangeUnboundedPrecedingToCurrentRow() async {
             await assertSQL(
                 of: Reminder.all
@@ -258,7 +242,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test RANGE frame with entire partition
         @Test func rangeEntirePartition() async {
             await assertSQL(
                 of: Reminder.all
@@ -285,7 +268,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test RANGE shorthand
         @Test func rangeShorthand() async {
             await assertSQL(
                 of: Reminder.all
@@ -307,9 +289,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - GROUPS Frame Type Tests
-
-        /// Test GROUPS frame with BETWEEN...AND
         @Test func groupsUnboundedPrecedingToCurrentRow() async {
             await assertSQL(
                 of: Reminder.all
@@ -334,7 +313,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test GROUPS frame with N PRECEDING
         @Test func groupsNPrecedingToCurrentRow() async {
             await assertSQL(
                 of: Reminder.all
@@ -359,7 +337,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test GROUPS shorthand
         @Test func groupsShorthand() async {
             await assertSQL(
                 of: Reminder.all
@@ -381,9 +358,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - Integration with Window Functions
-
-        /// Test lastValue() with proper frame (requires UNBOUNDED FOLLOWING)
         @Test func lastValueWithCorrectFrame() async {
             await assertSQL(
                 of: Reminder.all
@@ -411,7 +385,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test firstValue() with frame
         @Test func firstValueWithFrame() async {
             await assertSQL(
                 of: Reminder.all
@@ -439,7 +412,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test nthValue() with frame
         @Test func nthValueWithFrame() async {
             await assertSQL(
                 of: Reminder.all
@@ -467,9 +439,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - Frame with Named Windows
-
-        /// Test frame clause with named window
         @Test func frameWithNamedWindow() async {
             await assertSQL(
                 of: Reminder.all
@@ -491,7 +460,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test frame clause without PARTITION BY
         @Test func frameWithoutPartition() async {
             await assertSQL(
                 of: Reminder.all
@@ -516,7 +484,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test frame clause without ORDER BY (less common but valid)
         @Test func frameWithoutOrderBy() async {
             await assertSQL(
                 of: Reminder.all
@@ -541,9 +508,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // MARK: - Edge Cases
-
-        /// Test CURRENT ROW to CURRENT ROW (single-row frame)
         @Test func singleRowFrame() async {
             await assertSQL(
                 of: Reminder.all
@@ -568,7 +532,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test frame with all three window components (partition, order, frame)
         @Test func completeWindowSpecification() async {
             await assertSQL(
                 of: Reminder.all

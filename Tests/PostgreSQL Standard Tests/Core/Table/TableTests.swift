@@ -7,7 +7,6 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct TableTests {
-        // Tests for default scopes (soft delete pattern)
 
         @Table
         struct SoftDeleteRow {
@@ -17,7 +16,7 @@ extension SnapshotTests {
         }
 
         @Test func defaultScopeAppliesWhereClause() async {
-            // Default scope automatically adds WHERE and ORDER BY
+
             await assertSQL(of: SoftDeleteRow.where { $0.id > 0 }) {
                 """
                 SELECT "softDeleteRows"."id", "softDeleteRows"."isDeleted"
@@ -29,7 +28,7 @@ extension SnapshotTests {
         }
 
         @Test func unscopedRemovesDefaultScope() async {
-            // .unscoped removes the default WHERE and ORDER BY
+
             await assertSQL(of: SoftDeleteRow.unscoped) {
                 """
                 SELECT "softDeleteRows"."id", "softDeleteRows"."isDeleted"
@@ -40,7 +39,7 @@ extension SnapshotTests {
 
         @Test func defaultScopeWithTableAlias() async {
             enum R: AliasName {}
-            // Table aliases preserve the default scope
+
             await assertSQL(of: SoftDeleteRow.as(R.self).select(\.id)) {
                 """
                 SELECT "rs"."id"
@@ -49,7 +48,7 @@ extension SnapshotTests {
                 ORDER BY "rs"."id" DESC
                 """
             }
-            // .unscoped works with aliases too
+
             await assertSQL(of: SoftDeleteRow.as(R.self).unscoped.select(\.id)) {
                 """
                 SELECT "rs"."id"
@@ -59,7 +58,7 @@ extension SnapshotTests {
         }
 
         @Test func defaultScopeInDeleteStatements() async {
-            // Default scope applies to DELETE statements
+
             await assertSQL(
                 of:
                     SoftDeleteRow
@@ -73,7 +72,7 @@ extension SnapshotTests {
                 RETURNING "id", "isDeleted"
                 """
             }
-            // .unscoped allows deleting all rows
+
             await assertSQL(
                 of: SoftDeleteRow
                     .unscoped
@@ -90,7 +89,7 @@ extension SnapshotTests {
         }
 
         @Test func defaultScopeInUpdateStatements() async {
-            // Default scope applies to UPDATE statements
+
             await assertSQL(
                 of:
                     SoftDeleteRow
@@ -105,7 +104,7 @@ extension SnapshotTests {
                 RETURNING "softDeleteRows"."id", "softDeleteRows"."isDeleted"
                 """
             }
-            // .unscoped allows updating all rows
+
             await assertSQL(
                 of: SoftDeleteRow
                     .unscoped

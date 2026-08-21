@@ -5,7 +5,6 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-// Test tables for various scenarios
 @Table("uuid_records")
 struct UUIDRecord: Codable, Equatable, Identifiable {
     let id: UUID
@@ -19,8 +18,6 @@ struct CompositeKeyRecord: Codable, Equatable {
     let projectId: Int
     var role: String
 
-    // Note: Composite primary keys would need special handling
-    // This is a simplified representation
 }
 
 @Table("auto_increment_records")
@@ -33,10 +30,8 @@ struct AutoIncrementRecord: Codable, Equatable, Identifiable {
 extension SnapshotTests {
     @Suite struct MissingDraftTests {
 
-        // MARK: - ON CONFLICT DO NOTHING
-
         @Test func draftOnConflictDoNothing() {
-            // Test DO NOTHING instead of DO UPDATE
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -60,7 +55,7 @@ extension SnapshotTests {
         }
 
         @Test func draftOnConflictMultipleColumnsDoNothing() {
-            // DO NOTHING with compound conflict target
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -83,10 +78,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - UUID Primary Keys
-
         @Test func draftWithUUIDPrimaryKey() {
-            // Test with UUID primary key (no ID provided)
+
             assertInlineSnapshot(
                 of: UUIDRecord.insert {
                     UUIDRecord.Draft(
@@ -105,7 +98,7 @@ extension SnapshotTests {
         }
 
         @Test func draftWithExplicitUUID() {
-            // Test with explicit UUID
+
             let testId = UUID(uuidString: "123e4567-e89b-12d3-a456-426614174000")!
             assertInlineSnapshot(
                 of: UUIDRecord.insert {
@@ -126,7 +119,7 @@ extension SnapshotTests {
         }
 
         @Test func mixedUUIDInserts() {
-            // Mix of explicit and auto-generated UUIDs
+
             let explicitId = UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!
             assertInlineSnapshot(
                 of: UUIDRecord.insert {
@@ -144,10 +137,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - RETURNING Clause Tests
-
         @Test func draftInsertReturningAllColumns() {
-            // RETURNING * with Draft
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -168,7 +159,7 @@ extension SnapshotTests {
         }
 
         @Test func draftInsertReturningGeneratedId() {
-            // RETURNING just the auto-generated ID
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -189,7 +180,7 @@ extension SnapshotTests {
         }
 
         @Test func draftInsertReturningMultipleColumns() {
-            // RETURNING specific columns
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -211,19 +202,17 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Large Batch Tests
-
         @Test func largeMixedBatchInsert() {
-            // Test with many mixed records/drafts
+
             assertInlineSnapshot(
                 of: Reminder.insert {
-                    // First few with IDs
+
                     Reminder(id: 100, remindersListID: 1, title: "Explicit 1")
                     Reminder(id: 200, remindersListID: 1, title: "Explicit 2")
-                    // Then some drafts
+
                     Reminder.Draft(remindersListID: 1, title: "Draft 1")
                     Reminder.Draft(remindersListID: 1, title: "Draft 2")
-                    // Mixed again
+
                     Reminder(id: 300, remindersListID: 1, title: "Explicit 3")
                     Reminder.Draft(remindersListID: 1, title: "Draft 3")
                 },
@@ -239,7 +228,7 @@ extension SnapshotTests {
         }
 
         @Test func allDraftsBatchInsert() {
-            // Large batch of only Drafts (should exclude ID column)
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     for i in 1...5 {
@@ -260,10 +249,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Empty/Minimal Draft Tests
-
         @Test func emptyDraft() {
-            // Draft with only required fields
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(remindersListID: 1)
@@ -280,7 +267,7 @@ extension SnapshotTests {
         }
 
         @Test func minimalDraftWithConflict() {
-            // Minimal Draft with ON CONFLICT
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(remindersListID: 1)
@@ -302,10 +289,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - CTE Tests
-
         @Test func cteWithDraftInsert() {
-            // CTE with Draft insert and RETURNING
+
             assertInlineSnapshot(
                 of: #sql(
                     """
@@ -338,7 +323,7 @@ extension SnapshotTests {
         }
 
         @Test func multipleCTEsWithDrafts() {
-            // Multiple CTEs with Draft inserts
+
             assertInlineSnapshot(
                 of: #sql(
                     """
@@ -387,10 +372,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Special PostgreSQL Features
-
         @Test func draftWithGeneratedColumn() {
-            // Test with GENERATED column (using SQL function)
+
             assertInlineSnapshot(
                 of: #sql(
                     """
@@ -414,7 +397,7 @@ extension SnapshotTests {
         }
 
         @Test func draftInsertWithDefaultFunction() {
-            // Using PostgreSQL functions for defaults
+
             assertInlineSnapshot(
                 of: #sql(
                     """
@@ -435,11 +418,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Edge Cases
-
         @Test func draftWithOnConflictOnPrimaryKey() {
-            // ON CONFLICT on primary key with NULL id
-            // This is an edge case - should use DEFAULT
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -465,7 +445,7 @@ extension SnapshotTests {
         }
 
         @Test func veryLongDraftBatch() {
-            // Test with a very long batch to ensure no performance issues
+
             let count = 50
             var sql = """
                 INSERT INTO "reminders"

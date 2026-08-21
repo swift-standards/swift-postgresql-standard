@@ -6,7 +6,6 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct SumTests {
-        // MARK: - Table.sum Tests
 
         @Test
         func `Table.sum with closure syntax`() async {
@@ -57,8 +56,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Where.sum Tests
 
         @Test
         func `Where.sum with closure syntax`() async {
@@ -113,8 +110,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Select.sum Tests
 
         @Test
         func `Select.sum using low-level API`() async {
@@ -184,12 +179,9 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Nullable Column Tests
-
         @Test
         func `Sum of nullable column returns single optional`() async {
-            // Test that nullable column (discount: Double?) returns Select<Double?, ...>
-            // NOT Select<Double??, ...> (double optional)
+
             await assertSQL(of: Order.sum { $0.discount }) {
                 """
                 SELECT SUM("orders"."discount")
@@ -207,8 +199,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Complex Expression Tests
 
         @Test
         func `Sum of calculated expression`() async {
@@ -232,12 +222,8 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Compile-Time Type Tests
-
         func compileTimeTypeTests() {
-            // Verify return types compile correctly
 
-            // Table.sum returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
                 $0.amount
             }
@@ -245,7 +231,6 @@ extension SnapshotTests {
                 of: \.amount
             )
 
-            // Where.sum returns Select<Double?, Order, ()>
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.sum {
@@ -257,23 +242,18 @@ extension SnapshotTests {
                 of: \.amount
             )
 
-            // Double column returns Double?
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
                 $0.quantity
             }
 
-            // Nullable column returns single optional, not double
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
                 $0.discount
             }
 
-            // Complex expression
             let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
                 $0.quantity * $0.unitPrice
             }
         }
-
-        // MARK: - Edge Cases
 
         @Test
         func `Sum with GROUP BY`() async {
@@ -365,7 +345,7 @@ extension SnapshotTests {
 
         @Test
         func `Sum with HAVING using different operators`() async {
-            // Test less than
+
             await assertSQL(
                 of:
                     Order
@@ -381,7 +361,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Test greater than or equal
             await assertSQL(
                 of:
                     Order
@@ -397,7 +376,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Test less than or equal
             await assertSQL(
                 of:
                     Order

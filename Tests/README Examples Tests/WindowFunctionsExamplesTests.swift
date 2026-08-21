@@ -5,11 +5,8 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-/// Tests for Window Functions examples shown in README.md
 @Suite("README Examples - Window Functions")
 struct WindowFunctionsExamplesTests {
-
-    // MARK: - Test Models
 
     @Table
     struct Employee {
@@ -25,8 +22,6 @@ struct WindowFunctionsExamplesTests {
         var date: Date
         var amount: Double
     }
-
-    // MARK: - Basic Window Functions
 
     @Test
     func `README Example: RANK() window function`() async {
@@ -49,8 +44,6 @@ struct WindowFunctionsExamplesTests {
             """
         }
     }
-
-    // MARK: - Named Windows (WINDOW Clause)
 
     @Test
     func `README Example: Named window definition`() async {

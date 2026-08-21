@@ -8,22 +8,15 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.PostgresArrayOps {
     @Suite("Array Manipulation") struct ArrayManipulationTests {
 
-        // MARK: - .joined() Disambiguation Test
-
         @Test
         func `Swift stdlib .joined() vs SQL .joined() - disambiguation`() async {
-            // This test demonstrates that both .joined() methods coexist peacefully:
-            // 1. Swift's stdlib .joined() for regular Swift arrays (preferred via @_disfavoredOverload)
-            // 2. SQL's .joined() for QueryExpression types (PostgreSQL's array_to_string)
 
-            // Swift stdlib .joined() - used for building SQL strings
             let tagNames = ["swift", "postgres", "server"]
-            let swiftJoined = tagNames.joined(separator: ", ")  // Calls Swift.Sequence.joined()
+            let swiftJoined = tagNames.joined(separator: ", ")
             #expect(swiftJoined == "swift, postgres, server")
 
-            // SQL .joined() - generates PostgreSQL's array_to_string() in query
             await assertSQL(
-                // Calls QueryExpression.joined()
+
                 of: Post.select { $0.tags.joined(separator: ", ") }
             ) {
                 """
@@ -32,8 +25,6 @@ extension SnapshotTests.PostgresArrayOps {
                 """
             }
         }
-
-        // MARK: - Array Manipulation Functions
 
         @Test func removing() async {
             await assertSQL(
@@ -101,8 +92,6 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - String to Array Conversion
-
         @Test func split() async {
             await assertSQL(
                 of: Account.select { $0.commaSeparatedTags.split(separator: ",") }
@@ -126,8 +115,6 @@ extension SnapshotTests.PostgresArrayOps {
                 """
             }
         }
-
-        // MARK: - Array Construction
 
         @Test func appending() async {
             await assertSQL(
@@ -162,8 +149,6 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - Special Characters & SQL Injection Prevention
-
         @Test
         func `Properly escapes special characters in array manipulation`() async {
             await assertSQL(
@@ -176,11 +161,9 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - Real-World Use Cases
-
         @Test
         func `Display tags as comma-separated string`() async {
-            // Real-world: Convert array column to user-friendly display string
+
             await assertSQL(
                 of: Post.select { ($0.title, $0.tags.joined(separator: ", ")) }
             ) {
@@ -193,7 +176,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Remove deprecated tag from all posts`() async {
-            // Real-world: Cleanup operation - remove a specific tag
+
             await assertSQL(
                 of: Post.update { $0.tags = $0.tags.removing("deprecated") }
             ) {
@@ -206,7 +189,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Rename tag across all posts`() async {
-            // Real-world: Tag migration - rename old tag to new tag
+
             await assertSQL(
                 of: Post.update { $0.tags = $0.tags.replacing("old-name", with: "new-name") }
             ) {
@@ -219,7 +202,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Parse CSV string into array column`() async {
-            // Real-world: Import CSV data into array column
+
             await assertSQL(
                 of: Account.update { $0.tags = $0.commaSeparatedTags.split(separator: ",") }
             ) {
@@ -232,7 +215,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Export array as JSON for API response`() async {
-            // Real-world: API endpoint returning tags as JSON array
+
             await assertSQL(
                 of: Post.select { ($0.id, $0.tags.toJSON()) }
             ) {
@@ -244,8 +227,6 @@ extension SnapshotTests.PostgresArrayOps {
         }
     }
 }
-
-// MARK: - Test Models
 
 @Table
 private struct Post {

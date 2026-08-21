@@ -8,8 +8,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.StringFunctions {
     @Suite("String Functions") struct StringFunctionsTests {
 
-        // MARK: - String Concatenation Test
-
         @Test func concat() async {
             await assertSQL(
                 of: Person.select {
@@ -22,8 +20,6 @@ extension SnapshotTests.StringFunctions {
                 """
             }
         }
-
-        // MARK: - Case Conversion Tests
 
         @Test func uppercased() async {
             await assertSQL(
@@ -47,8 +43,6 @@ extension SnapshotTests.StringFunctions {
             }
         }
 
-        // MARK: - Trimming Test
-
         @Test func trim() async {
             await assertSQL(
                 of: Person.select { $0.description.trim() }
@@ -59,8 +53,6 @@ extension SnapshotTests.StringFunctions {
                 """
             }
         }
-
-        // MARK: - Substring Test
 
         @Test func substring() async {
             await assertSQL(
@@ -75,8 +67,6 @@ extension SnapshotTests.StringFunctions {
     }
 }
 
-// MARK: - Test Model
-
 @Table
 private struct Person {
     let id: Int
@@ -86,8 +76,6 @@ private struct Person {
     let lastName: String
     let description: String
 }
-
-// MARK: - SnapshotTests.StringFunctions Namespace
 
 extension SnapshotTests {
     enum StringFunctions {}

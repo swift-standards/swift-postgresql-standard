@@ -7,19 +7,9 @@ import Testing
 import Tests_Inline_Snapshot
 
 extension SnapshotTests.TriggerTests {
-    /// Tests for low-level trigger primitives and core functionality.
-    ///
-    /// These tests validate the fundamental building blocks of the trigger system:
-    /// - Event types and combinations
-    /// - Timing (BEFORE, AFTER, INSTEAD OF)
-    /// - Level (ROW, STATEMENT)
-    /// - WHEN conditions with NEW/OLD pseudo-records
-    /// - DROP statements
-    /// - Custom PL/pgSQL functions
+
     @Suite("Primitives")
     struct PrimitiveTests {
-
-        // MARK: - Test Models
 
         @Table("reminders")
         struct Reminder {
@@ -38,8 +28,6 @@ extension SnapshotTests.TriggerTests {
             var price: Double
             var stock: Int
         }
-
-        // MARK: - Basic Trigger Creation
 
         @Test
         func `Basic trigger with explicit function reference`() async {
@@ -87,8 +75,6 @@ extension SnapshotTests.TriggerTests {
                 """
             }
         }
-
-        // MARK: - Event Types
 
         @Test
         func `INSERT event`() async {
@@ -196,23 +182,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // NOTE: Multiple events in a single trigger are no longer supported through the public API.
-        // The new unified API takes a single `event` parameter instead of `events: [Event]`.
-        // To handle multiple events, create separate triggers for each event type.
-        //
-        // @Test("Multiple events (INSERT OR UPDATE OR DELETE)")
-        // func multipleEvents() async {
-        //     let function = Trigger<Reminder>.Function.plpgsql("on_change", "RETURN COALESCE(NEW, OLD);")
-        //     let trigger = Reminder.createTrigger(
-        //         name: "reminder_all_changes",
-        //         timing: .after,
-        //         event: .insert,  // Now single event only
-        //         function: function
-        //     )
-        // }
-
-        // MARK: - Timing
-
         @Test
         func `BEFORE timing`() async {
             let function = Trigger<Reminder>.Function.plpgsql("before_func", "RETURN NEW;")
@@ -276,8 +245,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - Level
-
         @Test
         func `FOR EACH ROW level (default)`() async {
             let function = Trigger<Reminder>.Function.plpgsql("row_func", "RETURN NEW;")
@@ -321,8 +288,6 @@ extension SnapshotTests.TriggerTests {
                 """
             }
         }
-
-        // MARK: - WHEN Conditions
 
         @Test
         func `WHEN condition with NEW pseudo-record (INSERT)`() async {
@@ -411,8 +376,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - DROP Statements
-
         @Test
         func `DROP TRIGGER`() async {
             let function = Trigger<Reminder>.Function.plpgsql("my_func", "RETURN NEW;")
@@ -484,7 +447,6 @@ extension SnapshotTests.TriggerTests {
 
             #expect(dropStatements.count == 2)
 
-            // Convert to concrete types for snapshot testing
             let dropTrigger = trigger.dropTrigger(ifExists: true)
             let dropFunction = function.drop(ifExists: true)
 
@@ -526,8 +488,6 @@ extension SnapshotTests.TriggerTests {
                 """
             }
         }
-
-        // MARK: - Custom PL/pgSQL Functions
 
         @Test
         func `Custom function with multiple statements`() async {
@@ -606,8 +566,6 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - Real-World Scenarios
-
         @Test
         func `Scenario: Audit trigger capturing operation type`() async {
             let function = Trigger<Product>.Function.plpgsql(
@@ -619,8 +577,6 @@ extension SnapshotTests.TriggerTests {
                 """
             )
 
-            // NOTE: Multiple events are no longer supported in the public API.
-            // Create separate triggers for each event instead.
             let trigger = Product.createTrigger(
                 name: "product_audit_insert",
                 timing: .after,
@@ -673,13 +629,10 @@ extension SnapshotTests.TriggerTests {
             }
         }
 
-        // MARK: - Type Safety Tests
-
         @Test
         func `Type safety: INSERT WHEN uses only NEW pseudo-record`() async {
             let function = Trigger<Product>.Function.plpgsql("validate", "RETURN NEW;")
 
-            // ✅ This compiles - INSERT can access NEW
             let trigger = Product.createTrigger(
                 timing: .before,
                 event: .insert(when: { new in new.price > 0 }),
@@ -702,7 +655,6 @@ extension SnapshotTests.TriggerTests {
         func `Type safety: DELETE WHEN uses only OLD pseudo-record`() async {
             let function = Trigger<Product>.Function.plpgsql("archive", "RETURN OLD;")
 
-            // ✅ This compiles - DELETE can access OLD
             let trigger = Product.createTrigger(
                 timing: .before,
                 event: .delete(when: { old in old.price > 100 }),
@@ -725,7 +677,6 @@ extension SnapshotTests.TriggerTests {
         func `Type safety: UPDATE WHEN uses NEW pseudo-record`() async {
             let function = Trigger<Product>.Function.plpgsql("validate", "RETURN NEW;")
 
-            // ✅ This compiles - UPDATE uses NEW for WHEN clause
             let trigger = Product.createTrigger(
                 timing: .before,
                 event: .update(when: { new in new.price > 0 }),
@@ -748,7 +699,6 @@ extension SnapshotTests.TriggerTests {
         func `Type safety: Multiple events without WHEN clauses`() async {
             let function = Trigger<Product>.Function.plpgsql("audit", "RETURN COALESCE(NEW, OLD);")
 
-            // ✅ This compiles - Multiple events without WHEN is allowed
             let trigger = Product.createTrigger(
                 name: "audit_all_changes",
                 timing: .after,
@@ -773,7 +723,6 @@ extension SnapshotTests.TriggerTests {
         func `Type safety: Multiple compatible events with same WHEN`() async {
             let function = Trigger<Product>.Function.plpgsql("validate", "RETURN NEW;")
 
-            // ✅ This compiles - INSERT and UPDATE both use NEW
             let trigger = Product.createTrigger(
                 name: "validate_price",
                 timing: .before,

@@ -9,7 +9,7 @@ extension SnapshotTests {
     @Suite struct PostgreSQLSyntaxTests {
 
         @Test func distinctOnSQL() async {
-            // PostgreSQL's DISTINCT ON - NOT available in SQLite or standard SQL
+
             await assertSQL(
                 of: #sql(
                     """
@@ -30,7 +30,7 @@ extension SnapshotTests {
         }
 
         @Test func arrayOperations() async {
-            // PostgreSQL array syntax with ANY - PostgreSQL-specific
+
             await assertSQL(
                 of: Reminder.where { reminder in
                     #sql("\(reminder.priority) = ANY(ARRAY[1, 2, 3])")
@@ -43,7 +43,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Array unnest
             await assertSQL(
                 of: #sql(
                     """
@@ -58,7 +57,7 @@ extension SnapshotTests {
         }
 
         @Test func postgresqlSpecificFunctions() async {
-            // gen_random_uuid() - PostgreSQL-specific function
+
             await assertSQL(
                 of: #sql(
                     """
@@ -73,7 +72,6 @@ extension SnapshotTests {
                 """
             }
 
-            // INTERVAL arithmetic - PostgreSQL-specific syntax
             await assertSQL(
                 of: #sql(
                     """
@@ -91,7 +89,7 @@ extension SnapshotTests {
         }
 
         @Test func aggregateFilters() async {
-            // FILTER clause on aggregates - PostgreSQL 9.4+ specific
+
             await assertSQL(
                 of: #sql(
                     """
@@ -116,7 +114,7 @@ extension SnapshotTests {
         }
 
         @Test func upsertWithPostgreSQLFunctions() async {
-            // Using EXCLUDED table with GREATEST - PostgreSQL-specific
+
             await assertSQL(
                 of: Reminder.insert {
                     Reminder(id: 1, remindersListID: 1, title: "Test")
@@ -139,7 +137,7 @@ extension SnapshotTests {
         }
 
         @Test func lateralJoin() async {
-            // LATERAL join - PostgreSQL-specific
+
             await assertSQL(
                 of: #sql(
                     """
@@ -168,7 +166,7 @@ extension SnapshotTests {
         }
 
         @Test func returningWithExpressions() async {
-            // RETURNING with PostgreSQL-specific expressions
+
             await assertSQL(
                 of: #sql(
                     """

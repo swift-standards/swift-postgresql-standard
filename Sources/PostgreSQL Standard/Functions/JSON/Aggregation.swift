@@ -1,51 +1,33 @@
 public import Foundation
 public import Structured_Queries_Primitives
 
-// swiftlint:disable no_any_protocol_existential
-// REASON: JSON object aggregation accepts heterogeneous SQL expression nodes, so its stored AST
-// representation deliberately uses dynamic dispatch.
-
-// MARK: - PostgreSQL JSON Aggregation Functions
-
 extension QueryExpression {
-    /// PostgreSQL's json_agg function - aggregates values into a JSON array
+
     public func jsonAgg() -> some QueryExpression<Data?> {
         JSONAggregation(expression: self, format: .json)
     }
 
-    /// PostgreSQL's jsonb_agg function - aggregates values into a JSONB array
     public func jsonbAgg() -> some QueryExpression<Data?> {
         JSONAggregation(expression: self, format: .jsonb)
     }
 
-    /// PostgreSQL's array_agg function - aggregates values into a PostgreSQL array
     public func arrayAgg() -> some QueryExpression<String?> {
         ArrayAggregation(expression: self)
     }
 }
 
-// MARK: - JSON Group Array (compatibility alias)
-
 extension QueryExpression {
-    /// Alias for jsonAgg()
-    ///
-    /// > Note: SQLite equivalent: `json_group_array()`
+
     public func jsonGroupArray() -> some QueryExpression<Data?> {
         jsonAgg()
     }
 }
 
-// MARK: - JSON Build Object
-
-/// PostgreSQL's json_build_object function
-/// Creates a JSON object from a variadic list of key-value pairs
 public func jsonBuildObject(_ pairs: (String, any QueryExpression)...) -> some QueryExpression<Data>
 {
     JSONBuildObject(pairs: pairs)
 }
 
-/// PostgreSQL's jsonb_build_object function
-/// Creates a JSONB object from a variadic list of key-value pairs
 public func jsonbBuildObject(
     _ pairs: (String, any QueryExpression)...
 ) -> some QueryExpression<
@@ -53,8 +35,6 @@ public func jsonbBuildObject(
 > {
     JSONBuildObject(pairs: pairs, format: .jsonb)
 }
-
-// MARK: - Implementation Types
 
 private struct JSONAggregation<Expression: QueryExpression>: QueryExpression {
     typealias QueryValue = Data?
@@ -127,25 +107,20 @@ extension JSONBuildObject {
     }
 }
 
-// MARK: - JSON Operators
-
 extension QueryExpression where QueryValue == Data {
-    /// PostgreSQL's -> operator - extract JSON object field by key
+
     public func field(_ key: String) -> some QueryExpression<Data> {
         JSONFieldOperator<Self, Data>(json: self, key: key, asText: false)
     }
 
-    /// PostgreSQL's ->> operator - extract JSON object field as text
     public func fieldAsText(_ key: String) -> some QueryExpression<String> {
         JSONFieldOperator<Self, String>(json: self, key: key, asText: true)
     }
 
-    /// PostgreSQL's -> operator - extract JSON array element by index
     public func element(at index: Int) -> some QueryExpression<Data> {
         JSONIndexOperator<Self, Data>(json: self, index: index, asText: false)
     }
 
-    /// PostgreSQL's ->> operator - extract JSON array element as text
     public func elementAsText(at index: Int) -> some QueryExpression<String> {
         JSONIndexOperator<Self, String>(json: self, index: index, asText: true)
     }
@@ -179,11 +154,8 @@ where JSON.QueryValue == Data {
     }
 }
 
-// MARK: - FILTER clause support
-
 extension QueryExpression {
-    /// PostgreSQL's FILTER clause for aggregate functions
-    /// Example: json_agg(column) FILTER (WHERE condition)
+
     public func filter(
         where condition: some QueryExpression<Bool>
     ) -> some QueryExpression<
@@ -205,5 +177,3 @@ where Condition.QueryValue == Bool {
         "\(aggregate.queryFragment) FILTER (WHERE \(condition.queryFragment))"
     }
 }
-
-// swiftlint:enable no_any_protocol_existential

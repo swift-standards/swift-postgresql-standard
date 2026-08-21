@@ -75,7 +75,7 @@ extension SnapshotTests {
         }
 
         @Test func emptyWithClauses() async {
-            // Test with no rows selected in CTE
+
             assertInlineSnapshot(
                 of: With {
                     Reminder
@@ -96,7 +96,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Test with .none in CTE definition
             assertInlineSnapshot(
                 of: With {
                     Reminder
@@ -117,7 +116,6 @@ extension SnapshotTests {
                 """
             }
 
-            // Test with both .none and regular CTE
             await assertSQL(
                 of: With {
                     Reminder
@@ -241,8 +239,7 @@ extension SnapshotTests {
         }
 
         @Test func explicitRecursiveOverride() async {
-            // Test explicit recursive: true parameter
-            // Even without UNION + self-reference, RECURSIVE keyword should be emitted
+
             await assertSQL(
                 of: With(recursive: true) {
                     Reminder
@@ -267,8 +264,7 @@ extension SnapshotTests {
         }
 
         @Test func nonRecursiveUnion() async {
-            // UNION between different tables should NOT generate RECURSIVE keyword
-            // (no self-reference)
+
             await assertSQL(
                 of: With {
                     Reminder.select { Name.Columns(type: "reminder", value: $0.title) }
@@ -293,8 +289,6 @@ extension SnapshotTests {
         }
     }
 }
-
-// MARK: - Test Support Types
 
 @Selection
 private struct Fibonacci {

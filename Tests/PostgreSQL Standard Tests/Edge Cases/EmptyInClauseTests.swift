@@ -9,7 +9,7 @@ extension SnapshotTests {
     @Suite struct EmptyInClauseTests {
 
         @Test func emptyArrayInClause() async {
-            // Test that empty arrays generate valid PostgreSQL
+
             let emptyIds: [Int] = []
 
             await assertSQL(of: Reminder.where { $0.id.in(emptyIds) }) {
@@ -22,7 +22,7 @@ extension SnapshotTests {
         }
 
         @Test func emptyArrayInClauseWithOtherConditions() async {
-            // Test empty IN clause combined with other conditions
+
             let emptyAccountIds: [UUID] = []
 
             await assertSQL(
@@ -39,7 +39,7 @@ extension SnapshotTests {
         }
 
         @Test func nonEmptyArrayInClause() async {
-            // Test that non-empty arrays still work correctly
+
             let ids = [1, 2, 3]
 
             await assertSQL(of: Reminder.where { $0.id.in(ids) }) {
@@ -52,7 +52,7 @@ extension SnapshotTests {
         }
 
         @Test func emptyStringArrayInClause() async {
-            // Test empty string array
+
             let emptyNames: [String] = []
 
             await assertSQL(of: Reminder.where { $0.title.in(emptyNames) }) {
@@ -65,7 +65,7 @@ extension SnapshotTests {
         }
 
         @Test func mixedConditionsWithEmptyIn() async {
-            // Test complex query with empty IN clause
+
             let emptyIds: [Int] = []
 
             await assertSQL(
@@ -88,7 +88,6 @@ extension SnapshotTests {
     }
 }
 
-// Test table for GitHub account (simplified)
 @Table("github_accounts")
 struct GitHubAccount: Codable, Equatable, Identifiable {
     let id: UUID

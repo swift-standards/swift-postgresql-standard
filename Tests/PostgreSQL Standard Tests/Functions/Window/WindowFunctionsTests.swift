@@ -5,7 +5,6 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-// Test tables for window functions
 @Table("scores")
 struct Score {
     let id: Int
@@ -32,8 +31,6 @@ struct StockPrice {
 
 extension SnapshotTests {
     @Suite("Window Functions") struct WindowFunctionsTests {
-
-        // MARK: - ROW_NUMBER Tests
 
         @Test func rowNumberBasic() async {
             let query = Score.select {
@@ -82,8 +79,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - RANK Tests
-
         @Test func rankBasic() async {
             let query = Score.select {
                 let points = $0.points
@@ -118,8 +113,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - DENSE_RANK Tests
-
         @Test func denseRankBasic() async {
             let query = Score.select {
                 let points = $0.points
@@ -133,8 +126,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - LAG/LEAD Tests
 
         @Test func lagBasic() async {
             let query = StockPrice.select {
@@ -181,8 +172,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - FIRST_VALUE/LAST_VALUE Tests
-
         @Test func firstValueBasic() async {
             let query = Product.select {
                 let price = $0.price
@@ -217,8 +206,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - NTH_VALUE Tests
-
         @Test func nthValueSecond() async {
             let query = Product.select {
                 let category = $0.category
@@ -239,8 +226,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - NTILE Tests
-
         @Test func ntileQuartiles() async {
             let query = Product.select {
                 let price = $0.price
@@ -254,8 +239,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - PERCENT_RANK and CUME_DIST Tests
 
         @Test func percentRank() async {
             let query = Score.select {

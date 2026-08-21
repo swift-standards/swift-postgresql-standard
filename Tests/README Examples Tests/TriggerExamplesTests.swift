@@ -5,11 +5,8 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-/// Tests for Trigger examples shown in README.md
 @Suite("README Examples - Triggers")
 struct TriggerExamplesTests {
-
-    // MARK: - Test Models
 
     @Table
     struct Product {
@@ -28,8 +25,6 @@ struct TriggerExamplesTests {
         var recordId: Int
         var changedAt: Date
     }
-
-    // MARK: - Basic Triggers
 
     @Test
     func `README Example: BEFORE UPDATE trigger with timestamp`() async {
@@ -111,8 +106,6 @@ struct TriggerExamplesTests {
             """
         }
     }
-
-    // MARK: - Triggers with WHEN Conditions
 
     @Test
     func `README Example: Trigger with WHEN condition on NEW record`() async {
@@ -202,8 +195,6 @@ struct TriggerExamplesTests {
         }
     }
 
-    // MARK: - PL/pgSQL Function Examples
-
     @Test
     func `README Example: Trigger function definition`() async {
         let function = Trigger<Product>.Function.plpgsql(
@@ -287,8 +278,6 @@ struct TriggerExamplesTests {
         }
     }
 
-    // MARK: - Multiple Events
-
     @Test
     func `README Example: Trigger for multiple events (INSERT, UPDATE, DELETE)`() async {
         let trigger = Product.createTrigger(
@@ -323,8 +312,6 @@ struct TriggerExamplesTests {
         }
     }
 
-    // MARK: - Statement-Level Triggers
-
     @Test
     func `README Example: Statement-level trigger`() async {
         let trigger = Product.createTrigger(
@@ -351,8 +338,6 @@ struct TriggerExamplesTests {
             """
         }
     }
-
-    // MARK: - DROP Triggers
 
     @Test
     func `README Example: Drop trigger`() async {

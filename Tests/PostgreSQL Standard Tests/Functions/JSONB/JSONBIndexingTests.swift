@@ -5,7 +5,6 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-// Test table for index creation
 @Table("test_users")
 struct TestUserForIndexing {
     let id: UUID
@@ -20,8 +19,6 @@ struct TestUserForIndexing {
 
 extension SnapshotTests.JSONB {
     @Suite("Indexing") struct IndexingTests {
-
-        // MARK: - GIN Index Tests
 
         @Test func ginIndexCreationDefault() {
             let fragment = TestUserForIndexing.createGINIndex(on: \.settings)
@@ -72,8 +69,6 @@ extension SnapshotTests.JSONB {
                 """
             }
         }
-
-        // MARK: - GIN Path Index Tests
 
         @Test func ginIndexOnPath() {
             let fragment = TestUserForIndexing.createGINIndexPath(
@@ -129,8 +124,6 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - B-tree Index Tests
-
         @Test func btreeIndexCreation() {
             let fragment = TestUserForIndexing.createBTreeIndex(on: \.settings)
 
@@ -153,8 +146,6 @@ extension SnapshotTests.JSONB {
                 """
             }
         }
-
-        // MARK: - Drop Index Tests
 
         @Test func dropIndexDefault() {
             let fragment = TestUserForIndexing.dropIndex(name: "idx_test_users_settings_gin")
@@ -179,10 +170,8 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - Multiple Indexes
-
         @Test func multipleIndexesOnSameColumn() {
-            // Can create both GIN and B-tree on same column for different query patterns
+
             let ginFragment = TestUserForIndexing.createGINIndex(
                 name: "settings_gin",
                 on: \.settings,

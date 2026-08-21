@@ -4,8 +4,7 @@ public import SwiftSyntaxMacros
 public enum ColumnsMacro: PeerMacro {}
 
 extension ColumnsMacro {
-    // swiftlint:disable typed_throws_required
-    // REASON: PeerMacro requires this external witness signature.
+
     public static func expansion<D: DeclSyntaxProtocol, C: MacroExpansionContext>(
         of node: AttributeSyntax,
         providingPeersOf declaration: D,
@@ -13,5 +12,5 @@ extension ColumnsMacro {
     ) throws -> [DeclSyntax] {
         []
     }
-    // swiftlint:enable typed_throws_required
+
 }

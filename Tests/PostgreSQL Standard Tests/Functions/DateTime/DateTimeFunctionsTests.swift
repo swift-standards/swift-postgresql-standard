@@ -8,8 +8,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.DateTime {
     @Suite("Date/Time Functions") struct DateTimeFunctionsTests {
 
-        // MARK: - EXTRACT Function Tests
-
         @Test func extractYear() async {
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.year) == 2024 }
@@ -116,8 +114,6 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - DATE_TRUNC Function Tests
-
         @Test func dateTruncYear() async {
             await assertSQL(
                 of: Event.select { $0.timestamp.dateTrunc(.year) }
@@ -184,8 +180,6 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Current Time Functions Tests
-
         @Test func currentTimestamp() async {
             await assertSQL(
                 of: Event.where { $0.timestamp < Date.currentTimestamp }
@@ -209,8 +203,6 @@ extension SnapshotTests.DateTime {
                 """
             }
         }
-
-        // MARK: - Real-World Use Cases Tests
 
         @Test func groupByMonth() async {
             await assertSQL(
@@ -239,11 +231,9 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Type Safety Tests
-
         @Test
         func `EXTRACT returns correct types - epoch returns Double`() async {
-            // Demonstrates that epoch returns Double, not Int
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.epoch) > 1700000000.0 }
             ) {
@@ -257,7 +247,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `EXTRACT returns correct types - second returns Double with fractional parts`() async {
-            // Demonstrates that second can have fractional parts (milliseconds)
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.second) >= 30.5 }
             ) {
@@ -271,7 +261,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `EXTRACT returns correct types - year returns Int`() async {
-            // Demonstrates that year returns Int (whole number)
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.year) + 1 == 2025 }
             ) {
@@ -283,11 +273,9 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Business Hours & Time-Based Filtering
-
         @Test
         func `Filter events during business hours (9 AM - 5 PM)`() async {
-            // Real-world: Find events scheduled during business hours
+
             await assertSQL(
                 of: Event.where {
                     $0.timestamp.extract(.hour) >= 9 && $0.timestamp.extract(.hour) < 17
@@ -303,7 +291,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Find weekend events (Saturday and Sunday)`() async {
-            // Real-world: Filter events on weekends (dow: 0 = Sunday, 6 = Saturday)
+
             await assertSQL(
                 of: Event.where {
                     $0.timestamp.extract(.dow) == 0 || $0.timestamp.extract(.dow) == 6
@@ -319,7 +307,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Find events in first quarter of the year`() async {
-            // Real-world: Q1 reporting (January, February, March)
+
             await assertSQL(
                 of: Event.where {
                     $0.timestamp.extract(.month) >= 1 && $0.timestamp.extract(.month) <= 3
@@ -333,11 +321,9 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Time-Based Grouping & Analytics
-
         @Test
         func `Group events by day for daily analytics`() async {
-            // Real-world: Daily event counts
+
             await assertSQL(
                 of: Event.select {
                     ($0.timestamp.dateTrunc(.day), $0.id.count())
@@ -352,7 +338,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Group events by hour for hourly analytics`() async {
-            // Real-world: Hourly traffic patterns
+
             await assertSQL(
                 of: Event.select {
                     ($0.timestamp.dateTrunc(.hour), $0.id.count())
@@ -367,7 +353,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Get start of current month for comparison`() async {
-            // Real-world: Compare against start of current month
+
             await assertSQL(
                 of: Event.where { $0.timestamp >= Date.currentDate.dateTrunc(.month) }
             ) {
@@ -379,11 +365,9 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Time Duration & Comparison
-
         @Test
         func `Calculate seconds since epoch for time comparison`() async {
-            // Real-world: Compare timestamps using Unix epoch
+
             await assertSQL(
                 of: Event.select {
                     $0.timestamp.extract(.epoch)
@@ -398,7 +382,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Filter events from last 7 days using epoch`() async {
-            // Real-world: Recent events using epoch arithmetic
+
             let sevenDaysAgo = Date.currentTimestamp.extract(.epoch) - (7 * 24 * 60 * 60)
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.epoch) > sevenDaysAgo }
@@ -411,11 +395,9 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Edge Cases & Special Scenarios
-
         @Test
         func `Handle events at midnight (hour = 0)`() async {
-            // Edge case: Midnight is hour 0
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.hour) == 0 }
             ) {
@@ -429,7 +411,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Handle events on first day of year (doy = 1)`() async {
-            // Edge case: January 1st
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.doy) == 1 }
             ) {
@@ -443,7 +425,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Handle events on last day of year (doy = 365 or 366)`() async {
-            // Edge case: December 31st (365 or 366 for leap years)
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.doy) >= 365 }
             ) {
@@ -457,7 +439,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Find events with fractional seconds (millisecond precision)`() async {
-            // Edge case: Millisecond precision in timestamps
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.second) > 45.123 }
             ) {
@@ -469,11 +451,9 @@ extension SnapshotTests.DateTime {
             }
         }
 
-        // MARK: - Complex Real-World Queries
-
         @Test
         func `Monthly event summary with date truncation`() async {
-            // Real-world: Aggregate events by month with @Selection macro for type-safe results
+
             await assertSQL(
                 of: Event.select {
                     MonthlyEventSummary.Columns(
@@ -493,7 +473,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Find events in current year`() async {
-            // Real-world: Year-to-date reporting
+
             await assertSQL(
                 of: Event.where { $0.timestamp.extract(.year) == Date.currentDate.extract(.year) }
             ) {
@@ -507,7 +487,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Find events happening today`() async {
-            // Real-world: Today's schedule
+
             await assertSQL(
                 of: Event.where { $0.timestamp.dateTrunc(.day) == Date.currentDate }
             ) {
@@ -521,7 +501,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Find events in current hour`() async {
-            // Real-world: Real-time event tracking
+
             await assertSQL(
                 of: Event.where {
                     $0.timestamp.dateTrunc(.hour) == Date.currentTimestamp.dateTrunc(.hour)
@@ -537,7 +517,7 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Calculate event age in seconds`() async {
-            // Real-world: How long ago did this event occur?
+
             await assertSQL(
                 of: Event.select {
                     Date.currentTimestamp.extract(.epoch) - $0.timestamp.extract(.epoch)
@@ -552,14 +532,14 @@ extension SnapshotTests.DateTime {
 
         @Test
         func `Filter events by multiple time criteria`() async {
-            // Real-world: Complex business logic - weekday business hours in Q1
+
             await assertSQL(
                 of: Event.where {
-                    // Q1 (Jan-Mar)
+
                     ($0.timestamp.extract(.month) >= 1 && $0.timestamp.extract(.month) <= 3)
-                        // Weekday (Mon-Fri, dow: 1-5)
+
                         && ($0.timestamp.extract(.dow) >= 1 && $0.timestamp.extract(.dow) <= 5)
-                        // Business hours (9 AM - 5 PM)
+
                         && ($0.timestamp.extract(.hour) >= 9 && $0.timestamp.extract(.hour) < 17)
                 }
             ) {
@@ -573,8 +553,6 @@ extension SnapshotTests.DateTime {
     }
 }
 
-// MARK: - Test Model
-
 @Table
 private struct Event {
     let id: Int
@@ -582,9 +560,6 @@ private struct Event {
     let timestamp: Date
 }
 
-// MARK: - Test Result Types
-
-/// Example of using @Selection macro for type-safe query results
 @Selection
 private struct MonthlyEventSummary {
     let monthStart: Date
@@ -592,8 +567,6 @@ private struct MonthlyEventSummary {
     let year: Int
     let month: Int
 }
-
-// MARK: - SnapshotTests.DateTime Namespace
 
 extension SnapshotTests {
     enum DateTime {}

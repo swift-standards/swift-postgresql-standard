@@ -5,11 +5,9 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-/// Tests for Full-Text Search examples shown in README.md
 @Suite("README Examples - Full-Text Search")
 struct FullTextSearchExamplesTests {
 
-    // MARK: - Basic Text Search on String Columns
     @Table
     struct Article: FullTextSearchable {
         let id: Int
@@ -56,8 +54,6 @@ struct FullTextSearchExamplesTests {
             """
         }
     }
-
-    // MARK: - Search with Ranking (Using Dedicated FTS Table)
 
     @Test
     func `README Example: Search with ranking`() async {

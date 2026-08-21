@@ -5,7 +5,6 @@ import PostgreSQL_Standard_Test_Support
 import Testing
 import Tests_Inline_Snapshot
 
-// Test table for conversion tests
 @Table("test_users")
 struct TestUserForConversion {
     let id: UUID
@@ -19,8 +18,6 @@ struct TestUserForConversion {
 
 extension SnapshotTests.JSONB {
     @Suite("Conversion") struct ConversionTests {
-
-        // MARK: - to_jsonb / to_json Tests
 
         @Test func toJsonbOnScalar() {
             let query = TestUserForConversion.select { $0.age.toJsonb() }
@@ -67,8 +64,6 @@ extension SnapshotTests.JSONB {
                 """
             }
         }
-
-        // MARK: - jsonb_build_array Tests
 
         @Test func jsonbBuildArraySimple() {
             let query = TestUserForConversion.select {
@@ -138,8 +133,6 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - array_to_json Tests
-
         @Test func arrayToJson() {
             let query = TestUserForConversion.select { columns in
                 JSONB.Creation.arrayToJson(columns.tags)
@@ -166,8 +159,6 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - row_to_json Tests
-
         @Test func rowToJson() {
             let query = TestUserForConversion.select { _ in
                 JSONB.Creation.rowToJson(TestUserForConversion.self)
@@ -193,8 +184,6 @@ extension SnapshotTests.JSONB {
                 """
             }
         }
-
-        // MARK: - json_object Tests
 
         @Test func jsonObjectSimple() {
             let query = TestUserForConversion.select { _ in
@@ -240,8 +229,6 @@ extension SnapshotTests.JSONB {
                 """
             }
         }
-
-        // MARK: - Combined Operations Tests
 
         @Test func toJsonbWithBuildArray() {
             let query = TestUserForConversion.select {

@@ -22,7 +22,7 @@ extension SnapshotTests.Commands.Select {
             let condition2 = Int?.some(1) != 2
             #expect(condition2 == true)
         }
-        //
+
         @Test func selectAll() async {
             await assertSQL(of: Tag.all) {
                 """
@@ -31,7 +31,7 @@ extension SnapshotTests.Commands.Select {
                 """
             }
         }
-        //
+
         @Test func selectDistinct() async {
             await assertSQL(of: Reminder.distinct().select(\.priority)) {
                 """
@@ -174,7 +174,7 @@ extension SnapshotTests.Commands.Select {
                 """
             }
         }
-        //
+
         @Test func whereConditionalFalse() async {
             let includeConditional = false
             await assertSQL(
@@ -393,28 +393,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        // TODO: Re-enable when Swift compiler bug is fixed (causes compiler hang)
-        // @Test func forceEmptyJoin() {
-        //     enum R1: AliasName {}
-        //     enum R2: AliasName {}
-        //     assertInlineSnapshot(
-        //         of: Reminder.as(R1.self)
-        //             .group(by: \.id)
-        //             .leftJoin(Reminder.as(R2.self).all) { $0.id.eq($1.id) && $0.id.eq(42) }
-        //             .limit(1)
-        //             .select { ($0, $1.jsonAgg().filter(where: $1.id.isNotNull)) },
-        //         as: .sql
-        //     ) {
-        //         """
-        //         SELECT "r1s"."id", "r1s"."assignedUserID", "r1s"."dueDate", "r1s"."isCompleted", "r1s"."isFlagged", "r1s"."notes", "r1s"."priority", "r1s"."remindersListID", "r1s"."title", "r1s"."updatedAt", json_agg("r2s") FILTER (WHERE ("r2s"."id" IS NOT NULL))
-        //         FROM "reminders" AS "r1s"
-        //         LEFT OUTER JOIN "reminders" AS "r2s" ON (("r1s"."id" = "r2s"."id") AND ("r1s"."id" = 42))
-        //         GROUP BY "r1s"."id"
-        //         LIMIT 1
-        //         """
-        //     }
-        // }
-
         @Test func reusableStaticHelperOnDraft() async {
             await assertSQL(of: Reminder.incomplete.select(\.id)) {
                 """
@@ -485,14 +463,9 @@ extension SnapshotTests.Commands.Select {
             _ = base.group { r, _ in r.isCompleted }
             _ = base.having { r, _ in r.isCompleted }
             _ = base.order { r, _ in r.isCompleted }
-            // Probed 2026-07-13 after the L1 group(by:) fix: both sites below still fail
-            // for reasons unrelated to the group(by:) collision — `limit`'s closure form
-            // cannot infer its opaque expression parameter on single-join selects, and
-            // `count(filter:)` is uninferrable (no argument) / ambiguous (closure) there.
-            //            _ = base.limit { r, _ in r.title.length() }
+
             _ = base.limit(1)
-            //            _ = base.count()
-            //            _ = base.count { r, _ in r.isCompleted }
+
             _ = base.map {}
         }
     }

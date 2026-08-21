@@ -57,7 +57,7 @@ extension SnapshotTests {
         }
 
         @Test func mixedMaterialization() async {
-            // Multiple CTEs with different materialization hints
+
             await assertSQL(
                 of: With {
                     Reminder
@@ -99,8 +99,7 @@ extension SnapshotTests {
         }
 
         @Test func recursiveAndMaterialized() async {
-            // Recursive CTE with materialization hint
-            // SQL should have both RECURSIVE and MATERIALIZED
+
             await assertSQL(
                 of: With {
                     Count(value: 1)
@@ -125,7 +124,7 @@ extension SnapshotTests {
         }
 
         @Test func noMaterializationHint() async {
-            // Regular CTE without materialization hint (default behavior)
+
             await assertSQL(
                 of: With {
                     Reminder
@@ -150,8 +149,6 @@ extension SnapshotTests {
         }
     }
 }
-
-// MARK: - Test Support Types
 
 @Selection
 private struct CompletedReminder {

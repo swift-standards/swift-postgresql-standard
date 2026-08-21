@@ -7,8 +7,7 @@ public import SwiftSyntaxMacros
 public enum TableMacro {}
 
 extension TableMacro: ExtensionMacro {
-    // swiftlint:disable typed_throws_required
-    // REASON: ExtensionMacro requires this external witness signature.
+
     public static func expansion<
         D: DeclGroupSyntax,
         T: TypeSyntaxProtocol,
@@ -113,11 +112,9 @@ extension TableMacro: ExtensionMacro {
         var columnWidths: [ExprSyntax] = []
         var diagnostics: [Diagnostic] = []
 
-        // NB: A compiler bug prevents us from applying the '@_Draft' macro directly
         var draftBindings:
             [(PatternBindingSyntax, queryOutputType: TypeSyntax?, optionalize: Bool)] =
                 []
-        // NB: End of workaround
 
         var draftProperties: [DeclSyntax] = []
         var draftTableType: TypeSyntax?
@@ -200,7 +197,7 @@ extension TableMacro: ExtensionMacro {
                     !property.isComputed
                 else { continue }
                 guard
-                    // TODO: Support multi-binding variables where '@Column{,s}' macro is omitted?
+
                     property.bindings.count == 1,
                     let binding = property.bindings.first,
                     let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier
@@ -299,7 +296,7 @@ extension TableMacro: ExtensionMacro {
                             if let primaryKey, let originalLabel = primaryKey.label {
                                 var newArguments = arguments
                                 newArguments.remove(at: argumentIndex)
-                                // TODO: Update to suggest using '@Columns' to specify a composite primary key
+
                                 diagnostics.append(
                                     Diagnostic(
                                         node: label,
@@ -394,11 +391,11 @@ extension TableMacro: ExtensionMacro {
                 }
 
                 if !isGenerated {
-                    // NB: A compiler bug prevents us from applying the '@_Draft' macro directly
+
                     draftBindings.append(
                         (binding, columnQueryOutputType, identifier == primaryKey?.identifier)
                     )
-                    // NB: End of workaround
+
                 }
 
                 columnWidths.append("\(columnQueryValueType)._columnWidth")
@@ -574,12 +571,11 @@ extension TableMacro: ExtensionMacro {
             for member in declaration.memberBlock.members {
                 guard let caseDecl = member.decl.as(EnumCaseDeclSyntax.self) else { continue }
                 guard
-                    // TODO: Support multi-element cases where '@Column{,s}' macro is omitted?
+
                     caseDecl.elements.count == 1,
                     let caseElement = caseDecl.elements.first,
                     let parameters = caseElement.parameterClause?.parameters,
-                    // TODO: Support enum cases with multiple associated values?
-                    // TODO: Support enum case with no associated value?
+
                     parameters.count == 1,
                     let parameter = parameters.first
                 else {
@@ -771,7 +767,6 @@ extension TableMacro: ExtensionMacro {
                 }
                 """
 
-            // NB: A compiler bug prevents us from applying the '@_Draft' macro directly
             var memberBlocks = try expansion(
                 of: "@_Draft(\(type).self)",
                 providingMembersOf: StructDeclSyntax("\(draft)"),
@@ -858,7 +853,7 @@ extension TableMacro: ExtensionMacro {
                 \(memberwiseInit)
                 }
                 """
-            // NB: End of workaround
+
         }
 
         var conformances: [TypeSyntax] = []
@@ -943,12 +938,11 @@ extension TableMacro: ExtensionMacro {
             .cast(ExtensionDeclSyntax.self)
         ]
     }
-    // swiftlint:enable typed_throws_required
+
 }
 
 extension TableMacro: MemberMacro {
-    // swiftlint:disable typed_throws_required
-    // REASON: MemberMacro requires this external witness signature.
+
     public static func expansion<D: DeclGroupSyntax, C: MacroExpansionContext>(
         of node: AttributeSyntax,
         providingMembersOf declaration: D,
@@ -974,11 +968,9 @@ extension TableMacro: MemberMacro {
         var columnsProperties: [DeclSyntax] = []
         var expansionFailed = false
 
-        // NB: A compiler bug prevents us from applying the '@_Draft' macro directly
         var draftBindings:
             [(PatternBindingSyntax, queryOutputType: TypeSyntax?, optionalize: Bool)] =
                 []
-        // NB: End of workaround
 
         var draftProperties: [DeclSyntax] = []
         var primaryKey:
@@ -1114,11 +1106,11 @@ extension TableMacro: MemberMacro {
                 selectedColumns.append((identifier, columnQueryValueType))
 
                 if !isGenerated {
-                    // NB: A compiler bug prevents us from applying the '@_Draft' macro directly
+
                     draftBindings.append(
                         (binding, columnQueryOutputType, identifier == primaryKey?.identifier)
                     )
-                    // NB: End of workaround
+
                 }
 
                 let defaultValue =
@@ -1426,7 +1418,6 @@ extension TableMacro: MemberMacro {
                 }
                 """
 
-            // NB: A compiler bug prevents us from applying the '@_Draft' macro directly
             var memberBlocks = try expansion(
                 of: "@_Draft(\(type).self)",
                 providingMembersOf: StructDeclSyntax("\(draft)"),
@@ -1479,7 +1470,7 @@ extension TableMacro: MemberMacro {
                 \(memberwiseInit)
                 }
                 """
-            // NB: End of workaround
+
         }
 
         var conformances: [TypeSyntax] = []
@@ -1570,12 +1561,11 @@ extension TableMacro: MemberMacro {
         ]
         .compactMap { $0 }
     }
-    // swiftlint:enable typed_throws_required
+
 }
 
 extension TableMacro: MemberAttributeMacro {
-    // swiftlint:disable typed_throws_required
-    // REASON: MemberAttributeMacro requires this external witness signature.
+
     public static func expansion<
         D: DeclGroupSyntax,
         T: DeclSyntaxProtocol,
@@ -1639,5 +1629,5 @@ extension TableMacro: MemberAttributeMacro {
             """
         ]
     }
-    // swiftlint:enable typed_throws_required
+
 }

@@ -19,11 +19,7 @@ extension SnapshotTests {
                         #sql("2")
                     )
                 } onConflictDoUpdate: {
-                    // NB: explicit SQLQueryExpression wrap — `$0.title += " Copy"`
-                    // trips the write-only subscript's unavailable getter on 6.3.3:
-                    // `@_disfavoredOverload` is not counted at operator-operand loci
-                    // and stdlib's String `+=` is concrete. Compiler-catalog CANDIDATE;
-                    // see the L1 gap-fill close report 2026-07-13.
+
                     $0.title = SQLQueryExpression($0.title) + " Copy"
                 }
                 .returning(\.id)
@@ -393,9 +389,7 @@ extension SnapshotTests {
             }
         }
         @Test func onConflict_invalidUpdateFilters() async {
-            // The invalid update filter reports through `QueryFragment.Report.invalid`;
-            // bound to `Issue.record`, the diagnostic lands as a known issue while the
-            // emitted SQL is still asserted (a snapshot mismatch stays a failure).
+
             await withKnownIssue {
                 await QueryFragment.Report.$invalid.withValue(
                     .init { Issue.record(Comment(rawValue: $0)) },

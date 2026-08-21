@@ -6,7 +6,6 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests {
     @Suite struct ArrayAggTests {
-        // MARK: - Table.arrayAgg Tests
 
         @Test
         func `Table.arrayAgg with closure syntax`() async {
@@ -47,8 +46,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Where.arrayAgg Tests
 
         @Test
         func `Where.arrayAgg with closure syntax`() async {
@@ -92,8 +89,6 @@ extension SnapshotTests {
                 """
             }
         }
-
-        // MARK: - Select.arrayAgg Tests (Low-Level API)
 
         @Test
         func `Select.arrayAgg using low-level API`() async {
@@ -153,8 +148,6 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Complex Expression Tests
-
         @Test
         func `ArrayAgg of calculated expression`() async {
             await assertSQL(of: Order.select { ($0.quantity * $0.unitPrice).arrayAgg() }) {
@@ -165,30 +158,22 @@ extension SnapshotTests {
             }
         }
 
-        // MARK: - Compile-Time Type Tests
-
         func compileTimeTypeTests() {
-            // Verify return types compile correctly
 
-            // Table.arrayAgg returns Select<String?, Customer, ()>
             let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.arrayAgg {
                 $0.name
             }
 
-            // Where.arrayAgg returns Select<String?, Order, ()>
             let _: Structured_Queries_Primitives.Select<String?, Order, ()> = Order.where {
                 $0.isPaid
             }.arrayAgg {
                 $0.orderID
             }
 
-            // Int column returns String? (array serialized as string)
             let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.arrayAgg {
                 $0.id
             }
         }
-
-        // MARK: - Edge Cases
 
         @Test
         func `ArrayAgg with GROUP BY`() async {

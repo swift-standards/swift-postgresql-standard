@@ -1,7 +1,5 @@
 import Structured_Queries_Primitives
 
-// MARK: - Core Operator Helper Structs
-
 internal func isNull<Value>(_ expression: some QueryExpression<Value>) -> Bool {
     (expression as? any _OptionalProtocol).map { $0._wrapped == nil } ?? false
 }
@@ -49,9 +47,7 @@ struct BinaryOperator<QueryValue>: QueryExpression {
     }
 
     var queryFragment: QueryFragment {
-        // PostgreSQL-specific: Translate IS to IS NOT DISTINCT FROM for row comparisons
-        // SQLite allows: (tuple) IS (tuple)
-        // PostgreSQL requires: (tuple) IS NOT DISTINCT FROM (tuple) for NULL-safe comparisons
+
         let op: QueryFragment
         if `operator`.debugDescription == "IS" {
             op = "IS NOT DISTINCT FROM"
@@ -61,8 +57,6 @@ struct BinaryOperator<QueryValue>: QueryExpression {
             op = `operator`
         }
 
-        // For IN/BETWEEN operators, RHS is already parenthesized by _SequenceExpression
-        // Don't double-wrap to avoid redundant parens: IN ((1, 2, 3)) → IN (1, 2, 3)
         let rhsDescription = rhs.debugDescription
         let wrappedRhs: QueryFragment
         if rhsDescription.hasPrefix("(") && rhsDescription.hasSuffix(")") {
@@ -106,14 +100,10 @@ where S.Element: QueryExpression, S.Element.QueryValue: QueryExpression {
     init(elements: S) {
         let itemsArray = Array(elements)
         if itemsArray.isEmpty {
-            // PostgreSQL doesn't allow empty IN clauses: IN ()
-            // Return NULL (no parens), BinaryOperator will wrap it: IN (NULL)
-            // This never matches since NULL != anything
+
             queryFragment = "NULL"
         } else {
-            // Wrap entire sequence in parens for IN operator
-            // Scalars: (1, 2, 3) → column IN (1, 2, 3) ✅
-            // Tuples: ((uuid, 'type')) → (a, b) IN ((uuid, 'type')) ✅
+
             let items = itemsArray.map { $0.queryFragment }.joined(separator: ", ")
             queryFragment = "(\(items))"
         }

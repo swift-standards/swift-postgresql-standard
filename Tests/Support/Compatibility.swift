@@ -1,7 +1,6 @@
 import Test_Primitives_Core
 import Tests_Inline_Snapshot
 
-/// Compatibility shim mapping Point-Free's `assertInlineSnapshot(of:as:...)` to the ecosystem's `snapshot(as:)`.
 @discardableResult
 public func assertInlineSnapshot<Value>(
     of value: @autoclosure () -> Value,

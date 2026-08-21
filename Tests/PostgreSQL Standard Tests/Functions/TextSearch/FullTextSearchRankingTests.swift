@@ -7,8 +7,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.FullTextSearch {
     @Suite("Ranking") struct RankingTests {
 
-        // MARK: - Basic Ranking
-
         @Test
         func `Basic rank`() async {
             await assertSQL(
@@ -80,8 +78,6 @@ extension SnapshotTests.FullTextSearch {
                 """
             }
         }
-
-        // MARK: - Weighted Ranking
 
         @Test
         func `Rank with custom weights`() async {

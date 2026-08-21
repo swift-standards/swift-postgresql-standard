@@ -8,10 +8,8 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.Subquery {
     @Suite("Quantified Comparison") struct QuantifiedComparisonTests {
 
-        // MARK: - ANY Operator Tests
-
         @Test func equalsAny() async {
-            // Create a subquery expression using raw SQL
+
             let subquery = #sql(
                 "SELECT id FROM shop_products WHERE featured = true",
                 as: [Int].self
@@ -70,8 +68,6 @@ extension SnapshotTests.Subquery {
             }
         }
 
-        // MARK: - ALL Operator Tests
-
         @Test func equalsAll() async {
             let subquery = #sql("SELECT required_value FROM requirements", as: [Int].self)
 
@@ -128,8 +124,6 @@ extension SnapshotTests.Subquery {
             }
         }
 
-        // MARK: - SOME Operator Tests
-
         @Test func lessThanSome() async {
             let subquery = #sql("SELECT price FROM competitor_products", as: [Double].self)
 
@@ -160,16 +154,12 @@ extension SnapshotTests.Subquery {
     }
 }
 
-// MARK: - Test Model
-
 @Table
 private struct ShopProduct {
     let id: Int
     let name: String
     let price: Double
 }
-
-// MARK: - SnapshotTests.Subquery Namespace
 
 extension SnapshotTests {
     enum Subquery {}

@@ -4,8 +4,6 @@ import Testing
 @Suite
 struct SnapshotTests {}
 
-// MARK: - Test Namespaces
-
 extension SnapshotTests {
     struct PostgresMath {}
 }

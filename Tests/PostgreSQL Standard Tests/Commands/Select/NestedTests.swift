@@ -39,13 +39,7 @@ extension SnapshotTests.Commands.Select {
         @Test func columnGroupUpdateNestedField() async {
             await assertSQL(
                 of: Item.update {
-                    // NB: explicit SQLQueryExpression wrap — with `= true`, overload
-                    // scores SUM across the chained subscripts on 6.3.3: the favored
-                    // ColumnGroup path plus a disfavored inner setter ties the
-                    // disfavored write-only group subscript (unavailable getter), and
-                    // the solver picks the latter. The concrete wrap resolves the inner
-                    // setter at the favored tier, breaking the tie. Compiler-catalog
-                    // CANDIDATE; see the L1 gap-fill close report 2026-07-13.
+
                     $0.status.isOutOfStock = SQLQueryExpression(true)
                 }
             ) {
@@ -70,7 +64,7 @@ extension SnapshotTests.Commands.Select {
         }
 
         @Test func generatedColumnInGroup() async {
-            // Test INSERT excludes generated column
+
             await assertSQL(
                 of:
                     RowWithTimestamps
@@ -95,7 +89,6 @@ extension SnapshotTests.Commands.Select {
                 """
             }
 
-            // Test SELECT includes generated column
             await assertSQL(of: RowWithTimestamps.all) {
                 """
                 SELECT "rows"."id", "rows"."createdAt", "rows"."updatedAt", "rows"."deletedAt", "rows"."isDeleted"
@@ -238,7 +231,6 @@ extension SnapshotTests.Commands.Select {
         @Test func compositePrimaryKey() async {
             let now = Date(timeIntervalSinceReferenceDate: 0)
 
-            // Test INSERT
             await assertSQL(
                 of:
                     Metadata
@@ -256,7 +248,6 @@ extension SnapshotTests.Commands.Select {
                 """
             }
 
-            // Test find with composite PK
             await assertSQL(
                 of: Metadata.find(MetadataID(recordID: UUID(0), recordType: "reminders"))
             ) {
@@ -269,8 +260,6 @@ extension SnapshotTests.Commands.Select {
         }
     }
 }
-
-// MARK: - Test Support Types
 
 @Table
 private struct Item {

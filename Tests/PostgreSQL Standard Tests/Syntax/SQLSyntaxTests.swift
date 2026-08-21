@@ -9,7 +9,7 @@ extension SnapshotTests {
     @Suite struct SQLSyntaxTests {
 
         @Test func returningVariations() async {
-            // RETURNING * - Standard SQL (supported by PostgreSQL, SQLite 3.35.0+, and others)
+
             await assertSQL(
                 of: Reminder.insert {
                     Reminder(id: 1, remindersListID: 1, title: "Test")
@@ -24,7 +24,6 @@ extension SnapshotTests {
                 """
             }
 
-            // RETURNING multiple columns
             await assertSQL(
                 of: Reminder.insert {
                     Reminder(id: 1, remindersListID: 1, title: "Test")
@@ -41,7 +40,7 @@ extension SnapshotTests {
         }
 
         @Test func defaultValuesSQL() async {
-            // INSERT with DEFAULT - Standard SQL
+
             await assertSQL(
                 of: #sql(
                     """
@@ -58,7 +57,7 @@ extension SnapshotTests {
         }
 
         @Test func inClause() async {
-            // Standard IN clause
+
             await assertSQL(
                 of: Reminder.where { reminder in
                     #sql("\(reminder.priority) IN (1, 2, 3)")
@@ -73,7 +72,7 @@ extension SnapshotTests {
         }
 
         @Test func coalesceFunctions() async {
-            // COALESCE - Standard SQL function
+
             await assertSQL(
                 of: Reminder.select {
                     #sql("COALESCE(\($0.notes), 'No notes')", as: String.self)
@@ -87,7 +86,7 @@ extension SnapshotTests {
         }
 
         @Test func cteWithInsertSQL() async {
-            // CTE with INSERT ... RETURNING - Standard SQL
+
             await assertSQL(
                 of: #sql(
                     """
@@ -112,7 +111,7 @@ extension SnapshotTests {
         }
 
         @Test func windowFunctions() async {
-            // ROW_NUMBER() OVER - Standard SQL window function
+
             await assertSQL(
                 of: #sql(
                     """
@@ -133,7 +132,6 @@ extension SnapshotTests {
                 """
             }
 
-            // RANK() and DENSE_RANK() - Standard SQL window functions
             await assertSQL(
                 of: #sql(
                     """
@@ -156,7 +154,7 @@ extension SnapshotTests {
         }
 
         @Test func upperFunction() async {
-            // UPPER() - Standard SQL function
+
             await assertSQL(
                 of: Reminder.select { reminder in
                     #sql("UPPER(\(reminder.title))", as: String.self)
@@ -170,7 +168,7 @@ extension SnapshotTests {
         }
 
         @Test func basicCTE() async {
-            // Basic CTE - Standard SQL
+
             await assertSQL(
                 of: #sql(
                     """

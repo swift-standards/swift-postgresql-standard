@@ -6,14 +6,11 @@ import Testing
 import Tests_Apple_Testing_Bridge
 import Tests_Inline_Snapshot
 
-/// Tests for Basic CRUD examples shown in README.md
 @Suite(
     "README Examples - Basic CRUD",
     .snapshots(record: .never)
 )
 struct BasicCRUDTests {
-
-    // MARK: - Test Models
 
     @Table
     struct User {
@@ -31,8 +28,6 @@ struct BasicCRUDTests {
         var content: String
         var publishedAt: Date?
     }
-
-    // MARK: - SELECT Examples
 
     @Test
     func `README Example: Basic SELECT with WHERE, ORDER BY, LIMIT`() async {
@@ -95,8 +90,6 @@ struct BasicCRUDTests {
             """
         }
     }
-
-    // MARK: - INSERT Examples
 
     @Test
     func `README Example: INSERT with Draft (NULL primary key handling)`() async {
@@ -165,8 +158,6 @@ struct BasicCRUDTests {
         }
     }
 
-    // MARK: - UPDATE Examples
-
     @Test
     func `README Example: UPDATE with WHERE`() async {
         await assertSQL(
@@ -220,8 +211,6 @@ struct BasicCRUDTests {
             """
         }
     }
-
-    // MARK: - DELETE Examples
 
     @Test
     func `README Example: DELETE with WHERE`() async {

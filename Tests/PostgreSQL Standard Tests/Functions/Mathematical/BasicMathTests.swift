@@ -8,22 +8,15 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.PostgresMath {
     @Suite("Basic Math Functions") struct BasicMathTests {
 
-        // MARK: - .min() and .max() Disambiguation Tests
-
         @Test
         func `Swift stdlib .min() vs SQL .min() - disambiguation`() async {
-            // This test demonstrates that both .min() methods coexist peacefully:
-            // 1. Swift's stdlib .min() for regular Swift collections (preferred via @_disfavoredOverload)
-            // 2. SQL's .min() for QueryExpression types (PostgreSQL's least() function)
 
-            // Swift stdlib .min() - used for regular Swift arrays
             let numbers = [5, 2, 8, 1, 9]
-            let swiftMin = numbers.min()  // Calls Swift.Sequence.min()
+            let swiftMin = numbers.min()
             #expect(swiftMin == 1)
 
-            // SQL .min() - generates PostgreSQL's least() in query
             await assertSQL(
-                // Calls QueryExpression.min()
+
                 of: PriceItem.select { $0.price.min($0.comparePrice) }
             ) {
                 """
@@ -35,18 +28,13 @@ extension SnapshotTests.PostgresMath {
 
         @Test
         func `Swift stdlib .max() vs SQL .max() - disambiguation`() async {
-            // This test demonstrates that both .max() methods coexist peacefully:
-            // 1. Swift's stdlib .max() for regular Swift collections (preferred via @_disfavoredOverload)
-            // 2. SQL's .max() for QueryExpression types (PostgreSQL's greatest() function)
 
-            // Swift stdlib .max() - used for regular Swift arrays
             let numbers = [5, 2, 8, 1, 9]
-            let swiftMax = numbers.max()  // Calls Swift.Sequence.max()
+            let swiftMax = numbers.max()
             #expect(swiftMax == 9)
 
-            // SQL .max() - generates PostgreSQL's greatest() in query
             await assertSQL(
-                // Calls QueryExpression.max()
+
                 of: PriceItem.select { $0.price.max($0.comparePrice) }
             ) {
                 """
@@ -55,8 +43,6 @@ extension SnapshotTests.PostgresMath {
                 """
             }
         }
-
-        // MARK: - Basic Math Functions
 
         @Test func abs() async {
             await assertSQL(
@@ -190,8 +176,6 @@ extension SnapshotTests.PostgresMath {
             }
         }
 
-        // MARK: - GCD and LCM
-
         @Test func gcd() async {
             await assertSQL(
                 of: Number.select { $0.a.gcd($0.b) }
@@ -213,8 +197,6 @@ extension SnapshotTests.PostgresMath {
                 """
             }
         }
-
-        // MARK: - Min/Max Functions
 
         @Test func minWithValue() async {
             await assertSQL(
@@ -260,11 +242,9 @@ extension SnapshotTests.PostgresMath {
             }
         }
 
-        // MARK: - Real-World Use Cases
-
         @Test
         func `Calculate price with 10% discount, minimum $5`() async {
-            // Real-world: Apply discount but ensure minimum price
+
             await assertSQL(
                 of: PriceItem.select { ($0.id, ($0.price * 0.9).max(5.0)) }
             ) {
@@ -277,7 +257,7 @@ extension SnapshotTests.PostgresMath {
 
         @Test
         func `Cap maximum price increase`() async {
-            // Real-world: Increase price by 20% but cap at compare price
+
             await assertSQL(
                 of: PriceItem.update {
                     $0.price = ($0.price * 1.2).min($0.comparePrice)
@@ -292,7 +272,7 @@ extension SnapshotTests.PostgresMath {
 
         @Test
         func `Round currency to 2 decimal places`() async {
-            // Real-world: Financial calculations need precise rounding
+
             await assertSQL(
                 of: PriceItem.select { $0.price.round(decimalPlaces: 2) }
             ) {
@@ -305,7 +285,7 @@ extension SnapshotTests.PostgresMath {
 
         @Test
         func `Determine transaction type by sign`() async {
-            // Real-world: Classify transactions as debit/credit by sign
+
             await assertSQL(
                 of: MathTransaction.select { ($0.id, $0.amount.sign()) }
             ) {
@@ -318,7 +298,7 @@ extension SnapshotTests.PostgresMath {
 
         @Test
         func `Calculate absolute difference`() async {
-            // Real-world: Find price variance regardless of direction
+
             await assertSQL(
                 of: PriceItem.select { ($0.price - $0.comparePrice).abs() }
             ) {
@@ -330,8 +310,6 @@ extension SnapshotTests.PostgresMath {
         }
     }
 }
-
-// MARK: - Test Models
 
 @Table("price_items")
 private struct PriceItem {

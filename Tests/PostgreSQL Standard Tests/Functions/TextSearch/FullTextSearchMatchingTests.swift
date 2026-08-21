@@ -7,8 +7,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.FullTextSearch {
     @Suite("Matching") struct MatchingTests {
 
-        // MARK: - Match Operations
-
         @Test
         func `Basic match with tsquery`() async {
             await assertSQL(

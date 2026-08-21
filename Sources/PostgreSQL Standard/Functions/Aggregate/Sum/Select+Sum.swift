@@ -1,18 +1,7 @@
 import Structured_Queries_Primitives
 
-// Deliberate overload set: renaming would break the public aggregate API surface;
-// the overloads are disambiguated by generic constraints, not by trailing-closure shape.
-// swift-format-ignore: AmbiguousTrailingClosureOverload
 extension Select {
-    /// Creates a new select statement from this one by appending a sum aggregate to its selection.
-    ///
-    /// ```swift
-    /// Order.select().sum { $0.amount }
-    /// // SELECT SUM("orders"."amount") FROM "orders"
-    /// ```
-    ///
-    /// - Parameter expression: A closure that takes table columns and returns an expression to sum.
-    /// - Returns: A new select statement that includes the sum of the expression.
+
     public func sum<Value>(
         of expression: (From.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Value._Optionalized.Wrapped?, From, ()>
@@ -27,10 +16,6 @@ extension Select {
         return select { _ in expr._sum(distinct: false, filter: nil) }
     }
 
-    /// Creates a new select statement from this one by appending a sum aggregate to its selection (with joins).
-    ///
-    /// - Parameter expression: A closure that takes table columns and returns an expression to sum.
-    /// - Returns: A new select statement that includes the sum of the expression.
     public func sum<Value, each J: Table>(
         of expression: (From.TableColumns, repeat (each J).TableColumns) -> some QueryExpression<
             Value
@@ -47,10 +32,6 @@ extension Select {
         return select { _ in expr._sum(distinct: false, filter: nil) }
     }
 
-    /// Creates a new select statement from this one by appending a sum aggregate to its selection (with existing columns).
-    ///
-    /// - Parameter expression: A closure that takes table columns and returns an expression to sum.
-    /// - Returns: A new select statement that includes the sum of the expression.
     public func sum<Value, each C: QueryRepresentable, each J: Table>(
         of expression: (From.TableColumns, repeat (each J).TableColumns) -> some QueryExpression<
             Value
@@ -67,10 +48,6 @@ extension Select {
         return select { _ in expr._sum(distinct: false, filter: nil) }
     }
 
-    /// Creates a new select statement from this one by appending a sum aggregate to its selection (with single join).
-    ///
-    /// - Parameter expression: A closure that takes table columns and returns an expression to sum.
-    /// - Returns: A new select statement that includes the sum of the expression.
     public func sum<Value>(
         of expression: (From.TableColumns, Joins.TableColumns) -> some QueryExpression<Value>
     ) -> Select<Value._Optionalized.Wrapped?, From, Joins>
@@ -85,10 +62,6 @@ extension Select {
         return select { _, _ in expr._sum(distinct: false, filter: nil) }
     }
 
-    /// Creates a new select statement from this one by appending a sum aggregate to its selection (with single join and existing columns).
-    ///
-    /// - Parameter expression: A closure that takes table columns and returns an expression to sum.
-    /// - Returns: A new select statement that includes the sum of the expression.
     public func sum<Value, each C: QueryRepresentable>(
         of expression: (From.TableColumns, Joins.TableColumns) -> some QueryExpression<Value>
     ) -> Select<(repeat each C, Value._Optionalized.Wrapped?), From, Joins>

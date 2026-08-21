@@ -1,10 +1,7 @@
 import Structured_Queries_Primitives
 
 extension Select {
-    /// Creates a new select statement from this one by appending `count(*)` to its selection.
-    ///
-    /// - Parameter filter: A `FILTER` clause to apply to the aggregation.
-    /// - Returns: A new select statement that selects `count(*)`.
+
     public func count(
         filter: ((From.TableColumns) -> some QueryExpression<Bool>)? = nil
     ) -> Select<Int, From, ()>
@@ -13,10 +10,6 @@ extension Select {
         return select { _ in .count(filter: filter) }
     }
 
-    /// Creates a new select statement from this one by appending `count(*)` to its selection.
-    ///
-    /// - Parameter filter: A `FILTER` clause to apply to the aggregation.
-    /// - Returns: A new select statement that selects `count(*)`.
     public func count<each J: Table>(
         filter: ((From.TableColumns, repeat (each J).TableColumns) -> some QueryExpression<Bool>)? =
             nil
@@ -26,10 +19,6 @@ extension Select {
         return select { _ in .count(filter: filter) }
     }
 
-    /// Creates a new select statement from this one by appending `count(*)` to its selection.
-    ///
-    /// - Parameter filter: A `FILTER` clause to apply to the aggregation.
-    /// - Returns: A new select statement that selects `count(*)`.
     public func count<each C: QueryRepresentable, each J: Table>(
         filter: ((From.TableColumns, repeat (each J).TableColumns) -> some QueryExpression<Bool>)? =
             nil
@@ -41,10 +30,6 @@ extension Select {
         return select { _ in .count(filter: filter) }
     }
 
-    /// Creates a new select statement from this one by appending `count(*)` to its selection.
-    ///
-    /// - Parameter filter: A `FILTER` clause to apply to the aggregation.
-    /// - Returns: A new select statement that selects `count(*)`.
     public func count(
         filter: ((From.TableColumns, Joins.TableColumns) -> some QueryExpression<Bool>)? = nil
     ) -> Select<Int, From, Joins>
@@ -53,10 +38,6 @@ extension Select {
         return select { _, _ in .count(filter: filter) }
     }
 
-    /// Creates a new select statement from this one by appending `count(*)` to its selection.
-    ///
-    /// - Parameter filter: A `FILTER` clause to apply to the aggregation.
-    /// - Returns: A new select statement that selects `count(*)`.
     public func count<each C: QueryRepresentable>(
         filter: ((From.TableColumns, Joins.TableColumns) -> some QueryExpression<Bool>)? = nil
     ) -> Select<

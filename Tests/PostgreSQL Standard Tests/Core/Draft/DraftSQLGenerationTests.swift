@@ -8,7 +8,7 @@ extension SnapshotTests {
     @Suite struct DraftSQLGenerationTests {
 
         @Test func draftWithExplicitId() {
-            // When Draft has explicit ID, it should be included
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -29,7 +29,7 @@ extension SnapshotTests {
         }
 
         @Test func draftWithOnConflict() {
-            // Draft with ON CONFLICT includes id with DEFAULT (conservative approach for PostgreSQL)
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -55,7 +55,7 @@ extension SnapshotTests {
         }
 
         @Test func mixedDraftsWithAndWithoutIds() {
-            // When mixing Drafts, use DEFAULT for NULL ids
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(
@@ -85,7 +85,7 @@ extension SnapshotTests {
         }
 
         @Test func draftUpsertSQL() {
-            // Test the upsert method on Draft
+
             assertInlineSnapshot(
                 of: Reminder.upsert {
                     Reminder.Draft(
@@ -107,7 +107,7 @@ extension SnapshotTests {
         }
 
         @Test func draftBatchInsertAllWithoutIds() {
-            // Multiple drafts without IDs should exclude id column entirely
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     for i in 1...3 {
@@ -129,7 +129,7 @@ extension SnapshotTests {
         }
 
         @Test func draftWithComplexConflictResolution() {
-            // Test ON CONFLICT with WHERE clause
+
             assertInlineSnapshot(
                 of: Reminder.insert {
                     Reminder.Draft(

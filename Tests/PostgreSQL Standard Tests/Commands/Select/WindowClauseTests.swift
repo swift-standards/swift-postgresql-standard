@@ -6,7 +6,7 @@ import Tests_Inline_Snapshot
 
 extension SnapshotTests.Commands.Select {
     @Suite struct WindowClauseTests {
-        /// Test a single named window with basic partition and order
+
         @Test func singleNamedWindow() async {
             await assertSQL(
                 of: Reminder.all
@@ -24,7 +24,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test multiple named windows in a single query
         @Test func multipleNamedWindows() async {
             await assertSQL(
                 of: Reminder.all
@@ -52,7 +51,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test mixing named windows with inline window specifications
         @Test func mixedNamedAndInlineWindows() async {
             await assertSQL(
                 of: Reminder.all
@@ -77,7 +75,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test that queries without named windows don't emit WINDOW clause
         @Test func noWindowClause() async {
             await assertSQL(
                 of: Reminder.all
@@ -100,7 +97,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test named window with partition only (no ordering)
         @Test func namedWindowPartitionOnly() async {
             await assertSQL(
                 of: Reminder.all
@@ -117,7 +113,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test named window with ordering only (no partition)
         @Test func namedWindowOrderOnly() async {
             await assertSQL(
                 of: Reminder.all
@@ -134,7 +129,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test reusing a named window across multiple functions
         @Test func reuseNamedWindow() async {
             await assertSQL(
                 of: Reminder.all
@@ -160,7 +154,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test window clause with WHERE filter
         @Test func windowWithWhere() async {
             await assertSQL(
                 of: Reminder.all
@@ -179,7 +172,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test window clause with ORDER BY at query level
         @Test func windowWithOrderBy() async {
             await assertSQL(
                 of: Reminder.all
@@ -199,7 +191,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test window clause with LIMIT
         @Test func windowWithLimit() async {
             await assertSQL(
                 of: Reminder.all
@@ -218,7 +209,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test LAG and LEAD with named windows
         @Test func lagLeadWithNamedWindow() async {
             await assertSQL(
                 of: Reminder.all
@@ -243,7 +233,6 @@ extension SnapshotTests.Commands.Select {
             }
         }
 
-        /// Test that WINDOW clause appears before ORDER BY in SQL output (PostgreSQL compliance)
         @Test func clauseOrderingValidation() async {
             await assertSQL(
                 of: Reminder.all

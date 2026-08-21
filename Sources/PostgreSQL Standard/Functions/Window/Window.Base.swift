@@ -1,12 +1,8 @@
 import Foundation
 import Structured_Queries_Primitives
 
-// MARK: - Window Function Base Implementation
-
 extension Window {
-    /// Base implementation for all window functions
-    ///
-    /// This internal type generates the actual SQL for window function calls with OVER clauses.
+
     struct Base<Value: QueryBindable>: QueryExpression {
         typealias QueryValue = Value
 

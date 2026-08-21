@@ -8,8 +8,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.UUIDFunctions {
     @Suite("UUID Functions") struct UUIDFunctionsTests {
 
-        // MARK: - Generation Tests
-
         @Test
         func `UUID.random generates gen_random_uuid()`() async {
             await assertSQL(
@@ -105,8 +103,6 @@ extension SnapshotTests.UUIDFunctions {
             }
         }
 
-        // MARK: - Extraction - Version Tests
-
         @Test
         func `extractVersion() from UUID column`() async {
             await assertSQL(
@@ -132,8 +128,6 @@ extension SnapshotTests.UUIDFunctions {
             }
         }
 
-        // MARK: - Extraction - Timestamp Tests
-
         @Test
         func `extractTimestamp() from UUIDv7`() async {
             await assertSQL(
@@ -148,7 +142,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `extractTimestamp() returns NULL for UUIDv4`() async {
-            // UUIDv4 doesn't have timestamp, so this would return NULL
+
             await assertSQL(
                 of: UUIDUser.select { $0.id.extractTimestamp() }
             ) {
@@ -174,8 +168,6 @@ extension SnapshotTests.UUIDFunctions {
             }
         }
 
-        // MARK: - Composition Tests
-
         @Test
         func `Use UUID.random in INSERT with RETURNING`() async {
             await assertSQL(
@@ -194,7 +186,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `Order by extractTimestamp() in ORDER BY`() async {
-            // Order events by extracted timestamp from UUID
+
             await assertSQL(
                 of: UUIDEvent.order(by: { $0.id.extractTimestamp() })
             ) {
@@ -205,8 +197,6 @@ extension SnapshotTests.UUIDFunctions {
                 """
             }
         }
-
-        // MARK: - Real-World Use Cases
 
         @Test
         func `INSERT multiple rows with UUID.timeOrdered`() async {
@@ -243,7 +233,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `Complex query: Filter v7 UUIDs created after specific date`() async {
-            // Real-world: Find all events with v7 UUIDs created in the last hour
+
             await assertSQL(
                 of: UUIDEvent.where {
                     $0.id.extractVersion() == 7 && $0.id.extractTimestamp() != nil
@@ -257,11 +247,9 @@ extension SnapshotTests.UUIDFunctions {
             }
         }
 
-        // MARK: - Edge Cases & Advanced Patterns
-
         @Test
         func `Extract timestamp and compare with table timestamp column`() async {
-            // Edge case: Compare UUID embedded timestamp with actual timestamp column
+
             await assertSQL(
                 of: UUIDEvent.where {
                     $0.id.extractTimestamp() != nil
@@ -277,7 +265,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `SELECT UUID generation in query`() async {
-            // Advanced: Generate UUID in SELECT clause
+
             await assertSQL(
                 of: UUIDEvent.select { _ in PostgreSQL.UUID.timeOrdered() }
             ) {
@@ -290,7 +278,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `Filter events using time shift for backdating`() async {
-            // Real-world: Create historical records with adjusted timestamps
+
             await assertSQL(
                 of: UUIDEvent.insert {
                     ($0.id, $0.title)
@@ -316,7 +304,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `Select version distribution across events`() async {
-            // Analytics: Count events by UUID version
+
             await assertSQL(
                 of: UUIDEvent.select {
                     ($0.id.extractVersion(), $0.id.count())
@@ -331,7 +319,7 @@ extension SnapshotTests.UUIDFunctions {
 
         @Test
         func `Optional UUID extraction`() async {
-            // Edge case: Extract from optional UUID column
+
             await assertSQL(
                 of: UUIDEvent.select { $0.userId.extractVersion() }
             ) {
@@ -343,8 +331,6 @@ extension SnapshotTests.UUIDFunctions {
         }
     }
 }
-
-// MARK: - Test Models
 
 @Table
 private struct UUIDUser {
@@ -360,8 +346,6 @@ private struct UUIDEvent {
     let userId: UUID?
     let timestamp: Date?
 }
-
-// MARK: - SnapshotTests.UUIDFunctions Namespace
 
 extension SnapshotTests {
     enum UUIDFunctions {}

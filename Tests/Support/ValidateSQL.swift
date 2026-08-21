@@ -10,20 +10,17 @@ import Tests_Inline_Snapshot
     import PostgresNIO
 #endif
 
-// MARK: - Shared Client
 #if SQLValidation
-    /// Global EventLoopGroup for all validation clients
+
     private let validationEventLoopGroup = MultiThreadedEventLoopGroup.singleton
 
-    /// Shared PostgresClient for ALL SQL validations
-    /// This prevents "too many connections" by reusing a single connection pool
     private actor SharedValidationClient {
         private var client: PostgresClient?
         private var runTask: Task<Void, Never>?
         private var connectionFailed = false
 
         func getOrCreateClient() async throws -> PostgresClient {
-            // If we previously failed to connect, don't retry
+
             if connectionFailed {
                 throw ValidationError.connectionUnavailable
             }
@@ -34,9 +31,8 @@ import Tests_Inline_Snapshot
 
             let config = try postgresConfiguration()
 
-            // Use a quieter logger that doesn't log connection errors
             var logger = Logger(label: "sql-validation")
-            logger.logLevel = .error  // Only log actual errors, not connection attempts
+            logger.logLevel = .error
 
             let newClient = PostgresClient(
                 configuration: config,
@@ -45,13 +41,11 @@ import Tests_Inline_Snapshot
             )
             self.client = newClient
 
-            // Start client.run() once for the shared client
             let task = Task {
                 await newClient.run()
             }
             self.runTask = task
 
-            // Register shutdown handler on first client creation
             if !shutdownHandlerRegistered {
                 shutdownHandlerRegistered = true
                 atexit {
@@ -64,7 +58,6 @@ import Tests_Inline_Snapshot
                 }
             }
 
-            // Test connection with a quick query
             do {
                 try await newClient.withConnection { connection in
                     _ = try await connection.query(
@@ -73,7 +66,7 @@ import Tests_Inline_Snapshot
                     )
                 }
             } catch {
-                // Connection failed - mark it and clean up
+
                 connectionFailed = true
                 runTask?.cancel()
                 client = nil
@@ -85,15 +78,13 @@ import Tests_Inline_Snapshot
         }
 
         func shutdown() async {
-            // Cancel run task
+
             runTask?.cancel()
 
-            // Wait for cancellation
             if let task = runTask {
                 await task.value
             }
 
-            // Shutdown EventLoopGroup
             try? await validationEventLoopGroup.shutdownGracefully()
 
             client = nil
@@ -103,25 +94,9 @@ import Tests_Inline_Snapshot
 
     private let sharedValidationClient = SharedValidationClient()
 
-    /// Register shutdown handler on first use
     nonisolated(unsafe) private var shutdownHandlerRegistered = false
 #endif
 
-// MARK: - SQL Validation
-
-/// Validates that generated SQL is syntactically correct PostgreSQL and matches the expected snapshot.
-///
-/// ```swift
-/// await assertSQL(of: Reminder.select(\.title)) {
-///     """
-///     SELECT "reminders"."title" FROM "reminders"
-///     """
-/// }
-/// ```
-///
-/// - Parameters:
-///   - statement: The statement to validate
-///   - matches: The expected SQL output (optional - will be recorded if nil)
 public func assertSQL<T>(
     of statement: some Statement<T>,
     matches: (() -> String)? = nil,
@@ -131,7 +106,7 @@ public func assertSQL<T>(
     line: Int = #line,
     column: Int = #column
 ) async {
-    // Snapshot the SQL
+
     await snapshot(
         as: .sql,
         { statement },
@@ -143,7 +118,7 @@ public func assertSQL<T>(
         function: function
     )
     #if SQLValidation
-        // Then validate syntax against PostgreSQL (asynchronous)
+
         await validatePostgreSQLSyntax(
             statement,
             fileID: fileID,
@@ -156,7 +131,7 @@ public func assertSQL<T>(
 }
 
 #if SQLValidation
-    /// Validates SQL syntax against PostgreSQL without snapshotting.
+
     public func validatePostgreSQLSyntax<T>(
         _ statement: some Statement<T>,
         fileID: String = #fileID,
@@ -167,7 +142,6 @@ public func assertSQL<T>(
     ) async {
         let sql = statement.query.debugDescription
 
-        // Normalize whitespace to handle newlines and multiple spaces
         let normalizedSQL = sql.replacingOccurrences(
             of: "\\s+",
             with: " ",
@@ -176,7 +150,6 @@ public func assertSQL<T>(
         .trimmingCharacters(in: .whitespaces)
         .uppercased()
 
-        // Validate CREATE FUNCTION and CREATE TRIGGER using transaction rollback
         let ddlValidatablePrefixes = [
             "CREATE FUNCTION", "CREATE OR REPLACE FUNCTION", "CREATE TRIGGER",
         ]
@@ -192,7 +165,6 @@ public func assertSQL<T>(
             return
         }
 
-        // Skip validation for other DDL that can't be validated
         let ddlSkippedPrefixes = [
             "CREATE VIEW", "CREATE TEMP VIEW", "CREATE TEMPORARY VIEW",
             "CREATE OR REPLACE VIEW", "CREATE OR REPLACE TEMP VIEW",
@@ -269,7 +241,6 @@ public func assertSQL<T>(
         }
     }
 
-    /// Validates DDL statements using transaction rollback.
     private func validateDDLWithTransaction(
         _ sql: String,
         fileID: String,
@@ -355,8 +326,6 @@ public func assertSQL<T>(
             return
         }
     }
-
-    // MARK: - Configuration
 
     private func postgresConfiguration() throws -> PostgresClient.Configuration {
         if let urlString = ProcessInfo.processInfo.environment["POSTGRES_URL"] {

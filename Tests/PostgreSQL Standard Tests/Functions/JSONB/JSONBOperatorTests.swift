@@ -7,10 +7,8 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.JSONB {
     @Suite("Operators") struct OperatorTests {
 
-        // MARK: - Containment Operators Tests
-
         @Test func containsOperator() async {
-            // Test @> operator
+
             let query = TestUser.all
                 .where { user in
                     user.settings.contains(["theme": "dark"])
@@ -28,7 +26,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func containedByOperator() async {
-            // Test <@ operator
+
             let query = TestUser.all
                 .where { user in
                     user.settings.isContained(by: [
@@ -47,10 +45,8 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - Key Existence Operators Tests
-
         @Test func hasKeyOperator() async {
-            // Test ? operator
+
             let query = TestUser.all
                 .where { user in
                     user.settings.hasKey("notifications")
@@ -68,7 +64,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func hasAnyKeysOperator() async {
-            // Test ?| operator
+
             let query = TestUser.all
                 .where { user in
                     user.settings.hasAny(of: ["theme", "color_scheme", "appearance"])
@@ -86,7 +82,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func hasAllKeysOperator() async {
-            // Test ?& operator
+
             let query = TestUser.all
                 .where { user in
                     user.settings.hasAll(of: ["theme", "language"])
@@ -103,10 +99,8 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - Path Extraction Operators Tests
-
         @Test func jsonFieldOperator() async {
-            // Test -> operator
+
             let query = TestUser.select { user in
                 (user.id, user.settings.field("theme"))
             }
@@ -122,7 +116,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func jsonFieldTextOperator() async {
-            // Test ->> operator
+
             let query = TestUser.select { user in
                 (user.id, user.settings.fieldAsText("theme"))
             }
@@ -138,7 +132,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func jsonElementOperator() async {
-            // Test -> with index
+
             let query = TestUser.select { user in
                 (user.id, user.tags.element(at: 0))
             }
@@ -154,7 +148,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func jsonElementTextOperator() async {
-            // Test ->> with index
+
             let query = TestUser.select { user in
                 (user.id, user.tags.elementAsText(at: 1))
             }
@@ -170,7 +164,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func jsonPathOperator() async {
-            // Test #> operator
+
             let query = TestUser.select { user in
                 (user.id, user.metadata.value(at: ["address", "city"]))
             }
@@ -186,7 +180,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func jsonPathTextOperator() async {
-            // Test #>> operator
+
             let query = TestUser.select { user in
                 (user.id, user.metadata.valueAsText(at: ["contact", "email"]))
             }
@@ -201,10 +195,8 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - Complex Query Tests
-
         @Test func complexJSONBQuery() async {
-            // Test combining multiple JSONB operators
+
             let query = TestUser.all
                 .where { user in
                     user.settings.hasKey("theme") && user.settings.contains(["notifications": true])
@@ -223,7 +215,7 @@ extension SnapshotTests.JSONB {
         }
 
         @Test func nestedJSONExtraction() async {
-            // Test chained JSON operations
+
             let query = TestUser.select { user in
                 user.settings
                     .field("preferences")
@@ -241,26 +233,5 @@ extension SnapshotTests.JSONB {
             }
         }
 
-        // MARK: - Disabled Tests (Type Inference Issues with UPDATE)
-
-        // Expected functionality that should be supported for UPDATE operations:
-        //
-        // 1. Concatenation (|| operator):
-        // UPDATE "test_users" SET "settings" = ("test_users"."settings" ||
-        // '{"newField":"value"}'::jsonb)
-        //
-        // 2. Delete key (- operator):
-        // UPDATE "test_users" SET "settings" = ("test_users"."settings" - 'obsolete')
-        //
-        // 3. Delete multiple keys (- operator with array):
-        // UPDATE "test_users" SET "settings" = ("test_users"."settings" -
-        // ARRAY['field1', 'field2', 'field3'])
-        //
-        // 4. Delete element by index (- operator):
-        // UPDATE "test_users" SET "tags" = ("test_users"."tags" - 2)
-        //
-        // 5. Delete at path (#- operator):
-        // UPDATE "test_users" SET "metadata" = ("test_users"."metadata" #-
-        // ARRAY['address', 'street2']::text[])
     }
 }

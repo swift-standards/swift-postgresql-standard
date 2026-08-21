@@ -8,8 +8,6 @@ import Tests_Inline_Snapshot
 extension SnapshotTests.PostgresArrayOps {
     @Suite("Array Operators") struct ArrayOperatorsTests {
 
-        // MARK: - Containment Operators Tests
-
         @Test func containsArray() async {
             await assertSQL(
                 of: Post.where { $0.tags.contains(["swift", "postgres"]) }
@@ -82,8 +80,6 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - Array Concatenation Tests
-
         @Test func concatArrays() async {
             await assertSQL(
                 of: Post.select { $0.tags.arrayConcat(["new-tag"]) }
@@ -116,8 +112,6 @@ extension SnapshotTests.PostgresArrayOps {
                 """
             }
         }
-
-        // MARK: - Array Equality & Comparison Tests
 
         @Test func arrayEquals() async {
             await assertSQL(
@@ -179,11 +173,9 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - Special Characters & SQL Injection Prevention Tests
-
         @Test
         func `Array operators properly escape special characters`() async {
-            // Test that single quotes, backslashes, and other special characters are properly escaped
+
             await assertSQL(
                 of: Post.where { $0.tags.contains(["it's", "\"quoted\"", "back\\slash"]) }
             ) {
@@ -210,11 +202,9 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Unicode normalization: Combining characters`() async {
-            // é can be represented as:
-            // - U+00E9 (single codepoint: LATIN SMALL LETTER E WITH ACUTE)
-            // - U+0065 + U+0301 (combining: LATIN SMALL LETTER E + COMBINING ACUTE ACCENT)
-            let precomposed = "café"  // Uses U+00E9
-            let decomposed = "cafe\u{0301}"  // Uses U+0065 + U+0301
+
+            let precomposed = "café"
+            let decomposed = "cafe\u{0301}"
 
             await assertSQL(
                 of: Post.where { $0.tags.contains([precomposed, decomposed]) }
@@ -266,11 +256,9 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - Real-World Use Cases
-
         @Test
         func `Find posts with required tags (AND logic)`() async {
-            // Real-world: Find posts that have ALL of these tags
+
             await assertSQL(
                 of: Post.where { $0.tags.contains(["swift", "tutorial", "beginner"]) }
             ) {
@@ -284,7 +272,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Find posts with any matching tag (OR logic)`() async {
-            // Real-world: Find posts that have ANY of these tags
+
             await assertSQL(
                 of: Post.where { $0.tags.overlaps(["swift", "rust", "go"]) }
             ) {
@@ -298,7 +286,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Find posts tagged as subset of allowed tags`() async {
-            // Real-world: Ensure post tags are only from approved list
+
             await assertSQL(
                 of: Post.where {
                     $0.tags.isContainedBy(["swift", "postgres", "vapor", "server"])
@@ -314,7 +302,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Add tag to existing tags`() async {
-            // Real-world: Add a new tag to a post's existing tags
+
             await assertSQL(
                 of: Post.select { $0.tags.arrayConcat("featured") }
             ) {
@@ -327,7 +315,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Merge two tag arrays`() async {
-            // Real-world: Combine tags from two different sources
+
             await assertSQL(
                 of: Post.select { $0.tags.arrayConcat(["archived", "reviewed"]) }
             ) {
@@ -340,7 +328,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Filter posts not tagged with default tags`() async {
-            // Real-world: Find posts that have custom tags (not the defaults)
+
             await assertSQL(
                 of: Post.where { $0.tags.arrayNotEquals(["uncategorized"]) }
             ) {
@@ -354,7 +342,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Compare tags alphabetically`() async {
-            // Real-world: Lexicographic comparison (useful for sorting or filtering)
+
             await assertSQL(
                 of: Post.where { $0.tags.arrayLessThan(["zzz"]) }
             ) {
@@ -365,8 +353,6 @@ extension SnapshotTests.PostgresArrayOps {
                 """
             }
         }
-
-        // MARK: - Array Query Functions Tests
 
         @Test func arrayLength() async {
             await assertSQL(
@@ -458,11 +444,9 @@ extension SnapshotTests.PostgresArrayOps {
             }
         }
 
-        // MARK: - Complex Real-World Queries
-
         @Test
         func `Posts with at least 3 tags including 'swift'`() async {
-            // Real-world: Find well-tagged Swift posts
+
             await assertSQL(
                 of: Post.where {
                     ($0.tags.cardinality() ?? 0) >= 3 && $0.tags.contains(["swift"])
@@ -478,7 +462,7 @@ extension SnapshotTests.PostgresArrayOps {
 
         @Test
         func `Posts with overlapping interests but not exactly matching`() async {
-            // Real-world: Recommendation system - similar tags but not identical posts
+
             await assertSQL(
                 of: Post.where {
                     $0.tags.overlaps(["swift", "vapor"])
@@ -495,8 +479,6 @@ extension SnapshotTests.PostgresArrayOps {
     }
 }
 
-// MARK: - Test Model
-
 @Table
 private struct Post {
     let id: Int
@@ -504,8 +486,6 @@ private struct Post {
     @Column(as: [String].self)
     let tags: [String]
 }
-
-// MARK: - SnapshotTests.PostgresArrayOps Namespace
 
 extension SnapshotTests {
     enum PostgresArrayOps {}

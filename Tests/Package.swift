@@ -1,8 +1,4 @@
 // swift-tools-version: 6.4
-//
-// Nested testing package ([INST-TEST-001]): isolates third-party test-only
-// dependencies (pointfreeco/swift-macro-testing, swift-snapshot-testing) from
-// the parent Package.swift so they never enter the main dependency graph.
 
 import PackageDescription
 

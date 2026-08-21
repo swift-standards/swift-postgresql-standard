@@ -68,8 +68,8 @@ struct RemindersAudit: Codable, Equatable, AuditTable {
     let id: Int
     var tableName: String
     var operation: String
-    var oldData: String?  // JSONB stored as string
-    var newData: String?  // JSONB stored as string
+    var oldData: String?
+    var newData: String?
     var changedAt: Date
     var changedBy: String
 }
@@ -80,7 +80,7 @@ struct Order: Codable, Equatable, Identifiable {
     var orderID: Int
     var customerID: Int
     var amount: Double
-    var quantity: Double  // Changed to Double for math operations
+    var quantity: Double
     var unitPrice: Double
     var discount: Double?
     var isPaid: Bool = false
@@ -98,14 +98,5 @@ struct LineItem: Codable, Equatable {
     let id: Int
     var orderID: Int
     var price: Double
-    var quantity: Double  // Changed to Double for math operations
+    var quantity: Double
 }
-
-// Database migration, trigger installation, and seed data code removed.
-// This file contained SQLite-specific features:
-// - FTS5 virtual tables (PostgreSQL uses different full-text search)
-// - SQLite temporary triggers (PostgreSQL has different trigger syntax)
-// - SQLite-specific SQL syntax (datetime('subsec'), etc.)
-//
-// Database operations, migrations, and seed data belong in swift-records package
-// where database integration is handled. This package is DSL-focused.
