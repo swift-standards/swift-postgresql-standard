@@ -73,7 +73,7 @@ let package = Package(
 
         // Remote
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
+//        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
 
         // Ecosystem (test support + tests)
 //        .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
