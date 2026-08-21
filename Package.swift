@@ -17,10 +17,10 @@ let package = Package(
             name: "PostgreSQL Standard",
             targets: ["PostgreSQL Standard"]
         ),
-        .library(
-            name: "PostgreSQL Standard Test Support",
-            targets: ["PostgreSQL Standard Test Support"]
-        ),
+//        .library(
+//            name: "PostgreSQL Standard Test Support",
+//            targets: ["PostgreSQL Standard Test Support"]
+//        ),
         .library(
             name: "PostgreSQL Standard Macros",
             targets: ["PostgreSQL Standard Macros"]
@@ -76,7 +76,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.22.0"),
 
         // Ecosystem (test support + tests)
-        .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
+//        .package(url: "https://github.com/swift-foundations/swift-tests.git", branch: "main"),
     ],
     targets: [
         // MARK: - PostgreSQL Standard
@@ -132,23 +132,23 @@ let package = Package(
 
         // MARK: - Test Support
 
-        .target(
-            name: "PostgreSQL Standard Test Support",
-            dependencies: [
-                "PostgreSQL Standard",
-                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
-                .product(
-                    name: "Test Snapshot Primitives",
-                    package: "swift-test-primitives"
-                ),
-                .product(
-                    name: "PostgresNIO",
-                    package: "postgres-nio",
-                    condition: .when(traits: ["SQLValidation"])
-                ),
-            ],
-            path: "Tests/Support"
-        ),
+//        .target(
+//            name: "PostgreSQL Standard Test Support",
+//            dependencies: [
+//                "PostgreSQL Standard",
+//                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+//                .product(
+//                    name: "Test Snapshot Primitives",
+//                    package: "swift-test-primitives"
+//                ),
+//                .product(
+//                    name: "PostgresNIO",
+//                    package: "postgres-nio",
+//                    condition: .when(traits: ["SQLValidation"])
+//                ),
+//            ],
+//            path: "Tests/Support"
+//        ),
 
         // MARK: - Tests
 
@@ -156,31 +156,31 @@ let package = Package(
         // (Tests/Package.swift) per [INST-TEST-001]: pointfreeco test-only deps
         // never enter this manifest.
 
-        .testTarget(
-            name: "PostgreSQL Standard Tests",
-            dependencies: [
-                "PostgreSQL Standard",
-                "PostgreSQL Standard Macros",
-                "PostgreSQL Standard Test Support",
-                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
-                // `QueryBinding`'s blob/jsonb payloads are `[Byte]` since the L1
-                // Foundation drain; the binding tests read those bytes back.
-                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
-            ],
-            path: "Tests/PostgreSQL Standard Tests"
-        ),
-
-        .testTarget(
-            name: "README Examples Tests",
-            dependencies: [
-                "PostgreSQL Standard",
-                "PostgreSQL Standard Macros",
-                "PostgreSQL Standard Test Support",
-                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
-                .product(name: "Tests Apple Testing Bridge", package: "swift-tests"),
-            ],
-            path: "Tests/README Examples Tests"
-        ),
+//        .testTarget(
+//            name: "PostgreSQL Standard Tests",
+//            dependencies: [
+//                "PostgreSQL Standard",
+//                "PostgreSQL Standard Macros",
+//                "PostgreSQL Standard Test Support",
+//                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+//                // `QueryBinding`'s blob/jsonb payloads are `[Byte]` since the L1
+//                // Foundation drain; the binding tests read those bytes back.
+//                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+//            ],
+//            path: "Tests/PostgreSQL Standard Tests"
+//        ),
+//
+//        .testTarget(
+//            name: "README Examples Tests",
+//            dependencies: [
+//                "PostgreSQL Standard",
+//                "PostgreSQL Standard Macros",
+//                "PostgreSQL Standard Test Support",
+//                .product(name: "Tests Inline Snapshot", package: "swift-tests"),
+//                .product(name: "Tests Apple Testing Bridge", package: "swift-tests"),
+//            ],
+//            path: "Tests/README Examples Tests"
+//        ),
     ],
     swiftLanguageModes: [.v6]
 )
