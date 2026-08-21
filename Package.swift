@@ -66,10 +66,10 @@ let package = Package(
             url: "https://github.com/swift-primitives/swift-byte-primitives.git",
             branch: "main"
         ),
-        .package(
-            url: "https://github.com/swift-primitives/swift-test-primitives.git",
-            branch: "main"
-        ),
+//        .package(
+//            url: "https://github.com/swift-primitives/swift-test-primitives.git",
+//            branch: "main"
+//        ),
 
         // Remote
         .package(url: "https://github.com/swiftlang/swift-syntax.git", "602.0.0"..<"603.0.0"),
@@ -194,7 +194,6 @@ for target in package.targets where ![.system, .binary, .plugin, .macro].contain
         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
         .enableExperimentalFeature("LifetimeDependence"),
         .enableExperimentalFeature("Lifetimes"),
-        .enableExperimentalFeature("SuppressedAssociatedTypes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
         .enableUpcomingFeature("LifetimeDependence"),
     ]
