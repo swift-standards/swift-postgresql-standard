@@ -1,4 +1,4 @@
 import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public enum Math {}

@@ -1,5 +1,5 @@
 import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 
 extension QueryExpression {
 

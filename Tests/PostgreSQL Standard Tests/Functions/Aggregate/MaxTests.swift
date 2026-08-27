@@ -234,37 +234,37 @@ extension SnapshotTests {
 
         func compileTimeTypeTests() {
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.max {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.max {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.max(
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.max(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.max {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.max(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Int?, Order, ()> = Order.max {
+            let _: Structured_Queries.Select<Int?, Order, ()> = Order.max {
                 $0.customerID
             }
 
-            let _: Structured_Queries_Primitives.Select<Date?, Order, ()> = Order.max {
+            let _: Structured_Queries.Select<Date?, Order, ()> = Order.max {
                 $0.createdAt
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.max {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.max {
                 $0.discount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.max {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.max {
                 $0.quantity * $0.unitPrice
             }
         }

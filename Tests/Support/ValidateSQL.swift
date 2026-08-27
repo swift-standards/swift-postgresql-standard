@@ -1,5 +1,5 @@
 import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 import Testing
 import Tests_Inline_Snapshot
 

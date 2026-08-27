@@ -1,6 +1,6 @@
 import Foundation
-import Structured_Queries_Primitives
-import Structured_Queries_Primitives_Support
+import Structured_Queries
+import Structured_Queries_Support
 
 extension TableColumnExpression where Value == String {
 

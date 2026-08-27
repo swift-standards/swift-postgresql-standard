@@ -1,5 +1,5 @@
 import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public func greatest<Value: Comparable & QueryBindable>(
     _ v1: some QueryExpression<Value>,

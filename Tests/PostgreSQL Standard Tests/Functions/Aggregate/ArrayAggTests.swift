@@ -160,17 +160,17 @@ extension SnapshotTests {
 
         func compileTimeTypeTests() {
 
-            let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.arrayAgg {
+            let _: Structured_Queries.Select<String?, Customer, ()> = Customer.arrayAgg {
                 $0.name
             }
 
-            let _: Structured_Queries_Primitives.Select<String?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<String?, Order, ()> = Order.where {
                 $0.isPaid
             }.arrayAgg {
                 $0.orderID
             }
 
-            let _: Structured_Queries_Primitives.Select<String?, Customer, ()> = Customer.arrayAgg {
+            let _: Structured_Queries.Select<String?, Customer, ()> = Customer.arrayAgg {
                 $0.id
             }
         }

@@ -1,5 +1,5 @@
 public import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public func generateSeries(_ start: Int, _ stop: Int) -> SQLQueryExpression<Int> {
     SQLQueryExpression(

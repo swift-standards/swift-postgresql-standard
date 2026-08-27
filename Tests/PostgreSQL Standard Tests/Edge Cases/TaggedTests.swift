@@ -2,7 +2,7 @@ import Foundation
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Macros
 import PostgreSQL_Standard_Test_Support
-import Tagged_Primitives
+import Tagged
 import Testing
 import Tests_Inline_Snapshot
 
@@ -110,15 +110,15 @@ extension SnapshotTests {
 
         @Test func taggedSelectPreservesType() {
 
-            let _: Structured_Queries_Primitives.Select<Reminder.ID, Reminder, ()> = Reminder.select
+            let _: Structured_Queries.Select<Reminder.ID, Reminder, ()> = Reminder.select
             { $0.id }
-            let _: Structured_Queries_Primitives.Select<User.ID, User, ()> = User.select { $0.id }
+            let _: Structured_Queries.Select<User.ID, User, ()> = User.select { $0.id }
 
-            let _: Structured_Queries_Primitives.Select<(Reminder.ID, Int), Reminder, ()> =
+            let _: Structured_Queries.Select<(Reminder.ID, Int), Reminder, ()> =
                 Reminder.select {
                     ($0.id, $0.remindersListID)
                 }
-            let _: Structured_Queries_Primitives.Select<(User.ID, String), User, ()> = User.select {
+            let _: Structured_Queries.Select<(User.ID, String), User, ()> = User.select {
                 ($0.id, $0.name)
             }
         }

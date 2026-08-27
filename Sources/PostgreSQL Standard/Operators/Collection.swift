@@ -1,4 +1,4 @@
-import Structured_Queries_Primitives
+import Structured_Queries
 
 extension QueryExpression where QueryValue: QueryExpression {
     func _in<S: Swift.Sequence>(_ expression: S) -> BinaryOperator<Bool>

@@ -1,2 +1,2 @@
-@_exported import Structured_Queries_Primitives
-@_exported import Structured_Queries_Primitives_Foundation_Integration
+@_exported import Structured_Queries
+@_exported import Structured_Queries_Foundation_Integration

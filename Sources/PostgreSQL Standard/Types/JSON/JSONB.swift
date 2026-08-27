@@ -1,6 +1,6 @@
-import Byte_Primitives
+import Byte
 public import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public protocol _JSONBRepresentationProtocol: QueryRepresentable {
     associatedtype UnderlyingType: Codable

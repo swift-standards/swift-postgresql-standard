@@ -1,21 +1,21 @@
-import Structured_Queries_Primitives
-import Test_Primitives_Core
-import Test_Snapshot_Primitives
+import Structured_Queries
+import Test_Core
+import Test_Snapshot
 
-extension Test_Primitives_Core.Test.Snapshot.Strategy where Value: Statement, Format == String {
+extension Test_Core.Test.Snapshot.Strategy where Value: Statement, Format == String {
 
     public static var sql: Self {
-        Test_Primitives_Core.Test.Snapshot.Strategy<String, String>.lines.pullback(
+        Test_Core.Test.Snapshot.Strategy<String, String>.lines.pullback(
             \.query.debugDescription
         )
     }
 }
 
-extension Test_Primitives_Core.Test.Snapshot.Strategy
+extension Test_Core.Test.Snapshot.Strategy
 where Value: QueryExpression, Format == String {
 
     public static var sql: Self {
-        Test_Primitives_Core.Test.Snapshot.Strategy<String, String>.lines.pullback(
+        Test_Core.Test.Snapshot.Strategy<String, String>.lines.pullback(
             \.queryFragment.debugDescription
         )
     }

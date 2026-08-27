@@ -1,5 +1,5 @@
 import Foundation
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public func rowNumber() -> Window.Function<Int> {
     Window.Function(functionName: "ROW_NUMBER", arguments: [])

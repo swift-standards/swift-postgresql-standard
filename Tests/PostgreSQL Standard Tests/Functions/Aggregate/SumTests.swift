@@ -224,33 +224,33 @@ extension SnapshotTests {
 
         func compileTimeTypeTests() {
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.sum {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum(
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.sum(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.sum {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.sum(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.sum {
                 $0.quantity
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.sum {
                 $0.discount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.sum {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.sum {
                 $0.quantity * $0.unitPrice
             }
         }

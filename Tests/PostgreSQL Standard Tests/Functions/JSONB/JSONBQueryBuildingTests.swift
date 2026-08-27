@@ -1,4 +1,4 @@
-import Byte_Primitives
+import Byte
 import Foundation
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Macros

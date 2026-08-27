@@ -309,27 +309,27 @@ extension SnapshotTests {
 
         func compileTimeTypeTests() {
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.stddev {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.stddev {
                 $0.amount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.variance {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.variance {
                 $0.amount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.stddev {
                 $0.amount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.variance {
                 $0.amount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.stddev {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.stddev {
                 $0.quantity
             }
         }

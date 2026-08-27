@@ -1,6 +1,6 @@
 public import Foundation
-public import Structured_Queries_Primitives
-import Structured_Queries_Primitives_Support
+public import Structured_Queries
+import Structured_Queries_Support
 
 extension Trigger.Function where On: Table {
 

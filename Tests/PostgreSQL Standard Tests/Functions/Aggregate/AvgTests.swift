@@ -224,33 +224,33 @@ extension SnapshotTests {
 
         func compileTimeTypeTests() {
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.avg {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.avg {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.avg(
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.avg(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.avg {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.avg(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.avg {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.avg {
                 $0.quantity
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.avg {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.avg {
                 $0.discount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.avg {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.avg {
                 $0.quantity * $0.unitPrice
             }
         }

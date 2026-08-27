@@ -37,11 +37,11 @@ let package = Package(
     dependencies: [
 
         .package(
-            url: "https://github.com/swift-primitives/swift-structured-queries-primitives.git",
+            url: "https://github.com/swift-molecules/swift-structured-queries.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-primitives/swift-byte-primitives.git",
+            url: "https://github.com/swift-molecules/swift-byte.git",
             branch: "main"
         ),
 
@@ -54,19 +54,19 @@ let package = Package(
             name: "PostgreSQL Standard",
             dependencies: [
                 .product(
-                    name: "Structured Queries Primitives",
-                    package: "swift-structured-queries-primitives"
+                    name: "Structured Queries",
+                    package: "swift-structured-queries"
                 ),
                 .product(
-                    name: "Structured Queries Primitives Support",
-                    package: "swift-structured-queries-primitives"
+                    name: "Structured Queries Support",
+                    package: "swift-structured-queries"
                 ),
 
                 .product(
-                    name: "Structured Queries Primitives Foundation Integration",
-                    package: "swift-structured-queries-primitives"
+                    name: "Structured Queries Foundation Integration",
+                    package: "swift-structured-queries"
                 ),
-                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+                .product(name: "Byte", package: "swift-byte"),
             ]
         ),
 

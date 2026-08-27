@@ -234,37 +234,37 @@ extension SnapshotTests {
 
         func compileTimeTypeTests() {
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.min {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min(
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.min(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.min {
                 $0.amount
             }
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.where {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.where {
                 $0.isPaid
             }.min(
                 of: \.amount
             )
 
-            let _: Structured_Queries_Primitives.Select<Int?, Order, ()> = Order.min {
+            let _: Structured_Queries.Select<Int?, Order, ()> = Order.min {
                 $0.customerID
             }
 
-            let _: Structured_Queries_Primitives.Select<Date?, Order, ()> = Order.min {
+            let _: Structured_Queries.Select<Date?, Order, ()> = Order.min {
                 $0.createdAt
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.min {
                 $0.discount
             }
 
-            let _: Structured_Queries_Primitives.Select<Double?, Order, ()> = Order.min {
+            let _: Structured_Queries.Select<Double?, Order, ()> = Order.min {
                 $0.quantity * $0.unitPrice
             }
         }

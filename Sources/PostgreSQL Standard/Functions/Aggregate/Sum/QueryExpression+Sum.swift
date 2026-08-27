@@ -1,4 +1,4 @@
-import Structured_Queries_Primitives
+import Structured_Queries
 
 extension QueryExpression
 where QueryValue: _OptionalPromotable, QueryValue._Optionalized.Wrapped: Numeric {

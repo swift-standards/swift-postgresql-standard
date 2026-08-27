@@ -1,5 +1,5 @@
 public import Foundation
-public import Structured_Queries_Primitives
+public import Structured_Queries
 
 extension QueryExpression where QueryValue == UUID {
 

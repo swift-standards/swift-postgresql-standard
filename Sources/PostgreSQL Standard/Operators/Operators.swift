@@ -1,4 +1,4 @@
-import Structured_Queries_Primitives
+import Structured_Queries
 
 internal func isNull<Value>(_ expression: some QueryExpression<Value>) -> Bool {
     (expression as? any _OptionalProtocol).map { $0._wrapped == nil } ?? false

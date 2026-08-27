@@ -1,4 +1,4 @@
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public struct AggregateFunction<QueryValue>: QueryExpression, Sendable {
     var name: QueryFragment

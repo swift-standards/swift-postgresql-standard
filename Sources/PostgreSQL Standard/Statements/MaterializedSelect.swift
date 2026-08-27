@@ -1,4 +1,4 @@
-import Structured_Queries_Primitives
+import Structured_Queries
 
 public struct MaterializedSelect<Base: PartialSelectStatement>: PartialSelectStatement {
     public typealias QueryValue = Base.QueryValue

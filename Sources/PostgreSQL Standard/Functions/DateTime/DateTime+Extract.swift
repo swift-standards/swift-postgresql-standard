@@ -1,5 +1,5 @@
 public import Foundation
-public import Structured_Queries_Primitives
+public import Structured_Queries
 
 public struct DateField<ReturnType: QueryBindable> {
     let sqlName: String

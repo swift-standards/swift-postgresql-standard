@@ -1,7 +1,7 @@
-import Byte_Primitives
+import Byte
 import Foundation
-import Structured_Queries_Primitives
-import Structured_Queries_Primitives_Foundation_Integration
+import Structured_Queries
+import Structured_Queries_Foundation_Integration
 
 extension Array: QueryBindable, QueryExpression where Element: QueryBindable {
     public typealias QueryValue = [Element]

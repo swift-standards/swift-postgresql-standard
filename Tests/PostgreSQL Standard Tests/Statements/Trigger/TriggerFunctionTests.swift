@@ -2,7 +2,7 @@ import Foundation
 import PostgreSQL_Standard
 import PostgreSQL_Standard_Macros
 import PostgreSQL_Standard_Test_Support
-import Structured_Queries_Primitives
+import Structured_Queries
 import Testing
 import Tests_Inline_Snapshot
 
